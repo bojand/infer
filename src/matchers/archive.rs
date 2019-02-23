@@ -156,7 +156,7 @@ pub fn is_xz(buf: &[u8]) -> bool {
 /// 
 /// ```rust
 /// use std::fs;
-/// assert!(infer::matchers::archive::is_sqlite(&fs::read("src/testdata/sample.db").unwrap()));
+/// assert!(infer::archive::is_sqlite(&fs::read("src/testdata/sample.db").unwrap()));
 /// ```
 pub fn is_sqlite(buf: &[u8]) -> bool {
 	return buf.len() > 3 && buf[0] == 0x53 && buf[1] == 0x51 && buf[2] == 0x4C && buf[3] == 0x69;

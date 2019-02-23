@@ -63,7 +63,7 @@ assert_eq!("jpg", typ.ext);
 
 ```rust
 let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
-assert!(infer::matchers::image::is_jpeg(&v));
+assert!(infer::image::is_jpeg(&v));
 ```
 
 ### Check for specific type class

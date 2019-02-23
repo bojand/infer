@@ -32,7 +32,7 @@ Note individual matcher functions do not require an Infer struct instance.
 
 ```rust
 let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
-assert!(infer::matchers::image::is_jpeg(&v));
+assert!(infer::image::is_jpeg(&v));
 ```
 
 ### Check for specific type class
@@ -63,12 +63,21 @@ assert_eq!("foo", res.ext);
 #![crate_name = "infer"]
 
 mod map;
-
-/// All the supported matchers categorized and exposed as functions
-pub mod matchers;
+mod matchers;
 
 use std::fs;
 use std::path::Path;
+
+/// All the supported matchers categorized and exposed as functions
+pub use matchers::*;
+
+// pub use matchers::app::*;
+// pub use matchers::archive::*;
+// pub use matchers::audio::*;
+// pub use matchers::doc::*;
+// pub use matchers::font::*;
+// pub use matchers::image::*;
+// pub use matchers::video::*;
 
 /// Matcher function
 pub type Matcher = fn(buf: &[u8]) -> bool;
