@@ -5,9 +5,11 @@
 [![documentation](https://docs.rs/infer/badge.svg?style=flat-square)](https://docs.rs/infer)
 
 Small crate to infer file and MIME type by checking the
-[magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)) signature. 
+[magic number](https://en.wikipedia.org/wiki/Magic_number_(programming)) signature. 
 
-Adaptation of [filetype](https://github.com/h2non/filetype) Go package ported to Rust. Does not require magic file database (i.e. `/etc/magic`). 
+Adaptation of [filetype](https://github.com/h2non/filetype) Go package ported to Rust. 
+
+Does not require magic file database (i.e. `/etc/magic`). 
 
 ## Features
 
