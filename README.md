@@ -1,5 +1,7 @@
 # infer
 
+[![crates version](https://img.shields.io/crates/v/infer.svg?style=flat-square)](https://crates.io/crates/infer)
+
 Small crate to infer file and MIME type by checking the
 [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)) signature. 
 
