@@ -1,0 +1,15 @@
+[package]
+name = "infer"
+version = "0.1.0"
+authors = ["Bojan <dbojan@gmail.com>"]
+edition = "2018"
+description = "Small crate to infer file types based on its magic numbers signature"
+license = "MIT"
+keywords = ["filetype", "file"]
+readme = "README.md"
+homepage = "https://github.com/bojand/infer"
+repository = "https://github.com/bojand/infer"
+documentation = "https://github.com/bojand/infer"
+
+[dependencies]
+byteorder = "1"
