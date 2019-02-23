@@ -71,14 +71,6 @@ use std::path::Path;
 /// All the supported matchers categorized and exposed as functions
 pub use matchers::*;
 
-// pub use matchers::app::*;
-// pub use matchers::archive::*;
-// pub use matchers::audio::*;
-// pub use matchers::doc::*;
-// pub use matchers::font::*;
-// pub use matchers::image::*;
-// pub use matchers::video::*;
-
 /// Matcher function
 pub type Matcher = fn(buf: &[u8]) -> bool;
 
