@@ -1,5 +1,6 @@
 # infer
 
+[![Build Status](https://img.shields.io/circleci/project/github/bojand/infer/master.svg?style=flat-square)](https://circleci.com/gh/bojand/infer)
 [![crates version](https://img.shields.io/crates/v/infer.svg?style=flat-square)](https://crates.io/crates/infer)
 
 Small crate to infer file and MIME type by checking the
@@ -27,7 +28,7 @@ like so:
 
 ```toml
 [dependencies]
-infer = "1"
+infer = "0.1"
 ```
 
 ## Examples
