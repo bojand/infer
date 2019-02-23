@@ -11,5 +11,5 @@ fn test_ttf() {
         mime: String::from("application/font-sfnt"), 
         ext: String::from("ttf"),
     }, 
-    info.get(&fs::read("src/testdata/sample.ttf").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.ttf").unwrap()).unwrap());
 }

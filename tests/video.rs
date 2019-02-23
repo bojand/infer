@@ -11,7 +11,7 @@ fn test_mp4() {
         mime: String::from("video/mp4"), 
         ext: String::from("mp4"),
     }, 
-    info.get(&fs::read("src/testdata/sample.mp4").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.mp4").unwrap()).unwrap());
 }
 
 #[test]
@@ -22,7 +22,7 @@ fn test_mkv() {
         mime: String::from("video/x-matroska"), 
         ext: String::from("mkv"),
     }, 
-    info.get(&fs::read("src/testdata/sample.mkv").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.mkv").unwrap()).unwrap());
 }
 
 
@@ -34,7 +34,7 @@ fn test_webm() {
         mime: String::from("video/webm"), 
         ext: String::from("webm"),
     }, 
-    info.get(&fs::read("src/testdata/sample.webm").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.webm").unwrap()).unwrap());
 }
 
 #[test]
@@ -45,7 +45,7 @@ fn test_mov() {
         mime: String::from("video/quicktime"), 
         ext: String::from("mov"),
     }, 
-    info.get(&fs::read("src/testdata/sample.mov").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.mov").unwrap()).unwrap());
 }
 
 #[test]
@@ -56,7 +56,7 @@ fn test_avi() {
         mime: String::from("video/x-msvideo"), 
         ext: String::from("avi"),
     }, 
-    info.get(&fs::read("src/testdata/sample.avi").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.avi").unwrap()).unwrap());
 }
 
 #[test]
@@ -67,5 +67,5 @@ fn test_flv() {
         mime: String::from("video/x-flv"), 
         ext: String::from("flv"),
     }, 
-    info.get(&fs::read("src/testdata/sample.flv").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.flv").unwrap()).unwrap());
 }

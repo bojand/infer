@@ -4,7 +4,7 @@
 ///
 /// ```rust
 /// use std::fs;
-/// assert!(infer::app::is_wasm(&fs::read("src/testdata/sample.wasm").unwrap()));
+/// assert!(infer::app::is_wasm(&fs::read("testdata/sample.wasm").unwrap()));
 /// ```
 pub fn is_wasm(buf: &[u8]) -> bool {
 	// WASM has starts with `\0asm`, followed by the version.
@@ -26,7 +26,7 @@ pub fn is_wasm(buf: &[u8]) -> bool {
 /// 
 /// ```rust
 /// use std::fs;
-/// assert!(infer::app::is_exe(&fs::read("src/testdata/sample.exe").unwrap()));
+/// assert!(infer::app::is_exe(&fs::read("testdata/sample.exe").unwrap()));
 /// ```
 pub fn is_exe(buf: &[u8]) -> bool {
 	return buf.len() > 1 && buf[0] == 0x4D && buf[1] == 0x5A;

@@ -10,5 +10,5 @@ fn test_wasm() {
         mime: String::from("application/wasm"), 
         ext: String::from("wasm"),
     }, 
-    info.get(&fs::read("src/testdata/sample.wasm").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.wasm").unwrap()).unwrap());
 }

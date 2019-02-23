@@ -11,7 +11,7 @@ fn test_jpg() {
         mime: String::from("image/jpeg"), 
         ext: String::from("jpg"),
     }, 
-    info.get(&fs::read("src/testdata/sample.jpg").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.jpg").unwrap()).unwrap());
 }
 
 #[test]
@@ -22,7 +22,7 @@ fn test_png() {
         mime: String::from("image/png"), 
         ext: String::from("png"),
     }, 
-    info.get(&fs::read("src/testdata/sample.png").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.png").unwrap()).unwrap());
 }
 
 #[test]
@@ -33,7 +33,7 @@ fn test_gif() {
         mime: String::from("image/gif"), 
         ext: String::from("gif"),
     }, 
-    info.get(&fs::read("src/testdata/sample.gif").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.gif").unwrap()).unwrap());
 }
 
 #[test]
@@ -44,7 +44,7 @@ fn test_tif() {
         mime: String::from("image/tiff"), 
         ext: String::from("tif"),
     }, 
-    info.get(&fs::read("src/testdata/sample.tif").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.tif").unwrap()).unwrap());
 }
 
 #[test]
@@ -55,7 +55,7 @@ fn test_tif2() {
         mime: String::from("image/tiff"), 
         ext: String::from("tif"),
     }, 
-    info.get(&fs::read("src/testdata/sample2.tif").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample2.tif").unwrap()).unwrap());
 }
 
 #[test]
@@ -66,7 +66,7 @@ fn test_tif3() {
         mime: String::from("image/tiff"), 
         ext: String::from("tif"),
     }, 
-    info.get(&fs::read("src/testdata/sample3.tif").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample3.tif").unwrap()).unwrap());
 }
 
 #[test]
@@ -77,7 +77,7 @@ fn test_tif4() {
         mime: String::from("image/tiff"), 
         ext: String::from("tif"),
     }, 
-    info.get(&fs::read("src/testdata/sample4.tif").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample4.tif").unwrap()).unwrap());
 }
 
 #[test]
@@ -88,7 +88,7 @@ fn test_tif5() {
         mime: String::from("image/tiff"), 
         ext: String::from("tif"),
     }, 
-    info.get(&fs::read("src/testdata/sample5.tif").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample5.tif").unwrap()).unwrap());
 }
 
 #[test]
@@ -99,7 +99,7 @@ fn test_bmp() {
         mime: String::from("image/bmp"), 
         ext: String::from("bmp"),
     }, 
-    info.get(&fs::read("src/testdata/sample.bmp").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.bmp").unwrap()).unwrap());
 }
 
 #[test]
@@ -110,7 +110,7 @@ fn test_psd() {
         mime: String::from("image/vnd.adobe.photoshop"), 
         ext: String::from("psd"),
     }, 
-    info.get(&fs::read("src/testdata/sample.psd").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.psd").unwrap()).unwrap());
 }
 
 #[test]
@@ -121,7 +121,7 @@ fn test_ico() {
         mime: String::from("image/x-icon"), 
         ext: String::from("ico"),
     }, 
-    info.get(&fs::read("src/testdata/sample.ico").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.ico").unwrap()).unwrap());
 }
 
 
@@ -133,5 +133,5 @@ fn test_heif() {
         mime: String::from("image/heif"), 
         ext: String::from("heif"),
     }, 
-    info.get(&fs::read("src/testdata/sample.heic").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.heic").unwrap()).unwrap());
 }

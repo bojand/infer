@@ -11,7 +11,7 @@ fn test_doc() {
         mime: String::from("application/msword"), 
         ext: String::from("doc"),
     }, 
-    info.get(&fs::read("src/testdata/sample.doc").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.doc").unwrap()).unwrap());
 }
 
 #[test]
@@ -22,7 +22,7 @@ fn test_docx() {
         mime: String::from("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), 
         ext: String::from("docx"),
     }, 
-    info.get(&fs::read("src/testdata/sample.docx").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.docx").unwrap()).unwrap());
 }
 
 #[test]
@@ -33,7 +33,7 @@ fn test_xlsx() {
         mime: String::from("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), 
         ext: String::from("xlsx"),
     }, 
-    info.get(&fs::read("src/testdata/sample.xlsx").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.xlsx").unwrap()).unwrap());
 }
 
 #[test]
@@ -44,5 +44,5 @@ fn test_pptx() {
         mime: String::from("application/application/vnd.openxmlformats-officedocument.presentationml.presentation"), 
         ext: String::from("pptx"),
     }, 
-    info.get(&fs::read("src/testdata/sample.pptx").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.pptx").unwrap()).unwrap());
 }

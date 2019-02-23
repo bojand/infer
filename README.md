@@ -54,7 +54,7 @@ assert_eq!("jpg", info.get(&v).unwrap().ext);
 use infer::Infer;
 
 let info = Infer::new();
-let res = info.get_from_path("src/testdata/sample.jpg");
+let res = info.get_from_path("testdata/sample.jpg");
 
 assert!(res.is_ok());
 let o = res.unwrap();

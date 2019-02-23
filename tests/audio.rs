@@ -11,5 +11,5 @@ fn test_mp3() {
         mime: String::from("audio/mpeg"), 
         ext: String::from("mp3"),
     }, 
-    info.get(&fs::read("src/testdata/sample.mp3").unwrap()).unwrap());
+    info.get(&fs::read("testdata/sample.mp3").unwrap()).unwrap());
 }

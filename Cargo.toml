@@ -1,6 +1,6 @@
 [package]
 name = "infer"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Bojan <dbojan@gmail.com>"]
 edition = "2018"
 description = "Small crate to infer file types based on its magic number signature"
@@ -10,7 +10,7 @@ readme = "README.md"
 homepage = "https://github.com/bojand/infer"
 repository = "https://github.com/bojand/infer"
 documentation = "https://github.com/bojand/infer"
-exclude = ["src/testdata/*", "tests/*"]
+exclude = ["testdata/*", "tests/*"]
 
 [dependencies]
 byteorder = "1"

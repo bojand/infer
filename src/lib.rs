@@ -17,7 +17,7 @@ assert_eq!("jpg", info.get(&v).unwrap().ext);
 
 ```rust
 let info = infer::Infer::new();
-let res = info.get_from_path("src/testdata/sample.jpg");
+let res = info.get_from_path("testdata/sample.jpg");
 assert!(res.is_ok());
 let o = res.unwrap();
 assert!(o.is_some());
@@ -132,7 +132,7 @@ impl Infer {
     ///
     /// ```rust
     /// let info = infer::Infer::new();
-    /// let res = info.get_from_path("src/testdata/sample.jpg");
+    /// let res = info.get_from_path("testdata/sample.jpg");
     /// assert!(res.is_ok());
     /// let o = res.unwrap();
     /// assert!(o.is_some());
@@ -241,7 +241,7 @@ impl Infer {
     /// ```rust
     /// use std::fs;
     /// let info = infer::Infer::new();
-    /// assert!(info.is_app(&fs::read("src/testdata/sample.wasm").unwrap()));
+    /// assert!(info.is_app(&fs::read("testdata/sample.wasm").unwrap()));
     /// ```
     pub fn is_app(&self, buf: &[u8]) -> bool {
         return self.is_type(buf, map::MatcherType::APP);
@@ -253,7 +253,7 @@ impl Infer {
     /// ```rust
     /// use std::fs;
     /// let info = infer::Infer::new();
-    /// assert!(info.is_archive(&fs::read("src/testdata/sample.pdf").unwrap()));
+    /// assert!(info.is_archive(&fs::read("testdata/sample.pdf").unwrap()));
     /// ```
     pub fn is_archive(&self, buf: &[u8]) -> bool {
         return self.is_type(buf, map::MatcherType::ARCHIVE);
@@ -280,7 +280,7 @@ impl Infer {
     /// ```rust
     /// use std::fs;
     /// let info = infer::Infer::new();
-    /// assert!(info.is_document(&fs::read("src/testdata/sample.docx").unwrap()));
+    /// assert!(info.is_document(&fs::read("testdata/sample.docx").unwrap()));
     /// ```
     pub fn is_document(&self, buf: &[u8]) -> bool {
         return self.is_type(buf, map::MatcherType::DOC);
@@ -293,7 +293,7 @@ impl Infer {
     /// ```rust
     /// use std::fs;
     /// let info = infer::Infer::new();
-    /// assert!(info.is_font(&fs::read("src/testdata/sample.ttf").unwrap()));
+    /// assert!(info.is_font(&fs::read("testdata/sample.ttf").unwrap()));
     /// ```
     pub fn is_font(&self, buf: &[u8]) -> bool {
         return self.is_type(buf, map::MatcherType::FONT);
@@ -319,7 +319,7 @@ impl Infer {
     /// ```rust
     /// use std::fs;
     /// let info = infer::Infer::new();
-    /// assert!(info.is_video(&fs::read("src/testdata/sample.mov").unwrap()));
+    /// assert!(info.is_video(&fs::read("testdata/sample.mov").unwrap()));
     /// ```
     pub fn is_video(&self, buf: &[u8]) -> bool {
         return self.is_type(buf, map::MatcherType::VIDEO);
