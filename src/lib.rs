@@ -141,13 +141,7 @@ impl Infer {
     /// assert_eq!("jpg", typ.ext);
     /// ```
     pub fn get_from_path<P: AsRef<Path>>(&self, path: P) -> Result<Option<Type>, std::io::Error> {
-        let r = fs::read(path);
-
-        if r.is_err() {
-            return Err(r.unwrap_err());
-        }
-
-        let data = r.unwrap();
+        let data = fs::read(path)?;
 
         return Ok(self.get(&data));
     }
