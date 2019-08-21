@@ -106,33 +106,120 @@ pub fn is_flv(buf: &[u8]) -> bool {
 /// Returns whether a buffer is MP4 video data.
 pub fn is_mp4(buf: &[u8]) -> bool {
     return buf.len() > 11
-        && (buf[4] == 'f' as u8 && buf[5] == 't' as u8 && buf[6] == 'y' as u8 && buf[7] == 'p' as u8)
-        && ((buf[8] == 'a' as u8 && buf[9] == 'v' as u8 && buf[10] == 'c' as u8 && buf[11] == '1' as u8)
-            || (buf[8] == 'd' as u8 && buf[9] == 'a' as u8 && buf[10] == 's' as u8 && buf[11] == 'h' as u8)
-            || (buf[8] == 'i' as u8 && buf[9] == 's' as u8 && buf[10] == 'o' as u8 && buf[11] == '2' as u8)
-            || (buf[8] == 'i' as u8 && buf[9] == 's' as u8 && buf[10] == 'o' as u8 && buf[11] == '3' as u8)
-            || (buf[8] == 'i' as u8 && buf[9] == 's' as u8 && buf[10] == 'o' as u8 && buf[11] == '4' as u8)
-            || (buf[8] == 'i' as u8 && buf[9] == 's' as u8 && buf[10] == 'o' as u8 && buf[11] == '5' as u8)
-            || (buf[8] == 'i' as u8 && buf[9] == 's' as u8 && buf[10] == 'o' as u8 && buf[11] == '6' as u8)
-            || (buf[8] == 'i' as u8 && buf[9] == 's' as u8 && buf[10] == 'o' as u8 && buf[11] == 'm' as u8)
-            || (buf[8] == 'm' as u8 && buf[9] == 'm' as u8 && buf[10] == 'p' as u8 && buf[11] == '4' as u8)
-            || (buf[8] == 'm' as u8 && buf[9] == 'p' as u8 && buf[10] == '4' as u8 && buf[11] == '1' as u8)
-            || (buf[8] == 'm' as u8 && buf[9] == 'p' as u8 && buf[10] == '4' as u8 && buf[11] == '2' as u8)
-            || (buf[8] == 'm' as u8 && buf[9] == 'p' as u8 && buf[10] == '4' as u8 && buf[11] == 'v' as u8)
-            || (buf[8] == 'm' as u8 && buf[9] == 'p' as u8 && buf[10] == '7' as u8 && buf[11] == '1' as u8)
-            || (buf[8] == 'M' as u8 && buf[9] == 'S' as u8 && buf[10] == 'N' as u8 && buf[11] == 'V' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'A' as u8 && buf[11] == 'S' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'S' as u8 && buf[11] == 'C' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'S' as u8 && buf[10] == 'D' as u8 && buf[11] == 'C' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'S' as u8 && buf[11] == 'H' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'S' as u8 && buf[11] == 'M' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'S' as u8 && buf[11] == 'P' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'S' as u8 && buf[11] == 'S' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'X' as u8 && buf[11] == 'C' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'X' as u8 && buf[11] == 'H' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'X' as u8 && buf[11] == 'M' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'X' as u8 && buf[11] == 'P' as u8)
-            || (buf[8] == 'N' as u8 && buf[9] == 'D' as u8 && buf[10] == 'X' as u8 && buf[11] == 'S' as u8)
-            || (buf[8] == 'F' as u8 && buf[9] == '4' as u8 && buf[10] == 'V' as u8 && buf[11] == ' ' as u8)
-            || (buf[8] == 'F' as u8 && buf[9] == '4' as u8 && buf[10] == 'P' as u8 && buf[11] == ' ' as u8));
+        && (buf[4] == 'f' as u8
+            && buf[5] == 't' as u8
+            && buf[6] == 'y' as u8
+            && buf[7] == 'p' as u8)
+        && ((buf[8] == 'a' as u8
+            && buf[9] == 'v' as u8
+            && buf[10] == 'c' as u8
+            && buf[11] == '1' as u8)
+            || (buf[8] == 'd' as u8
+                && buf[9] == 'a' as u8
+                && buf[10] == 's' as u8
+                && buf[11] == 'h' as u8)
+            || (buf[8] == 'i' as u8
+                && buf[9] == 's' as u8
+                && buf[10] == 'o' as u8
+                && buf[11] == '2' as u8)
+            || (buf[8] == 'i' as u8
+                && buf[9] == 's' as u8
+                && buf[10] == 'o' as u8
+                && buf[11] == '3' as u8)
+            || (buf[8] == 'i' as u8
+                && buf[9] == 's' as u8
+                && buf[10] == 'o' as u8
+                && buf[11] == '4' as u8)
+            || (buf[8] == 'i' as u8
+                && buf[9] == 's' as u8
+                && buf[10] == 'o' as u8
+                && buf[11] == '5' as u8)
+            || (buf[8] == 'i' as u8
+                && buf[9] == 's' as u8
+                && buf[10] == 'o' as u8
+                && buf[11] == '6' as u8)
+            || (buf[8] == 'i' as u8
+                && buf[9] == 's' as u8
+                && buf[10] == 'o' as u8
+                && buf[11] == 'm' as u8)
+            || (buf[8] == 'm' as u8
+                && buf[9] == 'm' as u8
+                && buf[10] == 'p' as u8
+                && buf[11] == '4' as u8)
+            || (buf[8] == 'm' as u8
+                && buf[9] == 'p' as u8
+                && buf[10] == '4' as u8
+                && buf[11] == '1' as u8)
+            || (buf[8] == 'm' as u8
+                && buf[9] == 'p' as u8
+                && buf[10] == '4' as u8
+                && buf[11] == '2' as u8)
+            || (buf[8] == 'm' as u8
+                && buf[9] == 'p' as u8
+                && buf[10] == '4' as u8
+                && buf[11] == 'v' as u8)
+            || (buf[8] == 'm' as u8
+                && buf[9] == 'p' as u8
+                && buf[10] == '7' as u8
+                && buf[11] == '1' as u8)
+            || (buf[8] == 'M' as u8
+                && buf[9] == 'S' as u8
+                && buf[10] == 'N' as u8
+                && buf[11] == 'V' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'A' as u8
+                && buf[11] == 'S' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'S' as u8
+                && buf[11] == 'C' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'S' as u8
+                && buf[10] == 'D' as u8
+                && buf[11] == 'C' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'S' as u8
+                && buf[11] == 'H' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'S' as u8
+                && buf[11] == 'M' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'S' as u8
+                && buf[11] == 'P' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'S' as u8
+                && buf[11] == 'S' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'X' as u8
+                && buf[11] == 'C' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'X' as u8
+                && buf[11] == 'H' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'X' as u8
+                && buf[11] == 'M' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'X' as u8
+                && buf[11] == 'P' as u8)
+            || (buf[8] == 'N' as u8
+                && buf[9] == 'D' as u8
+                && buf[10] == 'X' as u8
+                && buf[11] == 'S' as u8)
+            || (buf[8] == 'F' as u8
+                && buf[9] == '4' as u8
+                && buf[10] == 'V' as u8
+                && buf[11] == ' ' as u8)
+            || (buf[8] == 'F' as u8
+                && buf[9] == '4' as u8
+                && buf[10] == 'P' as u8
+                && buf[11] == ' ' as u8));
 }

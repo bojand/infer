@@ -290,7 +290,8 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
     ));
     v.push((
         MatcherType::DOC,
-        "application/application/vnd.openxmlformats-officedocument.presentationml.presentation".to_string(),
+        "application/application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            .to_string(),
         "pptx".to_string(),
         matchers::doc::is_pptx as Matcher,
     ));

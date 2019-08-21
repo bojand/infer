@@ -38,7 +38,11 @@ pub fn is_gif(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is WEBP image data.
 pub fn is_webp(buf: &[u8]) -> bool {
-    return buf.len() > 11 && buf[8] == 0x57 && buf[9] == 0x45 && buf[10] == 0x42 && buf[11] == 0x50;
+    return buf.len() > 11
+        && buf[8] == 0x57
+        && buf[9] == 0x45
+        && buf[10] == 0x42
+        && buf[11] == 0x50;
 }
 
 /// Returns whether a buffer is Canon CR2 image data.

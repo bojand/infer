@@ -44,7 +44,7 @@ assert!(info.is_image(&v));
 ```
 
 ### Adds a custom file type matcher
-    
+
 ```rust
 fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
@@ -123,9 +123,9 @@ impl Infer {
     }
 
     /// Returns the file type of the file given a path.
-    /// 
+    ///
     /// # Errors
-    /// 
+    ///
     /// Returns an error if we fail to read the path.
     ///
     /// # Examples
@@ -254,7 +254,7 @@ impl Infer {
     }
 
     /// Determines whether a buffer is an audio type.
-    /// 
+    ///
     /// # Examples
     ///
     /// ```rust
@@ -320,14 +320,14 @@ impl Infer {
     }
 
     /// Determines whether a buffer isone of the custom types added.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```rust
     /// fn custom_matcher(buf: &[u8]) -> bool {
     ///     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
     /// }
-    /// 
+    ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
     /// let v = vec![0x10, 0x11, 0x12, 0x13];
@@ -338,14 +338,14 @@ impl Infer {
     }
 
     /// Adds a custom matcher.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```rust
     /// fn custom_matcher(buf: &[u8]) -> bool {
     ///     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
     /// }
-    /// 
+    ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
     /// let v = vec![0x10, 0x11, 0x12, 0x13];
@@ -353,8 +353,13 @@ impl Infer {
     /// assert_eq!("custom/foo", res.mime);
     /// assert_eq!("foo", res.ext);
     /// ```
-    pub fn add(&mut self, mime: &str , ext: &str, m: Matcher) {
-        self.mmap.push((map::MatcherType::CUSTOM, mime.to_string(), ext.to_string(), m));
+    pub fn add(&mut self, mime: &str, ext: &str, m: Matcher) {
+        self.mmap.push((
+            map::MatcherType::CUSTOM,
+            mime.to_string(),
+            ext.to_string(),
+            m,
+        ));
     }
 
     fn is_type(&self, buf: &[u8], typ: map::MatcherType) -> bool {
