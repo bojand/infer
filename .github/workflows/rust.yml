@@ -1,4 +1,4 @@
-name: Build & Test
+name: ci
 
 on:
   push:
@@ -13,7 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Install rustfm
+      run: rustup component add rustfmt
+    - name: Check format
+      run: cargo fmt --all -- --check
     - name: Build
       run: cargo build --verbose
-    - name: Run tests
+    - name: Test
       run: cargo test --verbose
