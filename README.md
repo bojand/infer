@@ -1,8 +1,8 @@
 # infer
 
-[![Build Status](https://img.shields.io/circleci/project/github/bojand/infer/master.svg?style=flat-square)](https://circleci.com/gh/bojand/infer)
-[![crates version](https://img.shields.io/crates/v/infer.svg?style=flat-square)](https://crates.io/crates/infer)
-[![documentation](https://docs.rs/infer/badge.svg?style=flat-square)](https://docs.rs/infer)
+![Build Status](https://github.com/bojand/infer/workflows/build/badge.svg)
+[![crates version](https://img.shields.io/crates/v/infer.svg)](https://crates.io/crates/infer)
+[![documentation](https://docs.rs/infer/badge.svg)](https://docs.rs/infer)
 
 Small crate to infer file and MIME type by checking the
 [magic number](https://en.wikipedia.org/wiki/Magic_number_(programming)) signature. 
