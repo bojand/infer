@@ -5,12 +5,12 @@ use std::str;
 
 /// Returns whether a buffer is JPEG image data.
 pub fn is_jpeg(buf: &[u8]) -> bool {
-    return buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF;
+    buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF
 }
 
 /// Returns whether a buffer is jpg2 image data.
 pub fn is_jpeg2000(buf: &[u8]) -> bool {
-    return buf.len() > 12
+    buf.len() > 12
         && buf[0] == 0x0
         && buf[1] == 0x0
         && buf[2] == 0x0
@@ -23,69 +23,65 @@ pub fn is_jpeg2000(buf: &[u8]) -> bool {
         && buf[9] == 0xA
         && buf[10] == 0x87
         && buf[11] == 0xA
-        && buf[12] == 0x0;
+        && buf[12] == 0x0
 }
 
 /// Returns whether a buffer is PNG image data.
 pub fn is_png(buf: &[u8]) -> bool {
-    return buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47;
+    buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47
 }
 
 /// Returns whether a buffer is GIF image data.
 pub fn is_gif(buf: &[u8]) -> bool {
-    return buf.len() > 2 && buf[0] == 0x47 && buf[1] == 0x49 && buf[2] == 0x46;
+    buf.len() > 2 && buf[0] == 0x47 && buf[1] == 0x49 && buf[2] == 0x46
 }
 
 /// Returns whether a buffer is WEBP image data.
 pub fn is_webp(buf: &[u8]) -> bool {
-    return buf.len() > 11
-        && buf[8] == 0x57
-        && buf[9] == 0x45
-        && buf[10] == 0x42
-        && buf[11] == 0x50;
+    buf.len() > 11 && buf[8] == 0x57 && buf[9] == 0x45 && buf[10] == 0x42 && buf[11] == 0x50
 }
 
 /// Returns whether a buffer is Canon CR2 image data.
 pub fn is_cr2(buf: &[u8]) -> bool {
-    return buf.len() > 9
+    buf.len() > 9
         && ((buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0x2A && buf[3] == 0x0)
             || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
         && buf[8] == 0x43
-        && buf[9] == 0x52;
+        && buf[9] == 0x52
 }
 
 /// Returns whether a buffer is TIFF image data.
 pub fn is_tiff(buf: &[u8]) -> bool {
-    return buf.len() > 3
+    buf.len() > 3
         && ((buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0x2A && buf[3] == 0x0)
             || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
         && buf[8] != 0x43
-        && buf[9] != 0x52;
+        && buf[9] != 0x52
 }
 
 /// Returns whether a buffer is BMP image data.
 pub fn is_bmp(buf: &[u8]) -> bool {
-    return buf.len() > 1 && buf[0] == 0x42 && buf[1] == 0x4D;
+    buf.len() > 1 && buf[0] == 0x42 && buf[1] == 0x4D
 }
 
 /// Returns whether a buffer is jxr image data.
 pub fn is_jxr(buf: &[u8]) -> bool {
-    return buf.len() > 2 && buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0xBC;
+    buf.len() > 2 && buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0xBC
 }
 
 /// Returns whether a buffer is Photoshop PSD image data.
 pub fn is_psd(buf: &[u8]) -> bool {
-    return buf.len() > 3 && buf[0] == 0x38 && buf[1] == 0x42 && buf[2] == 0x50 && buf[3] == 0x53;
+    buf.len() > 3 && buf[0] == 0x38 && buf[1] == 0x42 && buf[2] == 0x50 && buf[3] == 0x53
 }
 
 /// Returns whether a buffer is ICO icon image data.
 pub fn is_ico(buf: &[u8]) -> bool {
-    return buf.len() > 3 && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01 && buf[3] == 0x00;
+    buf.len() > 3 && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01 && buf[3] == 0x00
 }
 
 /// Returns whether a buffer is HEIF image data.
 pub fn is_heif(buf: &[u8]) -> bool {
-    if buf.len() == 0 {
+    if buf.is_empty() {
         return false;
     }
 
@@ -108,7 +104,7 @@ pub fn is_heif(buf: &[u8]) -> bool {
                 }
             }
 
-            return false;
+            false
         }
     }
 }
@@ -129,11 +125,7 @@ fn is_isobmff(buf: &[u8]) -> bool {
     }
 
     let ftyp_length = BigEndian::read_u32(&buf[0..4]) as usize;
-    if buf.len() < ftyp_length {
-        return false;
-    }
-
-    return true;
+    buf.len() >= ftyp_length
 }
 
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
@@ -160,5 +152,5 @@ fn get_ftyp(buf: &[u8]) -> Option<(String, String, Vec<String>)> {
         compatible.push(String::from(v));
     }
 
-    return Some((major, minor, compatible));
+    Some((major, minor, compatible))
 }

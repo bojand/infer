@@ -119,7 +119,7 @@ impl Infer {
             }
         }
 
-        return None;
+        None
     }
 
     /// Returns the file type of the file given a path.
@@ -143,7 +143,7 @@ impl Infer {
     pub fn get_from_path<P: AsRef<Path>>(&self, path: P) -> Result<Option<Type>, std::io::Error> {
         let data = fs::read(path)?;
 
-        return Ok(self.get(&data));
+        Ok(self.get(&data))
     }
 
     /// Determines whether a buffer is of given extension.
@@ -156,7 +156,7 @@ impl Infer {
     /// assert!(info.is(&v, "jpg"));
     /// ```
     pub fn is(&self, buf: &[u8], ext: &str) -> bool {
-        for (_mt, _mi, _e, matcher) in self
+        if let Some((_mt, _mi, _e, matcher)) = self
             .mmap
             .iter()
             .find(|(_mt, _mime, ex, _matcher)| *ex == ext)
@@ -166,7 +166,7 @@ impl Infer {
             }
         }
 
-        return false;
+        false
     }
 
     /// Determines whether a buffer is of given mime type.
@@ -179,7 +179,7 @@ impl Infer {
     /// assert!(info.is_mime(&v, "image/jpeg"));
     /// ```
     pub fn is_mime(&self, buf: &[u8], mime: &str) -> bool {
-        for (_mt, _mi, _e, matcher) in self
+        if let Some((_mt, _mi, _e, matcher)) = self
             .mmap
             .iter()
             .find(|(_mt, mi, _ext, _matcher)| *mi == mime)
@@ -189,7 +189,7 @@ impl Infer {
             }
         }
 
-        return false;
+        false
     }
 
     /// Returns whether an extension is supported.
@@ -207,7 +207,7 @@ impl Infer {
             }
         }
 
-        return false;
+        false
     }
 
     /// Returns whether a mime type is supported.
@@ -225,7 +225,7 @@ impl Infer {
             }
         }
 
-        return false;
+        false
     }
 
     /// Determines whether a buffer is an image type.
@@ -238,7 +238,7 @@ impl Infer {
     /// assert!(info.is_app(&fs::read("testdata/sample.wasm").unwrap()));
     /// ```
     pub fn is_app(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::APP);
+        self.is_type(buf, map::MatcherType::APP)
     }
 
     /// Determines whether a buffer is an archive type.
@@ -250,7 +250,7 @@ impl Infer {
     /// assert!(info.is_archive(&fs::read("testdata/sample.pdf").unwrap()));
     /// ```
     pub fn is_archive(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::ARCHIVE);
+        self.is_type(buf, map::MatcherType::ARCHIVE)
     }
 
     /// Determines whether a buffer is an audio type.
@@ -264,7 +264,7 @@ impl Infer {
     /// assert!(info.is_audio(&v));
     /// ```
     pub fn is_audio(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::AUDIO);
+        self.is_type(buf, map::MatcherType::AUDIO)
     }
 
     /// Determines whether a buffer is a document type.
@@ -277,7 +277,7 @@ impl Infer {
     /// assert!(info.is_document(&fs::read("testdata/sample.docx").unwrap()));
     /// ```
     pub fn is_document(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::DOC);
+        self.is_type(buf, map::MatcherType::DOC)
     }
 
     /// Determines whether a buffer is a font type.
@@ -290,7 +290,7 @@ impl Infer {
     /// assert!(info.is_font(&fs::read("testdata/sample.ttf").unwrap()));
     /// ```
     pub fn is_font(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::FONT);
+        self.is_type(buf, map::MatcherType::FONT)
     }
 
     /// Determines whether a buffer is an image type.
@@ -303,7 +303,7 @@ impl Infer {
     /// assert!(info.is_image(&v));
     /// ```
     pub fn is_image(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::IMAGE);
+        self.is_type(buf, map::MatcherType::IMAGE)
     }
 
     /// Determines whether a buffer is a video type.
@@ -316,7 +316,7 @@ impl Infer {
     /// assert!(info.is_video(&fs::read("testdata/sample.mov").unwrap()));
     /// ```
     pub fn is_video(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::VIDEO);
+        self.is_type(buf, map::MatcherType::VIDEO)
     }
 
     /// Determines whether a buffer isone of the custom types added.
@@ -334,7 +334,7 @@ impl Infer {
     /// assert!(info.is_custom(&v));
     /// ```
     pub fn is_custom(&self, buf: &[u8]) -> bool {
-        return self.is_type(buf, map::MatcherType::CUSTOM);
+        self.is_type(buf, map::MatcherType::CUSTOM)
     }
 
     /// Adds a custom matcher.
@@ -373,7 +373,13 @@ impl Infer {
             }
         }
 
-        return false;
+        false
+    }
+}
+
+impl Default for Infer {
+    fn default() -> Self {
+        Infer::new()
     }
 }
 
