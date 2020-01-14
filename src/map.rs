@@ -435,4 +435,10 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
         "dcm".to_string(),
         matchers::archive::is_dcm as Matcher,
     ));
+    v.push((
+        MatcherType::ARCHIVE,
+        "application/zstd".to_string(),
+        "zst".to_string(),
+        matchers::archive::is_zst as Matcher,
+    ));
 }

@@ -162,6 +162,7 @@ assert_eq!("foo", res.ext);
 - **lz** - `application/x-lzip`
 - **rpm** - `application/x-rpm`
 - **dcm** - `application/dicom`
+- **zst** - `application/zstd`
 
 #### Documents
 

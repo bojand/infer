@@ -41,3 +41,17 @@ fn test_sqlite() {
         info.get(&fs::read("testdata/sample.db").unwrap()).unwrap()
     );
 }
+
+#[test]
+fn test_zst() {
+    let info = Infer::new();
+
+    assert_eq!(
+        infer::Type {
+            mime: String::from("application/zstd"),
+            ext: String::from("zst"),
+        },
+        info.get(&fs::read("testdata/sample.tar.zst").unwrap())
+            .unwrap()
+    );
+}

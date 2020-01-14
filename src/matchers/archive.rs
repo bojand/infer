@@ -219,3 +219,8 @@ pub fn is_rpm(buf: &[u8]) -> bool {
 pub fn is_dcm(buf: &[u8]) -> bool {
     buf.len() > 131 && buf[128] == 0x44 && buf[129] == 0x49 && buf[130] == 0x43 && buf[131] == 0x4D
 }
+
+/// Returns whether a buffer is a Zstd archive.
+pub fn is_zst(buf: &[u8]) -> bool {
+    buf.len() > 3 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD
+}
