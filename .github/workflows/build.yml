@@ -4,9 +4,19 @@ on:
   push:
     branches:
     - master
+    paths:
+    - 'Cargo*'
+    - 'src/**'
+    - 'tests/**'
+    - 'testdata/**'
   pull_request:
     branches:
     - master
+    paths:
+    - 'Cargo*'
+    - 'src/**'
+    - 'tests/**'
+    - 'testdata/**'
 
 jobs:
   build:
