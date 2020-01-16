@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
       - name: Generate release notes
         run: |
           # Temporary fix for https://github.com/actions/setup-go/issues/14
@@ -48,7 +48,8 @@ jobs:
     needs: github_build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout  
+        uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
