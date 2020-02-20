@@ -228,7 +228,7 @@ impl Infer {
         false
     }
 
-    /// Determines whether a buffer is an image type.
+    /// Determines whether a buffer is an application type.
     ///
     /// # Examples
     ///
@@ -319,7 +319,7 @@ impl Infer {
         self.is_type(buf, map::MatcherType::VIDEO)
     }
 
-    /// Determines whether a buffer isone of the custom types added.
+    /// Determines whether a buffer is one of the custom types added.
     ///
     /// # Examples
     ///
