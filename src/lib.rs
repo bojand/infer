@@ -65,7 +65,8 @@ assert_eq!("foo", res.ext);
 mod map;
 mod matchers;
 
-use std::fs;
+use std::fs::File;
+use std::io::Read;
 use std::path::Path;
 
 /// All the supported matchers categorized and exposed as functions
@@ -141,9 +142,16 @@ impl Infer {
     /// assert_eq!("jpg", typ.ext);
     /// ```
     pub fn get_from_path<P: AsRef<Path>>(&self, path: P) -> Result<Option<Type>, std::io::Error> {
-        let data = fs::read(path)?;
+        let file = File::open(path)?;
 
-        Ok(self.get(&data))
+        let limit = file
+            .metadata()
+            .map(|m| std::cmp::min(m.len(), 8192) as usize + 1)
+            .unwrap_or(0);
+        let mut bytes = Vec::with_capacity(limit);
+        file.take(8192).read_to_end(&mut bytes)?;
+
+        Ok(self.get(&bytes))
     }
 
     /// Determines whether a buffer is of given extension.
