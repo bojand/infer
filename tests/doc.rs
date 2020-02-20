@@ -1,7 +1,6 @@
 extern crate infer;
 
 use infer::Infer;
-use std::fs;
 
 #[test]
 fn test_doc() {
@@ -12,7 +11,7 @@ fn test_doc() {
             mime: String::from("application/msword"),
             ext: String::from("doc"),
         },
-        info.get(&fs::read("testdata/sample.doc").unwrap()).unwrap()
+        info.get_from_path("testdata/sample.doc").unwrap().unwrap()
     );
 }
 
@@ -27,8 +26,7 @@ fn test_docx() {
             ),
             ext: String::from("docx"),
         },
-        info.get(&fs::read("testdata/sample.docx").unwrap())
-            .unwrap()
+        info.get_from_path("testdata/sample.docx").unwrap().unwrap()
     );
 }
 
@@ -41,8 +39,7 @@ fn test_xlsx() {
             mime: String::from("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
             ext: String::from("xlsx"),
         },
-        info.get(&fs::read("testdata/sample.xlsx").unwrap())
-            .unwrap()
+        info.get_from_path("testdata/sample.xlsx").unwrap().unwrap()
     );
 }
 
@@ -50,9 +47,11 @@ fn test_xlsx() {
 fn test_pptx() {
     let info = Infer::new();
 
-    assert_eq!(infer::Type {
-        mime: String::from("application/application/vnd.openxmlformats-officedocument.presentationml.presentation"),
-        ext: String::from("pptx"),
-    },
-    info.get(&fs::read("testdata/sample.pptx").unwrap()).unwrap());
+    assert_eq!(
+        infer::Type {
+            mime: String::from("application/application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+            ext: String::from("pptx"),
+        },
+        info.get_from_path("testdata/sample.pptx").unwrap().unwrap()
+    );
 }

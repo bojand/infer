@@ -1,7 +1,6 @@
 extern crate infer;
 
 use infer::Infer;
-use std::fs;
 
 #[test]
 fn test_exe() {
@@ -12,7 +11,7 @@ fn test_exe() {
             mime: String::from("application/x-msdownload"),
             ext: String::from("exe"),
         },
-        info.get(&fs::read("testdata/sample.exe").unwrap()).unwrap()
+        info.get_from_path("testdata/sample.exe").unwrap().unwrap()
     );
 }
 
@@ -25,7 +24,7 @@ fn test_elf() {
             mime: String::from("application/x-executable"),
             ext: String::from("elf"),
         },
-        info.get(&fs::read("testdata/sample_elf").unwrap()).unwrap()
+        info.get_from_path("testdata/sample_elf").unwrap().unwrap()
     );
 }
 
@@ -38,7 +37,7 @@ fn test_sqlite() {
             mime: String::from("application/x-sqlite3"),
             ext: String::from("sqlite"),
         },
-        info.get(&fs::read("testdata/sample.db").unwrap()).unwrap()
+        info.get_from_path("testdata/sample.db").unwrap().unwrap()
     );
 }
 
@@ -51,7 +50,8 @@ fn test_zst() {
             mime: String::from("application/zstd"),
             ext: String::from("zst"),
         },
-        info.get(&fs::read("testdata/sample.tar.zst").unwrap())
+        info.get_from_path("testdata/sample.tar.zst")
+            .unwrap()
             .unwrap()
     );
 }

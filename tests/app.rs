@@ -1,7 +1,6 @@
 extern crate infer;
 
 use infer::Infer;
-use std::fs;
 
 #[test]
 fn test_wasm() {
@@ -11,7 +10,6 @@ fn test_wasm() {
             mime: String::from("application/wasm"),
             ext: String::from("wasm"),
         },
-        info.get(&fs::read("testdata/sample.wasm").unwrap())
-            .unwrap()
+        info.get_from_path("testdata/sample.wasm").unwrap().unwrap()
     );
 }
