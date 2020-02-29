@@ -52,7 +52,7 @@ pub fn is_cr2(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is TIFF image data.
 pub fn is_tiff(buf: &[u8]) -> bool {
-    buf.len() > 3
+    buf.len() > 9
         && ((buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0x2A && buf[3] == 0x0)
             || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
         && buf[8] != 0x43
