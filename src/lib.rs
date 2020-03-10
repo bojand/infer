@@ -411,7 +411,7 @@ mod tests {
                 assert_eq!(info.ext, "jpg");
                 assert_eq!(info.mime, "image/jpeg");
             }
-            None => assert!(false, "type info expected"),
+            None => panic!("type info expected"),
         }
     }
 }
