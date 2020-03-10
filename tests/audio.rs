@@ -1,7 +1,6 @@
 extern crate infer;
 
 use infer::Infer;
-use std::fs;
 
 #[test]
 fn test_mp3() {
@@ -12,6 +11,6 @@ fn test_mp3() {
             mime: String::from("audio/mpeg"),
             ext: String::from("mp3"),
         },
-        info.get(&fs::read("testdata/sample.mp3").unwrap()).unwrap()
+        info.get_from_path("testdata/sample.mp3").unwrap().unwrap()
     );
 }
