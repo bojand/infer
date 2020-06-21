@@ -11,6 +11,3 @@ homepage = "https://github.com/bojand/infer"
 repository = "https://github.com/bojand/infer"
 documentation = "https://github.com/bojand/infer"
 exclude = ["testdata/*", "tests/*"]
-
-[dependencies]
-byteorder = "1"
