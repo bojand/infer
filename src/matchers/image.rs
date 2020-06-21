@@ -46,6 +46,7 @@ pub fn is_cr2(buf: &[u8]) -> bool {
             || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
         && buf[8] == 0x43
         && buf[9] == 0x52
+        && buf[10] == 0x02 // CR2 major version
 }
 
 /// Returns whether a buffer is TIFF image data.
@@ -55,6 +56,7 @@ pub fn is_tiff(buf: &[u8]) -> bool {
             || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
         && buf[8] != 0x43
         && buf[9] != 0x52
+        && !is_cr2(buf) // To avoid conflicts differentiate Tiff from CR2
 }
 
 /// Returns whether a buffer is BMP image data.
