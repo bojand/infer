@@ -1,6 +1,4 @@
-extern crate byteorder;
-
-use byteorder::{BigEndian, ByteOrder};
+use std::convert::TryInto;
 use std::str;
 
 /// Returns whether a buffer is JPEG image data.
@@ -124,7 +122,7 @@ fn is_isobmff(buf: &[u8]) -> bool {
         return false;
     }
 
-    let ftyp_length = BigEndian::read_u32(&buf[0..4]) as usize;
+    let ftyp_length = u32::from_be_bytes(buf[0..4].try_into().unwrap()) as usize;
     buf.len() >= ftyp_length
 }
 
@@ -134,7 +132,7 @@ fn get_ftyp(buf: &[u8]) -> Option<(String, String, Vec<String>)> {
         return None;
     }
 
-    let ftyp_length = BigEndian::read_u32(&buf[0..4]) as usize;
+    let ftyp_length = u32::from_be_bytes(buf[0..4].try_into().unwrap()) as usize;
 
     let major_str = str::from_utf8(&buf[8..12]);
     let minor_str = str::from_utf8(&buf[12..16]);
