@@ -138,7 +138,7 @@ fn test_ico() {
 
     assert_eq!(
         infer::Type {
-            mime: String::from("image/x-icon"),
+            mime: String::from("image/vnd.microsoft.icon"),
             ext: String::from("ico"),
         },
         info.get_from_path("testdata/sample.ico").unwrap().unwrap()

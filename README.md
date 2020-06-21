@@ -112,7 +112,7 @@ assert_eq!("foo", res.ext);
 - **heif** - `image/heif`
 - **jxr** - `image/vnd.ms-photo`
 - **psd** - `image/vnd.adobe.photoshop`
-- **ico** - `image/x-icon`
+- **ico** - `image/vnd.microsoft.icon`
 
 #### Video
 
@@ -142,7 +142,7 @@ assert_eq!("foo", res.ext);
 - **epub** - `application/epub+zip`
 - **zip** - `application/zip`
 - **tar** - `application/x-tar`
-- **rar** - `application/x-rar-compressed`
+- **rar** - `application/vnd.rar`
 - **gz** - `application/gzip`
 - **bz2** - `application/x-bzip2`
 - **7z** - `application/x-7z-compressed`
@@ -152,11 +152,11 @@ assert_eq!("foo", res.ext);
 - **rtf** - `application/rtf`
 - **eot** - `application/octet-stream`
 - **ps** - `application/postscript`
-- **sqlite** - `application/x-sqlite3`
+- **sqlite** - `application/vnd.sqlite3`
 - **nes** - `application/x-nintendo-nes-rom`
 - **crx** - `application/x-google-chrome-extension`
 - **cab** - `application/vnd.ms-cab-compressed`
-- **deb** - `application/x-deb`
+- **deb** - `application/vnd.debian.binary-package`
 - **ar** - `application/x-unix-archive`
 - **Z** - `application/x-compress`
 - **lz** - `application/x-lzip`
@@ -183,7 +183,7 @@ assert_eq!("foo", res.ext);
 #### Application
 
 - **wasm** - `application/wasm`
-- **exe** - `application/x-msdownload`
+- **exe** - `application/vnd.microsoft.portable-executable`
 - **elf** - `application/x-executable`
 - **bc** - `application/llvm`
 - **class** - `application/java`

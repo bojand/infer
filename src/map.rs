@@ -34,7 +34,7 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
     ));
     v.push((
         MatcherType::APP,
-        "application/x-msdownload".to_string(),
+        "application/vnd.microsoft.portable-executable".to_string(),
         "exe".to_string(),
         matchers::app::is_exe as Matcher,
     ));
@@ -114,7 +114,7 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
     ));
     v.push((
         MatcherType::IMAGE,
-        "image/x-icon".to_string(),
+        "image/vnd.microsoft.icon".to_string(),
         "ico".to_string(),
         matchers::image::is_ico as Matcher,
     ));
@@ -317,7 +317,7 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
     ));
     v.push((
         MatcherType::ARCHIVE,
-        "application/x-rar-compressed".to_string(),
+        "application/vnd.rar".to_string(),
         "rar".to_string(),
         matchers::archive::is_rar as Matcher,
     ));
@@ -377,7 +377,7 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
     ));
     v.push((
         MatcherType::ARCHIVE,
-        "application/x-sqlite3".to_string(),
+        "application/vnd.sqlite3".to_string(),
         "sqlite".to_string(),
         matchers::archive::is_sqlite as Matcher,
     ));
@@ -401,7 +401,7 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
     ));
     v.push((
         MatcherType::ARCHIVE,
-        "application/x-deb".to_string(),
+        "application/vnd.debian.binary-package".to_string(),
         "deb".to_string(),
         matchers::archive::is_deb as Matcher,
     ));

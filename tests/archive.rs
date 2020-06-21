@@ -8,7 +8,7 @@ fn test_exe() {
 
     assert_eq!(
         infer::Type {
-            mime: String::from("application/x-msdownload"),
+            mime: String::from("application/vnd.microsoft.portable-executable"),
             ext: String::from("exe"),
         },
         info.get_from_path("testdata/sample.exe").unwrap().unwrap()
@@ -34,7 +34,7 @@ fn test_sqlite() {
 
     assert_eq!(
         infer::Type {
-            mime: String::from("application/x-sqlite3"),
+            mime: String::from("application/vnd.sqlite3"),
             ext: String::from("sqlite"),
         },
         info.get_from_path("testdata/sample.db").unwrap().unwrap()
