@@ -31,7 +31,7 @@ like so:
 
 ```toml
 [dependencies]
-infer = "0.1"
+infer = "0.2"
 ```
 
 ## Examples
