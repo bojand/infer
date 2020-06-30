@@ -1,5 +1,4 @@
 use std::convert::TryInto;
-use std::str;
 
 /// Returns whether a buffer is JPEG image data.
 pub fn is_jpeg(buf: &[u8]) -> bool {
@@ -89,38 +88,30 @@ pub fn is_heif(buf: &[u8]) -> bool {
         return false;
     }
 
-    match get_ftyp(buf) {
-        None => false,
-        Some((major, _minor, compatible)) => {
-            if major == "heic" {
-                return true;
-            }
+    if let Some((major, _minor, compatible)) = get_ftyp(buf) {
+        if major == b"heic" {
+            return true;
+        }
 
-            if major == "mif1" || major == "msf1" {
-                for b in compatible {
-                    if b == "heic" {
-                        return true;
-                    }
+        if major == b"mif1" || major == b"msf1" {
+            for b in compatible {
+                if b == b"heic" {
+                    return true;
                 }
             }
-
-            false
         }
     }
+
+    false
 }
 
 // IsISOBMFF checks whether the given buffer represents ISO Base Media File Format data
 fn is_isobmff(buf: &[u8]) -> bool {
-    if buf.len() < 8 {
+    if buf.len() < 16 {
         return false;
     }
 
-    let slice_str = str::from_utf8(&buf[4..8]);
-    if slice_str.is_err() {
-        return false;
-    }
-
-    if buf.len() < 16 || slice_str.unwrap() != "ftyp" {
+    if &buf[4..8] != b"ftyp" {
         return false;
     }
 
@@ -129,28 +120,16 @@ fn is_isobmff(buf: &[u8]) -> bool {
 }
 
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
-fn get_ftyp(buf: &[u8]) -> Option<(String, String, Vec<String>)> {
+fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
     if buf.len() < 16 {
         return None;
     }
 
     let ftyp_length = u32::from_be_bytes(buf[0..4].try_into().unwrap()) as usize;
 
-    let major_str = str::from_utf8(&buf[8..12]);
-    let minor_str = str::from_utf8(&buf[12..16]);
-
-    if major_str.is_err() || minor_str.is_err() {
-        return None;
-    }
-
-    let major = String::from(major_str.unwrap());
-    let minor = String::from(minor_str.unwrap());
-
-    let mut compatible = Vec::new();
-    for i in (16..ftyp_length).step_by(4) {
-        let v = str::from_utf8(&buf[i..i + 4]).unwrap();
-        compatible.push(String::from(v));
-    }
+    let major = &buf[8..12];
+    let minor = &buf[12..16];
+    let compatible = (16..ftyp_length).step_by(4).map(move |i| &buf[i..i + 4]);
 
     Some((major, minor, compatible))
 }
