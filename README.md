@@ -110,6 +110,7 @@ assert_eq!("foo", res.ext);
 - **tif** - `image/tiff`
 - **bmp** - `image/bmp`
 - **heif** - `image/heif`
+- **avif** - `image/avif`
 - **jxr** - `image/vnd.ms-photo`
 - **psd** - `image/vnd.adobe.photoshop`
 - **ico** - `image/vnd.microsoft.icon`

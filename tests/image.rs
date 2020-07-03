@@ -157,3 +157,16 @@ fn test_heif() {
         info.get_from_path("testdata/sample.heic").unwrap().unwrap()
     );
 }
+
+#[test]
+fn test_avif() {
+    let info = Infer::new();
+
+    assert_eq!(
+        infer::Type {
+            mime: String::from("image/avif"),
+            ext: String::from("avif"),
+        },
+        info.get_from_path("testdata/sample.avif").unwrap().unwrap()
+    );
+}

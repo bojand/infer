@@ -105,6 +105,31 @@ pub fn is_heif(buf: &[u8]) -> bool {
     false
 }
 
+/// Returns whether a buffer is AVIF image data.
+pub fn is_avif(buf: &[u8]) -> bool {
+    if buf.is_empty() {
+        return false;
+    }
+
+    if !is_isobmff(buf) {
+        return false;
+    }
+
+    if let Some((major, _minor, compatible)) = get_ftyp(buf) {
+        if major == b"avif" || major == b"avis" {
+            return true;
+        }
+
+        for b in compatible {
+            if b == b"avif" || b == b"avis" {
+                return true;
+            }
+        }
+    }
+
+    false
+}
+
 // IsISOBMFF checks whether the given buffer represents ISO Base Media File Format data
 fn is_isobmff(buf: &[u8]) -> bool {
     if buf.len() < 16 {
