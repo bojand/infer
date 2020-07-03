@@ -124,6 +124,12 @@ pub fn setup(v: &mut Vec<(MatcherType, String, String, Matcher)>) {
         "heif".to_string(),
         matchers::image::is_heif as Matcher,
     ));
+    v.push((
+        MatcherType::IMAGE,
+        "image/avif".to_string(),
+        "avif".to_string(),
+        matchers::image::is_avif as Matcher,
+    ));
 
     // Video
     v.push((
