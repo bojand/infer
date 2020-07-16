@@ -5,7 +5,7 @@ fn test_mp4() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::VIDEO, "video/mp4", "mp4",),
+        Type::new_for_test(MatcherType::VIDEO, "video/mp4", "mp4"),
         info.get_from_path("testdata/sample.mp4").unwrap().unwrap()
     );
 }
@@ -15,7 +15,7 @@ fn test_mkv() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::VIDEO, "video/x-matroska", "mkv",),
+        Type::new_for_test(MatcherType::VIDEO, "video/x-matroska", "mkv"),
         info.get_from_path("testdata/sample.mkv").unwrap().unwrap()
     );
 }
@@ -25,7 +25,7 @@ fn test_webm() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::VIDEO, "video/webm", "webm",),
+        Type::new_for_test(MatcherType::VIDEO, "video/webm", "webm"),
         info.get_from_path("testdata/sample.webm").unwrap().unwrap()
     );
 }
@@ -35,7 +35,7 @@ fn test_mov() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::VIDEO, "video/quicktime", "mov",),
+        Type::new_for_test(MatcherType::VIDEO, "video/quicktime", "mov"),
         info.get_from_path("testdata/sample.mov").unwrap().unwrap()
     );
 }
@@ -45,7 +45,7 @@ fn test_avi() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::VIDEO, "video/x-msvideo", "avi",),
+        Type::new_for_test(MatcherType::VIDEO, "video/x-msvideo", "avi"),
         info.get_from_path("testdata/sample.avi").unwrap().unwrap()
     );
 }
@@ -55,7 +55,7 @@ fn test_flv() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::VIDEO, "video/x-flv", "flv",),
+        Type::new_for_test(MatcherType::VIDEO, "video/x-flv", "flv"),
         info.get_from_path("testdata/sample.flv").unwrap().unwrap()
     );
 }

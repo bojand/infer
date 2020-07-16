@@ -5,7 +5,7 @@ fn test_elf() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::APP, "application/x-executable", "elf",),
+        Type::new_for_test(MatcherType::APP, "application/x-executable", "elf"),
         info.get_from_path("testdata/sample_elf").unwrap().unwrap()
     );
 }
@@ -28,7 +28,7 @@ fn test_exe() {
 fn test_wasm() {
     let info = Infer::new();
     assert_eq!(
-        Type::new_for_test(MatcherType::APP, "application/wasm", "wasm",),
+        Type::new_for_test(MatcherType::APP, "application/wasm", "wasm"),
         info.get_from_path("testdata/sample.wasm").unwrap().unwrap()
     );
 }

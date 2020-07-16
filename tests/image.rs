@@ -5,7 +5,7 @@ fn test_jpg() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/jpeg", "jpg",),
+        Type::new_for_test(MatcherType::IMAGE, "image/jpeg", "jpg"),
         info.get_from_path("testdata/sample.jpg").unwrap().unwrap()
     );
 }
@@ -15,7 +15,7 @@ fn test_png() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/png", "png",),
+        Type::new_for_test(MatcherType::IMAGE, "image/png", "png"),
         info.get_from_path("testdata/sample.png").unwrap().unwrap()
     );
 }
@@ -25,7 +25,7 @@ fn test_gif() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/gif", "gif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/gif", "gif"),
         info.get_from_path("testdata/sample.gif").unwrap().unwrap()
     );
 }
@@ -35,7 +35,7 @@ fn test_tif() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif"),
         info.get_from_path("testdata/sample.tif").unwrap().unwrap()
     );
 }
@@ -45,7 +45,7 @@ fn test_tif2() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif"),
         info.get_from_path("testdata/sample2.tif").unwrap().unwrap()
     );
 }
@@ -55,7 +55,7 @@ fn test_tif3() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif"),
         info.get_from_path("testdata/sample3.tif").unwrap().unwrap()
     );
 }
@@ -65,7 +65,7 @@ fn test_tif4() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif"),
         info.get_from_path("testdata/sample4.tif").unwrap().unwrap()
     );
 }
@@ -75,7 +75,7 @@ fn test_tif5() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/tiff", "tif"),
         info.get_from_path("testdata/sample5.tif").unwrap().unwrap()
     );
 }
@@ -85,7 +85,7 @@ fn test_bmp() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/bmp", "bmp",),
+        Type::new_for_test(MatcherType::IMAGE, "image/bmp", "bmp"),
         info.get_from_path("testdata/sample.bmp").unwrap().unwrap()
     );
 }
@@ -95,7 +95,7 @@ fn test_psd() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/vnd.adobe.photoshop", "psd",),
+        Type::new_for_test(MatcherType::IMAGE, "image/vnd.adobe.photoshop", "psd"),
         info.get_from_path("testdata/sample.psd").unwrap().unwrap()
     );
 }
@@ -105,7 +105,7 @@ fn test_ico() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/vnd.microsoft.icon", "ico",),
+        Type::new_for_test(MatcherType::IMAGE, "image/vnd.microsoft.icon", "ico"),
         info.get_from_path("testdata/sample.ico").unwrap().unwrap()
     );
 }
@@ -115,7 +115,7 @@ fn test_heif() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/heif", "heif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/heif", "heif"),
         info.get_from_path("testdata/sample.heic").unwrap().unwrap()
     );
 }
@@ -125,7 +125,7 @@ fn test_avif() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::IMAGE, "image/avif", "avif",),
+        Type::new_for_test(MatcherType::IMAGE, "image/avif", "avif"),
         info.get_from_path("testdata/sample.avif").unwrap().unwrap()
     );
 }

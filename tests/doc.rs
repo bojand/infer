@@ -5,7 +5,7 @@ fn test_doc() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::DOC, "application/msword", "doc",),
+        Type::new_for_test(MatcherType::DOC, "application/msword", "doc"),
         info.get_from_path("testdata/sample.doc").unwrap().unwrap()
     );
 }
