@@ -21,6 +21,9 @@ macro_rules! matcher_map {
     };
 }
 
+// Order: Application, Image, Video, Audio, Font, Document, Archive.
+// The above order should be preserved when adding new types since
+// it may affect match result and/or performances.
 matcher_map!(
     // Application
     (
