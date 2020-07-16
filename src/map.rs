@@ -13,10 +13,15 @@ pub enum MatcherType {
     CUSTOM,
 }
 
+// This is needed until function pointers can be used in `const fn`.
+// See trick and discussion at https://github.com/rust-lang/rust/issues/63997#issuecomment-616666309
+#[repr(transparent)]
+pub struct WrapMatcher(pub Matcher);
+
 macro_rules! matcher_map {
     ($(($mtype:expr, $mime:literal, $ext:literal, $matcher:expr)),*) => {
-        pub const MATCHER_MAP: &[(MatcherType, &'static str, &'static str, Matcher)] = &[
-            $(($mtype, $mime, $ext, $matcher as Matcher),)*
+        pub const MATCHER_MAP: &[(MatcherType, &'static str, &'static str, WrapMatcher)] = &[
+            $(($mtype, $mime, $ext, WrapMatcher($matcher as Matcher)),)*
         ];
     };
 }
