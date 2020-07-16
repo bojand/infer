@@ -22,6 +22,7 @@ macro_rules! matcher_map {
 }
 
 matcher_map!(
+    // Application
     (
         MatcherType::APP,
         "application/wasm",
