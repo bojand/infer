@@ -69,6 +69,8 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 
+use map::{MatcherType, MATCHER_MAP};
+
 /// All the supported matchers categorized and exposed as functions
 pub use matchers::*;
 
@@ -93,11 +95,18 @@ pub struct Infer {
 impl Infer {
     /// Initialize a new instance of the infer struct.
     pub fn new() -> Infer {
-        let mut v: Vec<(map::MatcherType, String, String, Matcher)> = Vec::new();
+        Infer { mmap: Vec::new() }
+    }
 
-        map::setup(&mut v);
-
-        Infer { mmap: v }
+    fn iter_matchers(&self) -> impl Iterator<Item = (&MatcherType, &str, &str, &Matcher)> {
+        let custom = self
+            .mmap
+            .iter()
+            .map(|(mt, mime, ext, matcher)| (mt, mime.as_str(), ext.as_str(), matcher));
+        MATCHER_MAP
+            .iter()
+            .map(|(mt, mime, ext, matcher)| (mt, *mime, *ext, matcher))
+            .chain(custom)
     }
 
     /// Returns the file type of the buffer.
@@ -111,11 +120,11 @@ impl Infer {
     /// assert_eq!("jpg", info.get(&v).unwrap().ext);
     /// ```
     pub fn get(&self, buf: &[u8]) -> Option<Type> {
-        for (_mt, mime, ext, matcher) in self.mmap.iter() {
+        for (_, mime, ext, matcher) in self.iter_matchers() {
             if matcher(buf) {
                 return Some(Type {
-                    mime: (*mime).clone(),
-                    ext: (*ext).clone(),
+                    mime: mime.to_string(),
+                    ext: ext.to_string(),
                 });
             }
         }
@@ -165,8 +174,7 @@ impl Infer {
     /// ```
     pub fn is(&self, buf: &[u8], ext: &str) -> bool {
         if let Some((_mt, _mi, _e, matcher)) = self
-            .mmap
-            .iter()
+            .iter_matchers()
             .find(|(_mt, _mime, ex, _matcher)| *ex == ext)
         {
             if matcher(buf) {
@@ -188,8 +196,7 @@ impl Infer {
     /// ```
     pub fn is_mime(&self, buf: &[u8], mime: &str) -> bool {
         if let Some((_mt, _mi, _e, matcher)) = self
-            .mmap
-            .iter()
+            .iter_matchers()
             .find(|(_mt, mi, _ext, _matcher)| *mi == mime)
         {
             if matcher(buf) {
@@ -209,8 +216,8 @@ impl Infer {
     /// assert!(info.is_supported("jpg"));
     /// ```
     pub fn is_supported(&self, ext: &str) -> bool {
-        for (_mt, _mime, type_ext, _matcher) in self.mmap.iter() {
-            if ext == *type_ext {
+        for (_mt, _mime, type_ext, _matcher) in self.iter_matchers() {
+            if ext == type_ext {
                 return true;
             }
         }
@@ -227,8 +234,8 @@ impl Infer {
     /// assert!(info.is_mime_supported("image/jpeg"));
     /// ```
     pub fn is_mime_supported(&self, mime: &str) -> bool {
-        for (_mt, type_mime, _ext, _matcher) in self.mmap.iter() {
-            if mime == *type_mime {
+        for (_mt, type_mime, _ext, _matcher) in self.iter_matchers() {
+            if mime == type_mime {
                 return true;
             }
         }
@@ -372,9 +379,8 @@ impl Infer {
 
     fn is_type(&self, buf: &[u8], typ: map::MatcherType) -> bool {
         for (_mt, _mi, _ex, matcher) in self
-            .mmap
-            .iter()
-            .filter(|(mt, _mime, _e, _matcher)| *mt == typ)
+            .iter_matchers()
+            .filter(|(mt, _mime, _e, _matcher)| **mt == typ)
         {
             if matcher(buf) {
                 return true;
