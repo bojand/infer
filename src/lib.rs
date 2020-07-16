@@ -65,7 +65,7 @@ mod matchers;
 
 use std::fmt;
 use std::fs::File;
-use std::io::Read;
+use std::io::{self, Read};
 use std::path::Path;
 
 pub use map::MatcherType;
@@ -181,13 +181,7 @@ impl Infer {
     /// assert_eq!("jpg", info.get(&v).unwrap().extension());
     /// ```
     pub fn get(&self, buf: &[u8]) -> Option<Type> {
-        for kind in self.iter_matchers() {
-            if kind.matches(buf) {
-                return Some(*kind);
-            }
-        }
-
-        None
+        self.iter_matchers().find(|kind| kind.matches(buf)).copied()
     }
 
     /// Returns the file type of the file given a path.
@@ -195,7 +189,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`get_from_path`](./fn.get_from_path.html).
-    pub fn get_from_path<P: AsRef<Path>>(&self, path: P) -> Result<Option<Type>, std::io::Error> {
+    pub fn get_from_path<P: AsRef<Path>>(&self, path: P) -> io::Result<Option<Type>> {
         let file = File::open(path)?;
 
         let limit = file
@@ -214,16 +208,8 @@ impl Infer {
     ///
     /// See [`is`](./fn.is.html).
     pub fn is(&self, buf: &[u8], extension: &str) -> bool {
-        if let Some(kind) = self
-            .iter_matchers()
-            .find(|kind| kind.extension() == extension)
-        {
-            if kind.matches(buf) {
-                return true;
-            }
-        }
-
-        false
+        self.iter_matchers()
+            .any(|kind| kind.extension() == extension && kind.matches(buf))
     }
 
     /// Determines whether a buffer is of given mime type.
@@ -232,16 +218,8 @@ impl Infer {
     ///
     /// See [`is_mime`](./fn.is_mime.html).
     pub fn is_mime(&self, buf: &[u8], mime_type: &str) -> bool {
-        if let Some(kind) = self
-            .iter_matchers()
-            .find(|kind| kind.mime_type() == mime_type)
-        {
-            if kind.matches(buf) {
-                return true;
-            }
-        }
-
-        false
+        self.iter_matchers()
+            .any(|kind| kind.mime_type() == mime_type && kind.matches(buf))
     }
 
     /// Returns whether an extension is supported.
@@ -250,13 +228,8 @@ impl Infer {
     ///
     /// See [`is_supported`](./fn.is_supported.html).
     pub fn is_supported(&self, extension: &str) -> bool {
-        for kind in self.iter_matchers() {
-            if kind.extension() == extension {
-                return true;
-            }
-        }
-
-        false
+        self.iter_matchers()
+            .any(|kind| kind.extension() == extension)
     }
 
     /// Returns whether a mime type is supported.
@@ -265,13 +238,8 @@ impl Infer {
     ///
     /// See [`is_mime_supported`](./fn.is_mime_supported.html).
     pub fn is_mime_supported(&self, mime_type: &str) -> bool {
-        for kind in self.iter_matchers() {
-            if kind.mime_type() == mime_type {
-                return true;
-            }
-        }
-
-        false
+        self.iter_matchers()
+            .any(|kind| kind.mime_type() == mime_type)
     }
 
     /// Determines whether a buffer is an application type.
@@ -384,16 +352,8 @@ impl Infer {
     }
 
     fn is_type(&self, buf: &[u8], matcher_type: MatcherType) -> bool {
-        for kind in self
-            .iter_matchers()
-            .filter(|kind| kind.matcher_type() == matcher_type)
-        {
-            if kind.matches(buf) {
-                return true;
-            }
-        }
-
-        false
+        self.iter_matchers()
+            .any(|kind| kind.matcher_type() == matcher_type && kind.matches(buf))
     }
 }
 
@@ -435,7 +395,7 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 /// assert_eq!("image/jpeg", typ.mime_type());
 /// assert_eq!("jpg", typ.extension());
 /// ```
-pub fn get_from_path<P: AsRef<Path>>(path: P) -> Result<Option<Type>, std::io::Error> {
+pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
     INFER.get_from_path(path)
 }
 
