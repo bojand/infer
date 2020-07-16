@@ -1,7 +1,6 @@
-use super::matchers;
-use super::Matcher;
+use super::{matchers, Matcher, Type};
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum MatcherType {
     APP,
     ARCHIVE,
@@ -19,9 +18,9 @@ pub enum MatcherType {
 pub struct WrapMatcher(pub Matcher);
 
 macro_rules! matcher_map {
-    ($(($mtype:expr, $mime:literal, $ext:literal, $matcher:expr)),*) => {
-        pub const MATCHER_MAP: &[(MatcherType, &'static str, &'static str, WrapMatcher)] = &[
-            $(($mtype, $mime, $ext, WrapMatcher($matcher as Matcher)),)*
+    ($(($mtype:expr, $mime_type:literal, $extension:literal, $matcher:expr)),*) => {
+        pub const MATCHER_MAP: &[(Type, WrapMatcher)] = &[
+            $((Type::new($mtype, $mime_type, $extension), WrapMatcher($matcher)),)*
         ];
     };
 }

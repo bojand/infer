@@ -1,16 +1,11 @@
-extern crate infer;
-
-use infer::Infer;
+use infer::{Infer, MatcherType, Type};
 
 #[test]
 fn test_jpg() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/jpeg"),
-            ext: String::from("jpg"),
-        },
+        Type::new(MatcherType::IMAGE, "image/jpeg", "jpg",),
         info.get_from_path("testdata/sample.jpg").unwrap().unwrap()
     );
 }
@@ -20,10 +15,7 @@ fn test_png() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/png"),
-            ext: String::from("png"),
-        },
+        Type::new(MatcherType::IMAGE, "image/png", "png",),
         info.get_from_path("testdata/sample.png").unwrap().unwrap()
     );
 }
@@ -33,10 +25,7 @@ fn test_gif() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/gif"),
-            ext: String::from("gif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/gif", "gif",),
         info.get_from_path("testdata/sample.gif").unwrap().unwrap()
     );
 }
@@ -46,10 +35,7 @@ fn test_tif() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/tiff"),
-            ext: String::from("tif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/tiff", "tif",),
         info.get_from_path("testdata/sample.tif").unwrap().unwrap()
     );
 }
@@ -59,10 +45,7 @@ fn test_tif2() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/tiff"),
-            ext: String::from("tif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/tiff", "tif",),
         info.get_from_path("testdata/sample2.tif").unwrap().unwrap()
     );
 }
@@ -72,10 +55,7 @@ fn test_tif3() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/tiff"),
-            ext: String::from("tif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/tiff", "tif",),
         info.get_from_path("testdata/sample3.tif").unwrap().unwrap()
     );
 }
@@ -85,10 +65,7 @@ fn test_tif4() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/tiff"),
-            ext: String::from("tif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/tiff", "tif",),
         info.get_from_path("testdata/sample4.tif").unwrap().unwrap()
     );
 }
@@ -98,10 +75,7 @@ fn test_tif5() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/tiff"),
-            ext: String::from("tif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/tiff", "tif",),
         info.get_from_path("testdata/sample5.tif").unwrap().unwrap()
     );
 }
@@ -111,10 +85,7 @@ fn test_bmp() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/bmp"),
-            ext: String::from("bmp"),
-        },
+        Type::new(MatcherType::IMAGE, "image/bmp", "bmp",),
         info.get_from_path("testdata/sample.bmp").unwrap().unwrap()
     );
 }
@@ -124,10 +95,7 @@ fn test_psd() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/vnd.adobe.photoshop"),
-            ext: String::from("psd"),
-        },
+        Type::new(MatcherType::IMAGE, "image/vnd.adobe.photoshop", "psd",),
         info.get_from_path("testdata/sample.psd").unwrap().unwrap()
     );
 }
@@ -137,10 +105,7 @@ fn test_ico() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/vnd.microsoft.icon"),
-            ext: String::from("ico"),
-        },
+        Type::new(MatcherType::IMAGE, "image/vnd.microsoft.icon", "ico",),
         info.get_from_path("testdata/sample.ico").unwrap().unwrap()
     );
 }
@@ -150,10 +115,7 @@ fn test_heif() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/heif"),
-            ext: String::from("heif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/heif", "heif",),
         info.get_from_path("testdata/sample.heic").unwrap().unwrap()
     );
 }
@@ -163,10 +125,7 @@ fn test_avif() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("image/avif"),
-            ext: String::from("avif"),
-        },
+        Type::new(MatcherType::IMAGE, "image/avif", "avif",),
         info.get_from_path("testdata/sample.avif").unwrap().unwrap()
     );
 }

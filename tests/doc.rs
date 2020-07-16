@@ -1,16 +1,11 @@
-extern crate infer;
-
-use infer::Infer;
+use infer::{Infer, MatcherType, Type};
 
 #[test]
 fn test_doc() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("application/msword"),
-            ext: String::from("doc"),
-        },
+        Type::new(MatcherType::DOC, "application/msword", "doc",),
         info.get_from_path("testdata/sample.doc").unwrap().unwrap()
     );
 }
@@ -20,12 +15,11 @@ fn test_docx() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from(
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ),
-            ext: String::from("docx"),
-        },
+        Type::new(
+            MatcherType::DOC,
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "docx",
+        ),
         info.get_from_path("testdata/sample.docx").unwrap().unwrap()
     );
 }
@@ -35,10 +29,11 @@ fn test_xlsx() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-            ext: String::from("xlsx"),
-        },
+        Type::new(
+            MatcherType::DOC,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "xlsx",
+        ),
         info.get_from_path("testdata/sample.xlsx").unwrap().unwrap()
     );
 }
@@ -48,10 +43,11 @@ fn test_pptx() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("application/application/vnd.openxmlformats-officedocument.presentationml.presentation"),
-            ext: String::from("pptx"),
-        },
+        Type::new(
+            MatcherType::DOC,
+            "application/application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "pptx",
+        ),
         info.get_from_path("testdata/sample.pptx").unwrap().unwrap()
     );
 }
