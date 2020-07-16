@@ -204,6 +204,16 @@ impl Infer {
         Ok(self.get(&bytes))
     }
 
+    /// Returns the `Type` from a mime string.
+    ///
+    /// See [`get_from_str`](./fn.get_from_str.html).
+    pub fn get_from_str<S: AsRef<str>>(&self, val: S) -> Option<Type> {
+        let val = val.as_ref();
+        self.iter_matchers()
+            .find(|kind| kind.mime_type() == val)
+            .copied()
+    }
+
     /// Determines whether a buffer is of given extension.
     ///
     /// # Examples
@@ -399,6 +409,21 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 /// ```
 pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
     INFER.get_from_path(path)
+}
+
+/// Returns the `Type` from a mime string.
+///
+/// # Examples
+///
+/// ```rust
+/// let res = infer::get_from_str("video/mp4");
+/// assert!(res.is_some());
+/// let typ = res.unwrap();
+/// assert_eq!(typ.mime_type(), "video/mp4");
+/// assert_eq!(typ.extension(), "mp4");
+/// ```
+pub fn get_from_str<S: AsRef<str>>(val: S) -> Option<Type> {
+    INFER.get_from_str(val)
 }
 
 /// Determines whether a buffer is of given extension.
