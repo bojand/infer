@@ -1,6 +1,6 @@
 [package]
 name = "infer"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Bojan <dbojan@gmail.com>"]
 edition = "2018"
 description = "Small crate to infer file types based on its magic number signature"
@@ -9,5 +9,5 @@ keywords = ["magic-number", "filetype", "mime", "mime-types"]
 readme = "README.md"
 homepage = "https://github.com/bojand/infer"
 repository = "https://github.com/bojand/infer"
-documentation = "https://github.com/bojand/infer"
+documentation = "https://docs.rs/infer"
 exclude = ["testdata/*", "tests/*"]
