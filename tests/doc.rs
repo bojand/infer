@@ -5,7 +5,7 @@ fn test_doc() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new(MatcherType::DOC, "application/msword", "doc",),
+        Type::new_for_test(MatcherType::DOC, "application/msword", "doc",),
         info.get_from_path("testdata/sample.doc").unwrap().unwrap()
     );
 }
@@ -15,7 +15,7 @@ fn test_docx() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new(
+        Type::new_for_test(
             MatcherType::DOC,
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "docx",
@@ -29,7 +29,7 @@ fn test_xlsx() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new(
+        Type::new_for_test(
             MatcherType::DOC,
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "xlsx",
@@ -43,7 +43,7 @@ fn test_pptx() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new(
+        Type::new_for_test(
             MatcherType::DOC,
             "application/application/vnd.openxmlformats-officedocument.presentationml.presentation",
             "pptx",

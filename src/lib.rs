@@ -63,6 +63,7 @@ assert_eq!("foo", res.extension());
 mod map;
 mod matchers;
 
+use std::fmt;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
@@ -77,24 +78,41 @@ pub use matchers::*;
 pub type Matcher = fn(buf: &[u8]) -> bool;
 
 /// Generic information for a type
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Copy, Clone)]
 pub struct Type {
     matcher_type: MatcherType,
     mime_type: &'static str,
     extension: &'static str,
+    matcher: WrapMatcher,
 }
 
 impl Type {
-    pub const fn new(
+    pub(crate) const fn new(
         matcher_type: MatcherType,
         mime_type: &'static str,
         extension: &'static str,
+        matcher: WrapMatcher,
     ) -> Self {
         Self {
             matcher_type,
             mime_type,
             extension,
+            matcher,
         }
+    }
+
+    /// Only for tests
+    #[doc(hidden)]
+    pub fn new_for_test(
+        matcher_type: MatcherType,
+        mime_type: &'static str,
+        extension: &'static str,
+    ) -> Self {
+        fn matcher(_buf: &[u8]) -> bool {
+            false
+        };
+
+        Self::new(matcher_type, mime_type, extension, WrapMatcher(matcher))
     }
 
     /// Returns the type of matcher
@@ -111,11 +129,34 @@ impl Type {
     pub const fn extension(&self) -> &'static str {
         self.extension
     }
+
+    /// Checks if buf matches this Type
+    fn matches(&self, buf: &[u8]) -> bool {
+        (self.matcher.0)(buf)
+    }
+}
+
+impl fmt::Debug for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Kind")
+            .field("matcher_type", &self.matcher_type)
+            .field("mime_type", &self.mime_type)
+            .field("extension", &self.extension)
+            .finish()
+    }
+}
+
+impl PartialEq for Type {
+    fn eq(&self, other: &Self) -> bool {
+        self.matcher_type == other.matcher_type
+            && self.mime_type == other.mime_type
+            && self.extension == other.extension
+    }
 }
 
 /// Infer allows to use a custom set of `Matcher`s for infering a MIME type.
 pub struct Infer {
-    mmap: Vec<(Type, WrapMatcher)>,
+    mmap: Vec<Type>,
 }
 
 impl Infer {
@@ -124,12 +165,9 @@ impl Infer {
         Infer { mmap: Vec::new() }
     }
 
-    fn iter_matchers(&self) -> impl Iterator<Item = (&Type, &WrapMatcher)> {
-        let mmap = MATCHER_MAP.iter().map(|(kind, matcher)| (kind, matcher));
-        self.mmap
-            .iter()
-            .map(|(kind, matcher)| (kind, matcher))
-            .chain(mmap)
+    fn iter_matchers(&self) -> impl Iterator<Item = &Type> {
+        let mmap = MATCHER_MAP.iter();
+        self.mmap.iter().chain(mmap)
     }
 
     /// Returns the file type of the buffer.
@@ -143,8 +181,8 @@ impl Infer {
     /// assert_eq!("jpg", info.get(&v).unwrap().extension());
     /// ```
     pub fn get(&self, buf: &[u8]) -> Option<Type> {
-        for (kind, matcher) in self.iter_matchers() {
-            if matcher.0(buf) {
+        for kind in self.iter_matchers() {
+            if kind.matches(buf) {
                 return Some(*kind);
             }
         }
@@ -176,11 +214,11 @@ impl Infer {
     ///
     /// See [`is`](./fn.is.html).
     pub fn is(&self, buf: &[u8], extension: &str) -> bool {
-        if let Some((_kind, matcher)) = self
+        if let Some(kind) = self
             .iter_matchers()
-            .find(|(kind, _matcher)| kind.extension() == extension)
+            .find(|kind| kind.extension() == extension)
         {
-            if matcher.0(buf) {
+            if kind.matches(buf) {
                 return true;
             }
         }
@@ -194,11 +232,11 @@ impl Infer {
     ///
     /// See [`is_mime`](./fn.is_mime.html).
     pub fn is_mime(&self, buf: &[u8], mime_type: &str) -> bool {
-        if let Some((_kind, matcher)) = self
+        if let Some(kind) = self
             .iter_matchers()
-            .find(|(kind, _matcher)| kind.mime_type() == mime_type)
+            .find(|kind| kind.mime_type() == mime_type)
         {
-            if matcher.0(buf) {
+            if kind.matches(buf) {
                 return true;
             }
         }
@@ -212,7 +250,7 @@ impl Infer {
     ///
     /// See [`is_supported`](./fn.is_supported.html).
     pub fn is_supported(&self, extension: &str) -> bool {
-        for (kind, _matcher) in self.iter_matchers() {
+        for kind in self.iter_matchers() {
             if kind.extension() == extension {
                 return true;
             }
@@ -227,7 +265,7 @@ impl Infer {
     ///
     /// See [`is_mime_supported`](./fn.is_mime_supported.html).
     pub fn is_mime_supported(&self, mime_type: &str) -> bool {
-        for (kind, _matcher) in self.iter_matchers() {
+        for kind in self.iter_matchers() {
             if kind.mime_type() == mime_type {
                 return true;
             }
@@ -337,18 +375,20 @@ impl Infer {
     /// assert_eq!("foo", res.extension());
     /// ```
     pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {
-        self.mmap.push((
-            Type::new(MatcherType::CUSTOM, mime_type, extension),
+        self.mmap.push(Type::new(
+            MatcherType::CUSTOM,
+            mime_type,
+            extension,
             WrapMatcher(m),
         ));
     }
 
     fn is_type(&self, buf: &[u8], matcher_type: MatcherType) -> bool {
-        for (_kind, matcher) in self
+        for kind in self
             .iter_matchers()
-            .filter(|(kind, _matcher)| kind.matcher_type() == matcher_type)
+            .filter(|kind| kind.matcher_type() == matcher_type)
         {
-            if matcher.0(buf) {
+            if kind.matches(buf) {
                 return true;
             }
         }
