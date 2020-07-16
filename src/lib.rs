@@ -99,14 +99,13 @@ impl Infer {
     }
 
     fn iter_matchers(&self) -> impl Iterator<Item = (&MatcherType, &str, &str, &Matcher)> {
-        let custom = self
-            .mmap
+        let mmap = MATCHER_MAP
             .iter()
-            .map(|(mt, mime, ext, matcher)| (mt, mime.as_str(), ext.as_str(), matcher));
-        MATCHER_MAP
+            .map(|(mt, mime, ext, matcher)| (mt, *mime, *ext, matcher));
+        self.mmap
             .iter()
-            .map(|(mt, mime, ext, matcher)| (mt, *mime, *ext, matcher))
-            .chain(custom)
+            .map(|(mt, mime, ext, matcher)| (mt, mime.as_str(), ext.as_str(), matcher))
+            .chain(mmap)
     }
 
     /// Returns the file type of the buffer.
@@ -354,6 +353,9 @@ impl Infer {
 
     /// Adds a custom matcher.
     ///
+    /// Custom matchers are matched in order of addition and before
+    /// the default set of matchers.
+    ///
     /// # Examples
     ///
     /// ```rust
@@ -419,5 +421,32 @@ mod tests {
             }
             None => panic!("type info expected"),
         }
+    }
+
+    #[test]
+    fn test_custom_matcher_ordering() {
+        // overrides jpeg matcher
+        fn foo_matcher(buf: &[u8]) -> bool {
+            buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF
+        }
+
+        // overrides png matcher
+        fn bar_matcher(buf: &[u8]) -> bool {
+            buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47
+        }
+
+        let mut info = Infer::new();
+        info.add("custom/foo", "foo", foo_matcher);
+        info.add("custom/bar", "bar", bar_matcher);
+
+        let buf_foo = &[0xFF, 0xD8, 0xFF];
+        let typ = info.get(buf_foo).expect("type is matched");
+        assert_eq!(typ.mime, "custom/foo");
+        assert_eq!(typ.ext, "foo");
+
+        let buf_bar = &[0x89, 0x50, 0x4E, 0x47];
+        let typ = info.get(buf_bar).expect("type is matched");
+        assert_eq!(typ.mime, "custom/bar");
+        assert_eq!(typ.ext, "bar");
     }
 }
