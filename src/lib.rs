@@ -7,7 +7,7 @@ Small crate to infer file and MIME type by checking the
 ### Get the type of a buffer
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+let v = [0xFF, 0xD8, 0xFF, 0xAA];
 let info = infer::Infer::new();
 assert_eq!("image/jpeg", info.get(&v).unwrap().mime_type());
 assert_eq!("jpg", info.get(&v).unwrap().extension());
@@ -30,14 +30,14 @@ assert_eq!("jpg", typ.extension());
 Note individual matcher functions do not require an Infer struct instance.
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+let v = [0xFF, 0xD8, 0xFF, 0xAA];
 assert!(infer::image::is_jpeg(&v));
 ```
 
 ### Check for specific type class
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+let v = [0xFF, 0xD8, 0xFF, 0xAA];
 assert!(infer::is_image(&v));
 ```
 
@@ -51,7 +51,7 @@ fn custom_matcher(buf: &[u8]) -> bool {
 let mut info = infer::Infer::new();
 info.add("custom/foo", "foo", custom_matcher);
 
-let v = vec![0x10, 0x11, 0x12, 0x13];
+let v = [0x10, 0x11, 0x12, 0x13];
 let res =  info.get(&v).unwrap();
 
 assert_eq!("custom/foo", res.mime_type());
@@ -197,7 +197,7 @@ impl Infer {
     ///
     /// ```rust
     /// let info = infer::Infer::new();
-    /// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+    /// let v = [0xFF, 0xD8, 0xFF, 0xAA];
     /// assert_eq!("image/jpeg", info.get(&v).unwrap().mime_type());
     /// assert_eq!("jpg", info.get(&v).unwrap().extension());
     /// ```
@@ -338,7 +338,7 @@ impl Infer {
     ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
-    /// let v = vec![0x10, 0x11, 0x12, 0x13];
+    /// let v = [0x10, 0x11, 0x12, 0x13];
     /// assert!(info.is_custom(&v));
     /// ```
     pub fn is_custom(&self, buf: &[u8]) -> bool {
@@ -359,7 +359,7 @@ impl Infer {
     ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
-    /// let v = vec![0x10, 0x11, 0x12, 0x13];
+    /// let v = [0x10, 0x11, 0x12, 0x13];
     /// let res =  info.get(&v).unwrap();
     /// assert_eq!("custom/foo", res.mime_type());
     /// assert_eq!("foo", res.extension());
@@ -393,7 +393,7 @@ static INFER: Infer = Infer::new();
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert_eq!("image/jpeg", infer::get(&v).unwrap().mime_type());
 /// assert_eq!("jpg", infer::get(&v).unwrap().extension());
 /// ```
@@ -428,7 +428,7 @@ pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert!(infer::is(&v, "jpg"));
 /// ```
 pub fn is(buf: &[u8], extension: &str) -> bool {
@@ -440,7 +440,7 @@ pub fn is(buf: &[u8], extension: &str) -> bool {
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert!(infer::is_mime(&v, "image/jpeg"));
 /// ```
 pub fn is_mime(buf: &[u8], mime_type: &str) -> bool {
@@ -498,7 +498,7 @@ pub fn is_archive(buf: &[u8]) -> bool {
 ///
 /// ```rust
 /// // mp3
-/// let v = vec![0xff, 0xfb, 0x90, 0x44, 0x00];
+/// let v = [0xff, 0xfb, 0x90, 0x44, 0x00];
 /// assert!(infer::is_audio(&v));
 /// ```
 pub fn is_audio(buf: &[u8]) -> bool {
@@ -534,7 +534,7 @@ pub fn is_font(buf: &[u8]) -> bool {
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert!(infer::is_image(&v));
 /// ```
 pub fn is_image(buf: &[u8]) -> bool {
@@ -559,14 +559,14 @@ mod tests {
 
     #[test]
     fn test_get_unknown() {
-        let v = Vec::new();
+        let v = [];
         let info = Infer::new();
         assert!(info.get(&v).is_none());
     }
 
     #[test]
     fn test_get_jpeg() {
-        let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+        let v = [0xFF, 0xD8, 0xFF, 0xAA];
         match crate::get(&v) {
             Some(info) => {
                 assert_eq!(info.extension(), "jpg");
