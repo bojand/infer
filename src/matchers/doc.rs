@@ -1,4 +1,4 @@
-use std::convert::TryInto;
+use core::convert::TryInto;
 
 #[derive(Debug, Eq, PartialEq)]
 enum DocType {

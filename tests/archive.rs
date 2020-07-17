@@ -1,32 +1,21 @@
-use infer::{Infer, MatcherType, Type};
+use infer::{MatcherType, Type};
 
-fn matcher(_buf: &[u8]) -> bool {
-    false
-}
+mod common;
 
-#[test]
-fn test_sqlite() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::ARCHIVE,
+    "application/vnd.sqlite3",
+    "sqlite",
+    test_sqlite,
+    test_sqlite_embed,
+    "sample.db"
+);
 
-    assert_eq!(
-        Type::new(
-            MatcherType::ARCHIVE,
-            "application/vnd.sqlite3",
-            "sqlite",
-            matcher
-        ),
-        info.get_from_path("testdata/sample.db").unwrap().unwrap()
-    );
-}
-
-#[test]
-fn test_zst() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::ARCHIVE, "application/zstd", "zst", matcher),
-        info.get_from_path("testdata/sample.tar.zst")
-            .unwrap()
-            .unwrap()
-    );
-}
+test_format!(
+    MatcherType::ARCHIVE,
+    "application/zstd",
+    "zst",
+    test_zst,
+    test_zst_embed,
+    "sample.tar.zst"
+);

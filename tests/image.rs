@@ -1,145 +1,120 @@
-use infer::{Infer, MatcherType, Type};
+use infer::{MatcherType, Type};
 
-fn matcher(_buf: &[u8]) -> bool {
-    false
-}
+mod common;
 
-#[test]
-fn test_jpg() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::IMAGE,
+    "image/jpeg",
+    "jpg",
+    test_jpg,
+    test_jpg_embed,
+    "sample.jpg"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/jpeg", "jpg", matcher),
-        info.get_from_path("testdata/sample.jpg").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::IMAGE,
+    "image/png",
+    "png",
+    test_png,
+    test_png_embed,
+    "sample.png"
+);
 
-#[test]
-fn test_png() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::IMAGE,
+    "image/gif",
+    "gif",
+    test_gif,
+    test_gif_embed,
+    "sample.gif"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/png", "png", matcher),
-        info.get_from_path("testdata/sample.png").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::IMAGE,
+    "image/tiff",
+    "tif",
+    test_tif,
+    test_tif_embed,
+    "sample.tif"
+);
 
-#[test]
-fn test_gif() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::IMAGE,
+    "image/tiff",
+    "tif",
+    test_tif2,
+    test_tif2_embed,
+    "sample2.tif"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/gif", "gif", matcher),
-        info.get_from_path("testdata/sample.gif").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::IMAGE,
+    "image/tiff",
+    "tif",
+    test_tif3,
+    test_tif3_embed,
+    "sample3.tif"
+);
 
-#[test]
-fn test_tif() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::IMAGE,
+    "image/tiff",
+    "tif",
+    test_tif4,
+    test_tif4_embed,
+    "sample4.tif"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/tiff", "tif", matcher),
-        info.get_from_path("testdata/sample.tif").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::IMAGE,
+    "image/tiff",
+    "tif",
+    test_tif5,
+    test_tif5_embed,
+    "sample5.tif"
+);
 
-#[test]
-fn test_tif2() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::IMAGE,
+    "image/bmp",
+    "bmp",
+    test_bmp,
+    test_bmp_embed,
+    "sample.bmp"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/tiff", "tif", matcher),
-        info.get_from_path("testdata/sample2.tif").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::IMAGE,
+    "image/vnd.adobe.photoshop",
+    "psd",
+    test_psd,
+    test_psd_embed,
+    "sample.psd"
+);
 
-#[test]
-fn test_tif3() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::IMAGE,
+    "image/vnd.microsoft.icon",
+    "ico",
+    test_ico,
+    test_ico_embed,
+    "sample.ico"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/tiff", "tif", matcher),
-        info.get_from_path("testdata/sample3.tif").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::IMAGE,
+    "image/heif",
+    "heif",
+    test_heif,
+    test_heif_embed,
+    "sample.heic"
+);
 
-#[test]
-fn test_tif4() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/tiff", "tif", matcher),
-        info.get_from_path("testdata/sample4.tif").unwrap().unwrap()
-    );
-}
-
-#[test]
-fn test_tif5() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/tiff", "tif", matcher),
-        info.get_from_path("testdata/sample5.tif").unwrap().unwrap()
-    );
-}
-
-#[test]
-fn test_bmp() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/bmp", "bmp", matcher),
-        info.get_from_path("testdata/sample.bmp").unwrap().unwrap()
-    );
-}
-
-#[test]
-fn test_psd() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(
-            MatcherType::IMAGE,
-            "image/vnd.adobe.photoshop",
-            "psd",
-            matcher
-        ),
-        info.get_from_path("testdata/sample.psd").unwrap().unwrap()
-    );
-}
-
-#[test]
-fn test_ico() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(
-            MatcherType::IMAGE,
-            "image/vnd.microsoft.icon",
-            "ico",
-            matcher
-        ),
-        info.get_from_path("testdata/sample.ico").unwrap().unwrap()
-    );
-}
-
-#[test]
-fn test_heif() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/heif", "heif", matcher),
-        info.get_from_path("testdata/sample.heic").unwrap().unwrap()
-    );
-}
-
-#[test]
-fn test_avif() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::IMAGE, "image/avif", "avif", matcher),
-        info.get_from_path("testdata/sample.avif").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::IMAGE,
+    "image/avif",
+    "avif",
+    test_avif,
+    test_avif_embed,
+    "sample.avif"
+);

@@ -7,7 +7,7 @@ Small crate to infer file and MIME type by checking the
 ### Get the type of a buffer
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+let v = [0xFF, 0xD8, 0xFF, 0xAA];
 let info = infer::Infer::new();
 assert_eq!("image/jpeg", info.get(&v).unwrap().mime_type());
 assert_eq!("jpg", info.get(&v).unwrap().extension());
@@ -16,6 +16,8 @@ assert_eq!("jpg", info.get(&v).unwrap().extension());
 ### Check path
 
 ```rust
+# #[cfg(feature = "std")]
+# fn run() {
 let res = infer::get_from_path("testdata/sample.jpg");
 assert!(res.is_ok());
 let o = res.unwrap();
@@ -23,6 +25,7 @@ assert!(o.is_some());
 let typ = o.unwrap();
 assert_eq!("image/jpeg", typ.mime_type());
 assert_eq!("jpg", typ.extension());
+# }
 ```
 
 ### Check for specific type
@@ -30,20 +33,22 @@ assert_eq!("jpg", typ.extension());
 Note individual matcher functions do not require an Infer struct instance.
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+let v = [0xFF, 0xD8, 0xFF, 0xAA];
 assert!(infer::image::is_jpeg(&v));
 ```
 
 ### Check for specific type class
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+let v = [0xFF, 0xD8, 0xFF, 0xAA];
 assert!(infer::is_image(&v));
 ```
 
 ### Adds a custom file type matcher
 
 ```rust
+# #[cfg(feature = "std")]
+# fn run() {
 fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
 }
@@ -51,21 +56,31 @@ fn custom_matcher(buf: &[u8]) -> bool {
 let mut info = infer::Infer::new();
 info.add("custom/foo", "foo", custom_matcher);
 
-let v = vec![0x10, 0x11, 0x12, 0x13];
+let v = [0x10, 0x11, 0x12, 0x13];
 let res =  info.get(&v).unwrap();
 
 assert_eq!("custom/foo", res.mime_type());
 assert_eq!("foo", res.extension());
+# }
 ```
 */
 #![crate_name = "infer"]
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
 
 mod map;
 mod matchers;
 
-use std::fmt;
+#[cfg(feature = "alloc")]
+use alloc::vec::Vec;
+use core::fmt;
+#[cfg(feature = "std")]
 use std::fs::File;
+#[cfg(feature = "std")]
 use std::io::{self, Read};
+#[cfg(feature = "std")]
 use std::path::Path;
 
 pub use map::MatcherType;
@@ -158,18 +173,28 @@ impl PartialEq for Type {
 
 /// Infer allows to use a custom set of `Matcher`s for infering a MIME type.
 pub struct Infer {
+    #[cfg(feature = "alloc")]
     mmap: Vec<Type>,
 }
 
 impl Infer {
     /// Initialize a new instance of the infer struct.
     pub const fn new() -> Infer {
-        Infer { mmap: Vec::new() }
+        #[cfg(feature = "alloc")]
+        return Infer { mmap: Vec::new() };
+
+        #[cfg(not(feature = "alloc"))]
+        return Infer {};
     }
 
     fn iter_matchers(&self) -> impl Iterator<Item = &Type> {
         let mmap = MATCHER_MAP.iter();
-        self.mmap.iter().chain(mmap)
+
+        #[cfg(feature = "alloc")]
+        return self.mmap.iter().chain(mmap);
+
+        #[cfg(not(feature = "alloc"))]
+        return mmap;
     }
 
     /// Returns the file type of the buffer.
@@ -178,7 +203,7 @@ impl Infer {
     ///
     /// ```rust
     /// let info = infer::Infer::new();
-    /// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+    /// let v = [0xFF, 0xD8, 0xFF, 0xAA];
     /// assert_eq!("image/jpeg", info.get(&v).unwrap().mime_type());
     /// assert_eq!("jpg", info.get(&v).unwrap().extension());
     /// ```
@@ -191,6 +216,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`get_from_path`](./fn.get_from_path.html).
+    #[cfg(feature = "std")]
     pub fn get_from_path<P: AsRef<Path>>(&self, path: P) -> io::Result<Option<Type>> {
         let file = File::open(path)?;
 
@@ -333,14 +359,17 @@ impl Infer {
     /// # Examples
     ///
     /// ```rust
+    /// # #[cfg(feature = "alloc")]
+    /// # fn run() {
     /// fn custom_matcher(buf: &[u8]) -> bool {
     ///     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
     /// }
     ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
-    /// let v = vec![0x10, 0x11, 0x12, 0x13];
+    /// let v = [0x10, 0x11, 0x12, 0x13];
     /// assert!(info.is_custom(&v));
+    /// # }
     /// ```
     pub fn is_custom(&self, buf: &[u8]) -> bool {
         self.is_type(buf, MatcherType::CUSTOM)
@@ -360,11 +389,12 @@ impl Infer {
     ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
-    /// let v = vec![0x10, 0x11, 0x12, 0x13];
+    /// let v = [0x10, 0x11, 0x12, 0x13];
     /// let res =  info.get(&v).unwrap();
     /// assert_eq!("custom/foo", res.mime_type());
     /// assert_eq!("foo", res.extension());
     /// ```
+    #[cfg(feature = "alloc")]
     pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {
         self.mmap.push(Type::new_static(
             MatcherType::CUSTOM,
@@ -393,7 +423,7 @@ static INFER: Infer = Infer::new();
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert_eq!("image/jpeg", infer::get(&v).unwrap().mime_type());
 /// assert_eq!("jpg", infer::get(&v).unwrap().extension());
 /// ```
@@ -418,6 +448,7 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 /// assert_eq!("image/jpeg", typ.mime_type());
 /// assert_eq!("jpg", typ.extension());
 /// ```
+#[cfg(feature = "std")]
 pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
     INFER.get_from_path(path)
 }
@@ -457,7 +488,7 @@ pub fn get_from_ext<S: AsRef<str>>(val: S) -> Option<Type> {
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert!(infer::is(&v, "jpg"));
 /// ```
 pub fn is(buf: &[u8], extension: &str) -> bool {
@@ -469,7 +500,7 @@ pub fn is(buf: &[u8], extension: &str) -> bool {
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert!(infer::is_mime(&v, "image/jpeg"));
 /// ```
 pub fn is_mime(buf: &[u8], mime_type: &str) -> bool {
@@ -527,7 +558,7 @@ pub fn is_archive(buf: &[u8]) -> bool {
 ///
 /// ```rust
 /// // mp3
-/// let v = vec![0xff, 0xfb, 0x90, 0x44, 0x00];
+/// let v = [0xff, 0xfb, 0x90, 0x44, 0x00];
 /// assert!(infer::is_audio(&v));
 /// ```
 pub fn is_audio(buf: &[u8]) -> bool {
@@ -563,7 +594,7 @@ pub fn is_font(buf: &[u8]) -> bool {
 /// # Examples
 ///
 /// ```rust
-/// let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
 /// assert!(infer::is_image(&v));
 /// ```
 pub fn is_image(buf: &[u8]) -> bool {
@@ -588,14 +619,14 @@ mod tests {
 
     #[test]
     fn test_get_unknown() {
-        let v = Vec::new();
+        let v = [];
         let info = Infer::new();
         assert!(info.get(&v).is_none());
     }
 
     #[test]
     fn test_get_jpeg() {
-        let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
+        let v = [0xFF, 0xD8, 0xFF, 0xAA];
         match crate::get(&v) {
             Some(info) => {
                 assert_eq!(info.extension(), "jpg");
@@ -605,6 +636,7 @@ mod tests {
         }
     }
 
+    #[cfg(feature = "alloc")]
     #[test]
     fn test_custom_matcher_ordering() {
         // overrides jpeg matcher

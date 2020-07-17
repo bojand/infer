@@ -1,15 +1,12 @@
-use infer::{Infer, MatcherType, Type};
+use infer::{MatcherType, Type};
 
-fn matcher(_buf: &[u8]) -> bool {
-    false
-}
+mod common;
 
-#[test]
-fn test_mp3() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::AUDIO, "audio/mpeg", "mp3", matcher),
-        info.get_from_path("testdata/sample.mp3").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::AUDIO,
+    "audio/mpeg",
+    "mp3",
+    test_mp3,
+    test_mp3_embed,
+    "sample.mp3"
+);
