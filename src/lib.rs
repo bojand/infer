@@ -138,7 +138,7 @@ impl Type {
 
 impl fmt::Debug for Type {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Kind")
+        f.debug_struct("Type")
             .field("matcher_type", &self.matcher_type)
             .field("mime_type", &self.mime_type)
             .field("extension", &self.extension)
