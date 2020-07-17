@@ -1,9 +1,12 @@
+#[cfg(feature = "std")]
 use infer::{Infer, MatcherType, Type};
 
+#[cfg(feature = "std")]
 fn matcher(_buf: &[u8]) -> bool {
     false
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_doc() {
     let info = Infer::new();
@@ -14,6 +17,7 @@ fn test_doc() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_docx() {
     let info = Infer::new();
@@ -29,6 +33,7 @@ fn test_docx() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_xlsx() {
     let info = Infer::new();
@@ -44,6 +49,7 @@ fn test_xlsx() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_pptx() {
     let info = Infer::new();

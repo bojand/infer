@@ -1,9 +1,12 @@
+#[cfg(feature = "std")]
 use infer::{Infer, MatcherType, Type};
 
+#[cfg(feature = "std")]
 fn matcher(_buf: &[u8]) -> bool {
     false
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_mp4() {
     let info = Infer::new();
@@ -14,6 +17,7 @@ fn test_mp4() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_mkv() {
     let info = Infer::new();
@@ -24,6 +28,7 @@ fn test_mkv() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_webm() {
     let info = Infer::new();
@@ -34,6 +39,7 @@ fn test_webm() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_mov() {
     let info = Infer::new();
@@ -44,6 +50,7 @@ fn test_mov() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_avi() {
     let info = Infer::new();
@@ -54,6 +61,7 @@ fn test_avi() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_flv() {
     let info = Infer::new();

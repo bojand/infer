@@ -1,9 +1,12 @@
+#[cfg(feature = "std")]
 use infer::{Infer, MatcherType, Type};
 
+#[cfg(feature = "std")]
 fn matcher(_buf: &[u8]) -> bool {
     false
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_jpg() {
     let info = Infer::new();
@@ -14,6 +17,7 @@ fn test_jpg() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_png() {
     let info = Infer::new();
@@ -24,6 +28,7 @@ fn test_png() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_gif() {
     let info = Infer::new();
@@ -34,6 +39,7 @@ fn test_gif() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_tif() {
     let info = Infer::new();
@@ -44,6 +50,7 @@ fn test_tif() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_tif2() {
     let info = Infer::new();
@@ -54,6 +61,7 @@ fn test_tif2() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_tif3() {
     let info = Infer::new();
@@ -64,6 +72,7 @@ fn test_tif3() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_tif4() {
     let info = Infer::new();
@@ -74,6 +83,7 @@ fn test_tif4() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_tif5() {
     let info = Infer::new();
@@ -84,6 +94,7 @@ fn test_tif5() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_bmp() {
     let info = Infer::new();
@@ -94,6 +105,7 @@ fn test_bmp() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_psd() {
     let info = Infer::new();
@@ -109,6 +121,7 @@ fn test_psd() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_ico() {
     let info = Infer::new();
@@ -124,6 +137,7 @@ fn test_ico() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_heif() {
     let info = Infer::new();
@@ -134,6 +148,7 @@ fn test_heif() {
     );
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn test_avif() {
     let info = Infer::new();

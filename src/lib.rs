@@ -16,6 +16,8 @@ assert_eq!("jpg", info.get(&v).unwrap().extension());
 ### Check path
 
 ```rust
+# #[cfg(feature = "std")]
+# fn run() {
 let res = infer::get_from_path("testdata/sample.jpg");
 assert!(res.is_ok());
 let o = res.unwrap();
@@ -23,6 +25,7 @@ assert!(o.is_some());
 let typ = o.unwrap();
 assert_eq!("image/jpeg", typ.mime_type());
 assert_eq!("jpg", typ.extension());
+# }
 ```
 
 ### Check for specific type
@@ -44,6 +47,8 @@ assert!(infer::is_image(&v));
 ### Adds a custom file type matcher
 
 ```rust
+# #[cfg(feature = "std")]
+# fn run() {
 fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
 }
@@ -56,6 +61,7 @@ let res =  info.get(&v).unwrap();
 
 assert_eq!("custom/foo", res.mime_type());
 assert_eq!("foo", res.extension());
+# }
 ```
 */
 #![crate_name = "infer"]
@@ -341,6 +347,7 @@ impl Infer {
     /// let v = [0x10, 0x11, 0x12, 0x13];
     /// assert!(info.is_custom(&v));
     /// ```
+    #[cfg(feature = "alloc")]
     pub fn is_custom(&self, buf: &[u8]) -> bool {
         self.is_type(buf, MatcherType::CUSTOM)
     }
@@ -576,6 +583,7 @@ mod tests {
         }
     }
 
+    #[cfg(feature = "alloc")]
     #[test]
     fn test_custom_matcher_ordering() {
         // overrides jpeg matcher
