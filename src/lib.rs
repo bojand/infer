@@ -338,6 +338,8 @@ impl Infer {
     /// # Examples
     ///
     /// ```rust
+    /// # #[cfg(feature = "alloc")]
+    /// # fn run() {
     /// fn custom_matcher(buf: &[u8]) -> bool {
     ///     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
     /// }
@@ -346,8 +348,8 @@ impl Infer {
     /// info.add("custom/foo", "foo", custom_matcher);
     /// let v = [0x10, 0x11, 0x12, 0x13];
     /// assert!(info.is_custom(&v));
+    /// # }
     /// ```
-    #[cfg(feature = "alloc")]
     pub fn is_custom(&self, buf: &[u8]) -> bool {
         self.is_type(buf, MatcherType::CUSTOM)
     }
