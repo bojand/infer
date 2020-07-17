@@ -10,8 +10,8 @@ macro_rules! test_format {
 
             let expected_kind = Type::new($exp_matchert, $exp_mimet, $exp_ext, matcher);
             let kind = infer::get_from_path(concat!("testdata/", $file))
-                .unwrap()
-                .unwrap();
+                .expect("test file read")
+                .expect("test file matches");
 
             assert_eq!(expected_kind, kind);
         }
@@ -23,8 +23,8 @@ macro_rules! test_format {
             }
 
             let expected_kind = Type::new($exp_matchert, $exp_mimet, $exp_ext, matcher);
-            let buf = core::include_bytes!(concat!("../testdata/", $file));
-            let kind = infer::get(buf).unwrap();
+            let buf = include_bytes!(concat!("../testdata/", $file));
+            let kind = infer::get(buf).expect("test file matches");
 
             assert_eq!(expected_kind, kind);
         }
