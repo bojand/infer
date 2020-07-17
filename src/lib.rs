@@ -87,7 +87,7 @@ pub struct Type {
 }
 
 impl Type {
-    pub(crate) const fn new(
+    pub(crate) const fn new_static(
         matcher_type: MatcherType,
         mime_type: &'static str,
         extension: &'static str,
@@ -101,18 +101,14 @@ impl Type {
         }
     }
 
-    /// Only for tests
-    #[doc(hidden)]
-    pub fn new_for_test(
+    /// Returns a new `Type` with matcher and extension.
+    pub fn new(
         matcher_type: MatcherType,
         mime_type: &'static str,
         extension: &'static str,
+        matcher: Matcher,
     ) -> Self {
-        fn matcher(_buf: &[u8]) -> bool {
-            false
-        };
-
-        Self::new(matcher_type, mime_type, extension, WrapMatcher(matcher))
+        Self::new_static(matcher_type, mime_type, extension, WrapMatcher(matcher))
     }
 
     /// Returns the type of matcher
@@ -349,7 +345,7 @@ impl Infer {
     /// assert_eq!("foo", res.extension());
     /// ```
     pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {
-        self.mmap.push(Type::new(
+        self.mmap.push(Type::new_static(
             MatcherType::CUSTOM,
             mime_type,
             extension,

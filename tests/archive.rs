@@ -1,11 +1,20 @@
 use infer::{Infer, MatcherType, Type};
 
+fn matcher(_buf: &[u8]) -> bool {
+    false
+}
+
 #[test]
 fn test_sqlite() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::ARCHIVE, "application/vnd.sqlite3", "sqlite"),
+        Type::new(
+            MatcherType::ARCHIVE,
+            "application/vnd.sqlite3",
+            "sqlite",
+            matcher
+        ),
         info.get_from_path("testdata/sample.db").unwrap().unwrap()
     );
 }
@@ -15,7 +24,7 @@ fn test_zst() {
     let info = Infer::new();
 
     assert_eq!(
-        Type::new_for_test(MatcherType::ARCHIVE, "application/zstd", "zst"),
+        Type::new(MatcherType::ARCHIVE, "application/zstd", "zst", matcher),
         info.get_from_path("testdata/sample.tar.zst")
             .unwrap()
             .unwrap()
