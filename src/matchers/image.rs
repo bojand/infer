@@ -1,4 +1,4 @@
-use std::convert::TryInto;
+use core::convert::TryInto;
 
 /// Returns whether a buffer is JPEG image data.
 pub fn is_jpeg(buf: &[u8]) -> bool {

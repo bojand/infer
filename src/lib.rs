@@ -59,13 +59,22 @@ assert_eq!("foo", res.extension());
 ```
 */
 #![crate_name = "infer"]
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
 
 mod map;
 mod matchers;
 
-use std::fmt;
+#[cfg(feature = "alloc")]
+use alloc::vec::Vec;
+use core::fmt;
+#[cfg(feature = "std")]
 use std::fs::File;
+#[cfg(feature = "std")]
 use std::io::{self, Read};
+#[cfg(feature = "std")]
 use std::path::Path;
 
 pub use map::MatcherType;
@@ -158,18 +167,28 @@ impl PartialEq for Type {
 
 /// Infer allows to use a custom set of `Matcher`s for infering a MIME type.
 pub struct Infer {
+    #[cfg(feature = "alloc")]
     mmap: Vec<Type>,
 }
 
 impl Infer {
     /// Initialize a new instance of the infer struct.
     pub const fn new() -> Infer {
-        Infer { mmap: Vec::new() }
+        #[cfg(feature = "alloc")]
+        return Infer { mmap: Vec::new() };
+
+        #[cfg(not(feature = "alloc"))]
+        return Infer {};
     }
 
     fn iter_matchers(&self) -> impl Iterator<Item = &Type> {
         let mmap = MATCHER_MAP.iter();
-        self.mmap.iter().chain(mmap)
+
+        #[cfg(feature = "alloc")]
+        return self.mmap.iter().chain(mmap);
+
+        #[cfg(not(feature = "alloc"))]
+        return mmap;
     }
 
     /// Returns the file type of the buffer.
@@ -191,6 +210,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`get_from_path`](./fn.get_from_path.html).
+    #[cfg(feature = "std")]
     pub fn get_from_path<P: AsRef<Path>>(&self, path: P) -> io::Result<Option<Type>> {
         let file = File::open(path)?;
 
@@ -344,6 +364,7 @@ impl Infer {
     /// assert_eq!("custom/foo", res.mime_type());
     /// assert_eq!("foo", res.extension());
     /// ```
+    #[cfg(feature = "alloc")]
     pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {
         self.mmap.push(Type::new_static(
             MatcherType::CUSTOM,
@@ -397,6 +418,7 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 /// assert_eq!("image/jpeg", typ.mime_type());
 /// assert_eq!("jpg", typ.extension());
 /// ```
+#[cfg(feature = "std")]
 pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
     INFER.get_from_path(path)
 }
