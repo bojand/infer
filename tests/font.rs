@@ -1,16 +1,15 @@
-extern crate infer;
+use infer::{Infer, MatcherType, Type};
 
-use infer::Infer;
+fn matcher(_buf: &[u8]) -> bool {
+    false
+}
 
 #[test]
 fn test_ttf() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("application/font-sfnt"),
-            ext: String::from("ttf"),
-        },
+        Type::new(MatcherType::FONT, "application/font-sfnt", "ttf", matcher),
         info.get_from_path("testdata/sample.ttf").unwrap().unwrap()
     );
 }

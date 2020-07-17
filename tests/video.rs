@@ -1,16 +1,15 @@
-extern crate infer;
+use infer::{Infer, MatcherType, Type};
 
-use infer::Infer;
+fn matcher(_buf: &[u8]) -> bool {
+    false
+}
 
 #[test]
 fn test_mp4() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("video/mp4"),
-            ext: String::from("mp4"),
-        },
+        Type::new(MatcherType::VIDEO, "video/mp4", "mp4", matcher),
         info.get_from_path("testdata/sample.mp4").unwrap().unwrap()
     );
 }
@@ -20,10 +19,7 @@ fn test_mkv() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("video/x-matroska"),
-            ext: String::from("mkv"),
-        },
+        Type::new(MatcherType::VIDEO, "video/x-matroska", "mkv", matcher),
         info.get_from_path("testdata/sample.mkv").unwrap().unwrap()
     );
 }
@@ -33,10 +29,7 @@ fn test_webm() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("video/webm"),
-            ext: String::from("webm"),
-        },
+        Type::new(MatcherType::VIDEO, "video/webm", "webm", matcher),
         info.get_from_path("testdata/sample.webm").unwrap().unwrap()
     );
 }
@@ -46,10 +39,7 @@ fn test_mov() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("video/quicktime"),
-            ext: String::from("mov"),
-        },
+        Type::new(MatcherType::VIDEO, "video/quicktime", "mov", matcher),
         info.get_from_path("testdata/sample.mov").unwrap().unwrap()
     );
 }
@@ -59,10 +49,7 @@ fn test_avi() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("video/x-msvideo"),
-            ext: String::from("avi"),
-        },
+        Type::new(MatcherType::VIDEO, "video/x-msvideo", "avi", matcher),
         info.get_from_path("testdata/sample.avi").unwrap().unwrap()
     );
 }
@@ -72,10 +59,7 @@ fn test_flv() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("video/x-flv"),
-            ext: String::from("flv"),
-        },
+        Type::new(MatcherType::VIDEO, "video/x-flv", "flv", matcher),
         info.get_from_path("testdata/sample.flv").unwrap().unwrap()
     );
 }

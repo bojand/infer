@@ -1,16 +1,15 @@
-extern crate infer;
+use infer::{Infer, MatcherType, Type};
 
-use infer::Infer;
+fn matcher(_buf: &[u8]) -> bool {
+    false
+}
 
 #[test]
 fn test_mp3() {
     let info = Infer::new();
 
     assert_eq!(
-        infer::Type {
-            mime: String::from("audio/mpeg"),
-            ext: String::from("mp3"),
-        },
+        Type::new(MatcherType::AUDIO, "audio/mpeg", "mp3", matcher),
         info.get_from_path("testdata/sample.mp3").unwrap().unwrap()
     );
 }
