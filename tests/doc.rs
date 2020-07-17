@@ -1,66 +1,39 @@
-#[cfg(feature = "std")]
-use infer::{Infer, MatcherType, Type};
+use infer::{MatcherType, Type};
 
-#[cfg(feature = "std")]
-fn matcher(_buf: &[u8]) -> bool {
-    false
-}
+mod common;
 
-#[cfg(feature = "std")]
-#[test]
-fn test_doc() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::DOC,
+    "application/msword",
+    "doc",
+    test_doc,
+    test_doc_embed,
+    "sample.doc"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::DOC, "application/msword", "doc", matcher),
-        info.get_from_path("testdata/sample.doc").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::DOC,
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "docx",
+    test_docx,
+    test_docx_embed,
+    "sample.docx"
+);
 
-#[cfg(feature = "std")]
-#[test]
-fn test_docx() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::DOC,
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "xlsx",
+    test_xlsx,
+    test_xlsx_embed,
+    "sample.xlsx"
+);
 
-    assert_eq!(
-        Type::new(
-            MatcherType::DOC,
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "docx",
-            matcher
-        ),
-        info.get_from_path("testdata/sample.docx").unwrap().unwrap()
-    );
-}
-
-#[cfg(feature = "std")]
-#[test]
-fn test_xlsx() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(
-            MatcherType::DOC,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "xlsx",
-            matcher
-        ),
-        info.get_from_path("testdata/sample.xlsx").unwrap().unwrap()
-    );
-}
-
-#[cfg(feature = "std")]
-#[test]
-fn test_pptx() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(
-            MatcherType::DOC,
-            "application/application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "pptx",
-            matcher
-        ),
-        info.get_from_path("testdata/sample.pptx").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::DOC,
+    "application/application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "pptx",
+    test_pptx,
+    test_pptx_embed,
+    "sample.pptx"
+);

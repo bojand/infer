@@ -1,73 +1,57 @@
-#[cfg(feature = "std")]
-use infer::{Infer, MatcherType, Type};
+use infer::{MatcherType, Type};
 
-#[cfg(feature = "std")]
-fn matcher(_buf: &[u8]) -> bool {
-    false
-}
+mod common;
 
-#[cfg(feature = "std")]
-#[test]
-fn test_mp4() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::VIDEO,
+    "video/mp4",
+    "mp4",
+    test_mp4,
+    test_mp4_embed,
+    "sample.mp4"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::VIDEO, "video/mp4", "mp4", matcher),
-        info.get_from_path("testdata/sample.mp4").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::VIDEO,
+    "video/x-matroska",
+    "mkv",
+    test_mkv,
+    test_mkv_embed,
+    "sample.mkv"
+);
 
-#[cfg(feature = "std")]
-#[test]
-fn test_mkv() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::VIDEO,
+    "video/webm",
+    "webm",
+    test_webm,
+    test_webm_embed,
+    "sample.webm"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::VIDEO, "video/x-matroska", "mkv", matcher),
-        info.get_from_path("testdata/sample.mkv").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::VIDEO,
+    "video/quicktime",
+    "mov",
+    test_mov,
+    test_mov_embed,
+    "sample.mov"
+);
 
-#[cfg(feature = "std")]
-#[test]
-fn test_webm() {
-    let info = Infer::new();
+test_format!(
+    MatcherType::VIDEO,
+    "video/x-msvideo",
+    "avi",
+    test_avi,
+    test_avi_embed,
+    "sample.avi"
+);
 
-    assert_eq!(
-        Type::new(MatcherType::VIDEO, "video/webm", "webm", matcher),
-        info.get_from_path("testdata/sample.webm").unwrap().unwrap()
-    );
-}
-
-#[cfg(feature = "std")]
-#[test]
-fn test_mov() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::VIDEO, "video/quicktime", "mov", matcher),
-        info.get_from_path("testdata/sample.mov").unwrap().unwrap()
-    );
-}
-
-#[cfg(feature = "std")]
-#[test]
-fn test_avi() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::VIDEO, "video/x-msvideo", "avi", matcher),
-        info.get_from_path("testdata/sample.avi").unwrap().unwrap()
-    );
-}
-
-#[cfg(feature = "std")]
-#[test]
-fn test_flv() {
-    let info = Infer::new();
-
-    assert_eq!(
-        Type::new(MatcherType::VIDEO, "video/x-flv", "flv", matcher),
-        info.get_from_path("testdata/sample.flv").unwrap().unwrap()
-    );
-}
+test_format!(
+    MatcherType::VIDEO,
+    "video/x-flv",
+    "flv",
+    test_flv,
+    test_flv_embed,
+    "sample.flv"
+);
