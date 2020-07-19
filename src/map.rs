@@ -8,6 +8,7 @@ pub enum MatcherType {
     DOC,
     FONT,
     IMAGE,
+    TEXT,
     VIDEO,
     CUSTOM,
 }
@@ -26,7 +27,7 @@ macro_rules! matcher_map {
     };
 }
 
-// Order: Application, Image, Video, Audio, Font, Document, Archive.
+// Order: Application, Image, Video, Audio, Font, Document, Archive, Text.
 // The above order should be preserved when adding new types since
 // it may affect match result and/or performances.
 matcher_map!(
@@ -450,5 +451,12 @@ matcher_map!(
         "application/zstd",
         "zst",
         matchers::archive::is_zst
+    ),
+    // Text
+    (
+        MatcherType::TEXT,
+        "text/html",
+        "html",
+        matchers::text::is_html
     )
 );
