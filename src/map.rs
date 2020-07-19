@@ -458,5 +458,6 @@ matcher_map!(
         "text/html",
         "html",
         matchers::text::is_html
-    )
+    ),
+    (MatcherType::TEXT, "text/xml", "xml", matchers::text::is_xml)
 );

@@ -41,6 +41,20 @@ pub fn is_html(buf: &[u8]) -> bool {
     false
 }
 
+/// Returns whether a buffer is xml data.
+///
+/// Conforms to [whatwg](https://mimesniff.spec.whatwg.org/)
+/// specification.
+pub fn is_xml(buf: &[u8]) -> bool {
+    let val: &[u8] = b"<?xml";
+    let buf = trim_start_whitespaces(buf);
+    if buf.len() <= val.len() {
+        return false;
+    }
+    let b = &buf[..val.len()];
+    b.eq_ignore_ascii_case(val)
+}
+
 /// Strip whitespaces at the beginning of the buffer.
 ///
 /// Follows https://mimesniff.spec.whatwg.org
