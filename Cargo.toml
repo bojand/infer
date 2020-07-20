@@ -16,3 +16,8 @@ exclude = ["testdata/*", "tests/*"]
 default = ["std"]
 std = ["alloc"]
 alloc = []
+
+[[example]]
+name = "file"
+path = "examples/file.rs"
+required-features = ["std"]
