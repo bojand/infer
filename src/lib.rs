@@ -7,47 +7,47 @@ Small crate to infer file and MIME type by checking the
 ### Get the type of a buffer
 
 ```rust
-let v = [0xFF, 0xD8, 0xFF, 0xAA];
-let info = infer::Infer::new();
-assert_eq!("image/jpeg", info.get(&v).unwrap().mime_type());
-assert_eq!("jpg", info.get(&v).unwrap().extension());
+let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+let kind = infer::get(&buf).expect("file type is known");
+
+assert_eq!(kind.mime_type(), "image/jpeg");
+assert_eq!(kind.extension(), "jpg");
 ```
 
-### Check path
+### Check file type by path
 
 ```rust
 # #[cfg(feature = "std")]
 # fn run() {
-let res = infer::get_from_path("testdata/sample.jpg");
-assert!(res.is_ok());
-let o = res.unwrap();
-assert!(o.is_some());
-let typ = o.unwrap();
-assert_eq!("image/jpeg", typ.mime_type());
-assert_eq!("jpg", typ.extension());
+let kind = infer::get_from_path("testdata/sample.jpg")
+    .expect("file read successfully")
+    .expect("file type is known");
+
+assert_eq!(kind.mime_type(), "image/jpeg");
+assert_eq!(kind.extension(), "jpg");
 # }
 ```
 
 ### Check for specific type
 
-Note individual matcher functions do not require an Infer struct instance.
-
 ```rust
-let v = [0xFF, 0xD8, 0xFF, 0xAA];
-assert!(infer::image::is_jpeg(&v));
+let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+assert!(infer::image::is_jpeg(&buf));
 ```
 
 ### Check for specific type class
 
 ```rust
-let v = [0xFF, 0xD8, 0xFF, 0xAA];
-assert!(infer::is_image(&v));
+let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+assert!(infer::is_image(&buf));
 ```
 
 ### Adds a custom file type matcher
 
+Here we actually need to use the `Infer` struct to be able to declare custom matchers.
+
 ```rust
-# #[cfg(feature = "std")]
+# #[cfg(feature = "alloc")]
 # fn run() {
 fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
@@ -56,11 +56,11 @@ fn custom_matcher(buf: &[u8]) -> bool {
 let mut info = infer::Infer::new();
 info.add("custom/foo", "foo", custom_matcher);
 
-let v = [0x10, 0x11, 0x12, 0x13];
-let res =  info.get(&v).unwrap();
+let buf = [0x10, 0x11, 0x12, 0x13];
+let kind = info.get(&buf).unwrap();
 
-assert_eq!("custom/foo", res.mime_type());
-assert_eq!("foo", res.extension());
+assert_eq!(kind.mime_type(), "custom/foo");
+assert_eq!(kind.extension(), "foo");
 # }
 ```
 */
@@ -172,6 +172,10 @@ impl PartialEq for Type {
 }
 
 /// Infer allows to use a custom set of `Matcher`s for infering a MIME type.
+///
+/// Most operations can be done by using the _top level functions_, but when custom matchers
+/// are needed every call has to go through the `Infer` struct to be able
+/// to see the custom matchers.
 pub struct Infer {
     #[cfg(feature = "alloc")]
     mmap: Vec<Type>,
@@ -203,9 +207,11 @@ impl Infer {
     ///
     /// ```rust
     /// let info = infer::Infer::new();
-    /// let v = [0xFF, 0xD8, 0xFF, 0xAA];
-    /// assert_eq!("image/jpeg", info.get(&v).unwrap().mime_type());
-    /// assert_eq!("jpg", info.get(&v).unwrap().extension());
+    /// let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+    /// let kind = info.get(&buf).expect("file type is known");
+    ///
+    /// assert_eq!(kind.mime_type(), "image/jpeg");
+    /// assert_eq!(kind.extension(), "jpg");
     /// ```
     pub fn get(&self, buf: &[u8]) -> Option<Type> {
         self.iter_matchers().find(|kind| kind.matches(buf)).copied()
@@ -243,7 +249,6 @@ impl Infer {
     /// Returns the `Type` from a file extension.
     ///
     /// See [`get_from_ext`](./fn.get_from_ext.html).
-    /// ```
     pub fn get_from_ext<S: AsRef<str>>(&self, val: S) -> Option<Type> {
         let val = val.as_ref();
         self.iter_matchers()
@@ -367,8 +372,8 @@ impl Infer {
     ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
-    /// let v = [0x10, 0x11, 0x12, 0x13];
-    /// assert!(info.is_custom(&v));
+    /// let buf = [0x10, 0x11, 0x12, 0x13];
+    /// assert!(info.is_custom(&buf));
     /// # }
     /// ```
     pub fn is_custom(&self, buf: &[u8]) -> bool {
@@ -389,10 +394,11 @@ impl Infer {
     ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
-    /// let v = [0x10, 0x11, 0x12, 0x13];
-    /// let res =  info.get(&v).unwrap();
-    /// assert_eq!("custom/foo", res.mime_type());
-    /// assert_eq!("foo", res.extension());
+    /// let buf = [0x10, 0x11, 0x12, 0x13];
+    /// let kind =  info.get(&buf).expect("file type is known");
+    ///
+    /// assert_eq!(kind.mime_type(), "custom/foo");
+    /// assert_eq!(kind.extension(), "foo");
     /// ```
     #[cfg(feature = "alloc")]
     pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {
@@ -423,9 +429,12 @@ static INFER: Infer = Infer::new();
 /// # Examples
 ///
 /// ```rust
-/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
-/// assert_eq!("image/jpeg", infer::get(&v).unwrap().mime_type());
-/// assert_eq!("jpg", infer::get(&v).unwrap().extension());
+/// let info = infer::Infer::new();
+/// let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+/// let kind = info.get(&buf).expect("file type is known");
+///
+/// assert_eq!(kind.mime_type(), "image/jpeg");
+/// assert_eq!(kind.extension(), "jpg");
 /// ```
 pub fn get(buf: &[u8]) -> Option<Type> {
     INFER.get(buf)
@@ -440,13 +449,12 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 /// # Examples
 ///
 /// ```rust
-/// let res = infer::get_from_path("testdata/sample.jpg");
-/// assert!(res.is_ok());
-/// let o = res.unwrap();
-/// assert!(o.is_some());
-/// let typ = o.unwrap();
-/// assert_eq!("image/jpeg", typ.mime_type());
-/// assert_eq!("jpg", typ.extension());
+/// let kind = infer::get_from_path("testdata/sample.jpg")
+///     .expect("file read successfully")
+///     .expect("file type is known");
+///
+/// assert_eq!(kind.mime_type(), "image/jpeg");
+/// assert_eq!(kind.extension(), "jpg");
 /// ```
 #[cfg(feature = "std")]
 pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
@@ -458,11 +466,9 @@ pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
 /// # Examples
 ///
 /// ```rust
-/// let res = infer::get_from_str("video/mp4");
-/// assert!(res.is_some());
-/// let typ = res.unwrap();
-/// assert_eq!(typ.mime_type(), "video/mp4");
-/// assert_eq!(typ.extension(), "mp4");
+/// let kind = infer::get_from_str("video/mp4").expect("mime type is known");
+/// assert_eq!(kind.mime_type(), "video/mp4");
+/// assert_eq!(kind.extension(), "mp4");
 /// ```
 pub fn get_from_str<S: AsRef<str>>(val: S) -> Option<Type> {
     INFER.get_from_str(val)
@@ -473,11 +479,9 @@ pub fn get_from_str<S: AsRef<str>>(val: S) -> Option<Type> {
 /// # Examples
 ///
 /// ```rust
-/// let res = infer::get_from_ext("jpg");
-/// assert!(res.is_some());
-/// let typ = res.unwrap();
-/// assert_eq!(typ.mime_type(), "image/jpeg");
-/// assert_eq!(typ.extension(), "jpg");
+/// let kind = infer::get_from_ext("jpg").expect("extension is known");
+/// assert_eq!(kind.mime_type(), "image/jpeg");
+/// assert_eq!(kind.extension(), "jpg");
 /// ```
 pub fn get_from_ext<S: AsRef<str>>(val: S) -> Option<Type> {
     INFER.get_from_ext(val)
@@ -488,8 +492,8 @@ pub fn get_from_ext<S: AsRef<str>>(val: S) -> Option<Type> {
 /// # Examples
 ///
 /// ```rust
-/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
-/// assert!(infer::is(&v, "jpg"));
+/// let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+/// assert!(infer::is(&buf, "jpg"));
 /// ```
 pub fn is(buf: &[u8], extension: &str) -> bool {
     INFER.is(buf, extension)
@@ -500,8 +504,8 @@ pub fn is(buf: &[u8], extension: &str) -> bool {
 /// # Examples
 ///
 /// ```rust
-/// let v = [0xFF, 0xD8, 0xFF, 0xAA];
-/// assert!(infer::is_mime(&v, "image/jpeg"));
+/// let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+/// assert!(infer::is_mime(&buf, "image/jpeg"));
 /// ```
 pub fn is_mime(buf: &[u8], mime_type: &str) -> bool {
     INFER.is_mime(buf, mime_type)
@@ -615,25 +619,21 @@ pub fn is_video(buf: &[u8]) -> bool {
 
 #[cfg(test)]
 mod tests {
+    #[cfg(feature = "alloc")]
     use super::Infer;
 
     #[test]
     fn test_get_unknown() {
-        let v = [];
-        let info = Infer::new();
-        assert!(info.get(&v).is_none());
+        let buf = [];
+        assert!(crate::get(&buf).is_none());
     }
 
     #[test]
     fn test_get_jpeg() {
-        let v = [0xFF, 0xD8, 0xFF, 0xAA];
-        match crate::get(&v) {
-            Some(info) => {
-                assert_eq!(info.extension(), "jpg");
-                assert_eq!(info.mime_type(), "image/jpeg");
-            }
-            None => panic!("type info expected"),
-        }
+        let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+        let kind = crate::get(&buf).expect("file type is known");
+        assert_eq!(kind.extension(), "jpg");
+        assert_eq!(kind.mime_type(), "image/jpeg");
     }
 
     #[cfg(feature = "alloc")]

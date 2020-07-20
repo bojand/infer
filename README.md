@@ -19,66 +19,72 @@ Does not require magic file database (i.e. `/etc/magic`).
 - File discovery by class (image, video, audio...)
 - Supports custom new types and matchers
 
-## Documentation
-
-https://docs.rs/infer
-
 ## Installation
 
-This crate works with Cargo and is on
-[crates.io](https://crates.io/crates/infer). Add it to your `Cargo.toml`
-like so:
+This crate works with Cargo and is on [crates.io](https://crates.io/crates/infer).
+Add it to your `Cargo.toml` like so:
 
 ```toml
 [dependencies]
 infer = "0.2"
 ```
 
+If you are not using the custom matcher or the file type from file path functionality you
+can make this crate even lighter by importing it with no default features, like so:
+
+```toml
+[dependencies]
+infer = { version = "0.2", default-features = false }
+```
+
+## no_std and no_alloc support
+
+This crate supports `no_std` and `no_alloc` environments. `std` support is enabled by default,
+but you can disable it by importing the crate with no default features, making it depend
+only on the Rust `core` Library.
+
+`alloc` has to be enabled to be able to use custom file matchers.
+
+`std` has to be enabled to be able to get the file type from a file given the file path.
+
 ## Examples
+
+Most operations can be done via _top level functions_, but they are also available through the `Infer`
+struct, which must be used when dealing custom matchers.
 
 ### Get the type of a buffer
 
 ```rust
-use infer::Infer;
+let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+let kind = infer::get(&buf).expect("file type is known");
 
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
-let info = Infer::new();
-
-assert_eq!("image/jpeg", info.get(&v).unwrap().mime);
-assert_eq!("jpg", info.get(&v).unwrap().ext);
+assert_eq!(kind.mime_type(), "image/jpeg");
+assert_eq!(kind.extension(), "jpg");
 ```
 
-### Check path
+### Check file type by path
 
 ```rust
-use infer::Infer;
+let kind = infer::get_from_path("testdata/sample.jpg")
+    .expect("file read successfully")
+    .expect("file type is known");
 
-let info = Infer::new();
-let res = info.get_from_path("testdata/sample.jpg");
-
-assert!(res.is_ok());
-let o = res.unwrap();
-assert!(o.is_some());
-let typ = o.unwrap();
-
-assert_eq!("image/jpeg", typ.mime);
-assert_eq!("jpg", typ.ext);
+assert_eq!(kind.mime_type(), "image/jpeg");
+assert_eq!(kind.extension(), "jpg");
 ```
 
 ### Check for specific type
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
-assert!(infer::image::is_jpeg(&v));
+let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+assert!(infer::image::is_jpeg(&buf));
 ```
 
 ### Check for specific type class
-Note individual matcher functions do not require init
 
 ```rust
-let v = vec![0xFF, 0xD8, 0xFF, 0xAA];
-let info = infer::Infer::new();
-assert!(info.is_image(&v));
+let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+assert!(infer::is_image(&buf));
 ```
 
 ### Adds a custom file type matcher
@@ -91,11 +97,11 @@ fn custom_matcher(buf: &[u8]) -> bool {
 let mut info = infer::Infer::new();
 info.add("custom/foo", "foo", custom_matcher);
 
-let v = vec![0x10, 0x11, 0x12, 0x13];
-let res =  info.get(&v).unwrap();
+let buf = [0x10, 0x11, 0x12, 0x13];
+let kind = info.get(&buf).expect("file type is known");
 
-assert_eq!("custom/foo", res.mime);
-assert_eq!("foo", res.ext);
+assert_eq!(kind.mime_type(), "custom/foo");
+assert_eq!(kind.extension(), "foo");
 ```
 
 ## Supported types
