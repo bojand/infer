@@ -25,11 +25,7 @@ pub fn is_html(buf: &[u8]) -> bool {
     let buf = trim_start_whitespaces(buf);
 
     for val in values {
-        if buf.len() <= val.len() {
-            continue;
-        }
-        let b = &buf[..val.len()];
-        if b.eq_ignore_ascii_case(val) {
+        if starts_with_ignore_ascii_case(buf, val) && buf.len() > val.len() {
             match buf[val.len()] {
                 // tag-terminitating byte
                 0x20 | 0x3E => return true,
@@ -48,11 +44,7 @@ pub fn is_html(buf: &[u8]) -> bool {
 pub fn is_xml(buf: &[u8]) -> bool {
     let val: &[u8] = b"<?xml";
     let buf = trim_start_whitespaces(buf);
-    if buf.len() <= val.len() {
-        return false;
-    }
-    let b = &buf[..val.len()];
-    b.eq_ignore_ascii_case(val)
+    starts_with_ignore_ascii_case(buf, val)
 }
 
 /// Strip whitespaces at the beginning of the buffer.
@@ -67,6 +59,10 @@ fn trim_start_whitespaces(buf: &[u8]) -> &[u8] {
         }
     }
     &[]
+}
+
+fn starts_with_ignore_ascii_case(buf: &[u8], needle: &[u8]) -> bool {
+    buf.len() >= needle.len() && buf[..needle.len()].eq_ignore_ascii_case(needle)
 }
 
 #[cfg(test)]
