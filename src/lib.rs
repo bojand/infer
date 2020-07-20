@@ -394,10 +394,11 @@ impl Infer {
     ///
     /// let mut info = infer::Infer::new();
     /// info.add("custom/foo", "foo", custom_matcher);
-    /// let v = [0x10, 0x11, 0x12, 0x13];
-    /// let res =  info.get(&v).unwrap();
-    /// assert_eq!(res.mime_type(), "custom/foo");
-    /// assert_eq!(res.extension(), "foo");
+    /// let buf = [0x10, 0x11, 0x12, 0x13];
+    /// let kind =  info.get(&buf).expect("file type is known");
+    ///
+    /// assert_eq!(kind.mime_type(), "custom/foo");
+    /// assert_eq!(kind.extension(), "foo");
     /// ```
     #[cfg(feature = "alloc")]
     pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {

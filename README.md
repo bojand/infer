@@ -98,7 +98,7 @@ let mut info = infer::Infer::new();
 info.add("custom/foo", "foo", custom_matcher);
 
 let buf = [0x10, 0x11, 0x12, 0x13];
-let kind = info.get(&buf).unwrap();
+let kind = info.get(&buf).expect("file type is known");
 
 assert_eq!(kind.mime_type(), "custom/foo");
 assert_eq!(kind.extension(), "foo");
