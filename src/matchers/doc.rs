@@ -26,10 +26,7 @@ pub fn is_doc(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is Microsoft Word Open XML Format Document (DOCX) data.
 pub fn is_docx(buf: &[u8]) -> bool {
-    match msooxml(buf) {
-        Some(typ) => typ == DocType::DOCX,
-        None => false,
-    }
+    msooxml(buf) == Some(DocType::DOCX)
 }
 
 /// Returns whether a buffer is Microsoft Excel 97-2003 Worksheet (XLS) data.
@@ -47,10 +44,7 @@ pub fn is_xls(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
 pub fn is_xlsx(buf: &[u8]) -> bool {
-    match msooxml(buf) {
-        Some(typ) => typ == DocType::XLSX,
-        None => false,
-    }
+    msooxml(buf) == Some(DocType::XLSX)
 }
 
 /// Returns whether a buffer is Microsoft PowerPoint 97-2003 Presentation (PPT) data.
@@ -68,10 +62,7 @@ pub fn is_ppt(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is Microsoft PowerPoint Open XML Presentation (PPTX) data.
 pub fn is_pptx(buf: &[u8]) -> bool {
-    match msooxml(buf) {
-        Some(typ) => typ == DocType::PPTX,
-        None => false,
-    }
+    msooxml(buf) == Some(DocType::PPTX)
 }
 
 fn msooxml(buf: &[u8]) -> Option<DocType> {
