@@ -154,7 +154,7 @@ fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
 
     let major = &buf[8..12];
     let minor = &buf[12..16];
-    let compatible = (16..ftyp_length).step_by(4).map(move |i| &buf[i..i + 4]);
+    let compatible = buf[16..].chunks_exact(4);
 
     Some((major, minor, compatible))
 }
