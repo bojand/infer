@@ -131,7 +131,6 @@ pub fn is_avif(buf: &[u8]) -> bool {
 }
 
 // IsISOBMFF checks whether the given buffer represents ISO Base Media File Format data
-#[inline]
 fn is_isobmff(buf: &[u8]) -> bool {
     if buf.len() < 16 {
         return false;
@@ -146,7 +145,6 @@ fn is_isobmff(buf: &[u8]) -> bool {
 }
 
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
-#[inline]
 fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
     if buf.len() < 16 {
         return None;
