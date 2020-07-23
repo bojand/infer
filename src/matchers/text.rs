@@ -51,14 +51,14 @@ pub fn is_xml(buf: &[u8]) -> bool {
 ///
 /// Follows https://mimesniff.spec.whatwg.org
 /// definition of whitespace.
-fn trim_start_whitespaces(buf: &[u8]) -> &[u8] {
-    for (i, b) in buf.iter().enumerate() {
-        match b {
-            0x09 | 0x0A | 0x0C | 0x0D | 0x20 => continue,
-            _ => return &buf[i..],
+fn trim_start_whitespaces(mut buf: &[u8]) -> &[u8] {
+    while !buf.is_empty() {
+        match buf[0] {
+            0x09 | 0x0A | 0x0C | 0x0D | 0x20 => buf = &buf[1..],
+            _ => break,
         }
     }
-    &[]
+    buf
 }
 
 fn starts_with_ignore_ascii_case(buf: &[u8], needle: &[u8]) -> bool {
