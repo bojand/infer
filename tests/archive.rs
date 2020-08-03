@@ -1,21 +1,11 @@
-use infer::{MatcherType, Type};
-
 mod common;
 
 test_format!(
-    MatcherType::ARCHIVE,
+    ARCHIVE,
     "application/vnd.sqlite3",
     "sqlite",
-    test_sqlite,
-    test_sqlite_embed,
+    sqlite,
     "sample.db"
 );
 
-test_format!(
-    MatcherType::ARCHIVE,
-    "application/zstd",
-    "zst",
-    test_zst,
-    test_zst_embed,
-    "sample.tar.zst"
-);
+test_format!(ARCHIVE, "application/zstd", "zst", zst, "sample.tar.zst");
