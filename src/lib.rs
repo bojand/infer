@@ -236,26 +236,6 @@ impl Infer {
         Ok(self.get(&bytes))
     }
 
-    /// Returns the `Type` from a mime string.
-    ///
-    /// See [`get_from_str`](./fn.get_from_str.html).
-    pub fn get_from_str<S: AsRef<str>>(&self, val: S) -> Option<Type> {
-        let val = val.as_ref();
-        self.iter_matchers()
-            .find(|kind| kind.mime_type() == val)
-            .copied()
-    }
-
-    /// Returns the `Type` from a file extension.
-    ///
-    /// See [`get_from_ext`](./fn.get_from_ext.html).
-    pub fn get_from_ext<S: AsRef<str>>(&self, val: S) -> Option<Type> {
-        let val = val.as_ref();
-        self.iter_matchers()
-            .find(|kind| kind.extension() == val)
-            .copied()
-    }
-
     /// Determines whether a buffer is of given extension.
     ///
     /// # Examples
@@ -459,32 +439,6 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 #[cfg(feature = "std")]
 pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
     INFER.get_from_path(path)
-}
-
-/// Returns the `Type` from a mime string.
-///
-/// # Examples
-///
-/// ```rust
-/// let kind = infer::get_from_str("video/mp4").expect("mime type is known");
-/// assert_eq!(kind.mime_type(), "video/mp4");
-/// assert_eq!(kind.extension(), "mp4");
-/// ```
-pub fn get_from_str<S: AsRef<str>>(val: S) -> Option<Type> {
-    INFER.get_from_str(val)
-}
-
-/// Returns the `Type` from a file extension.
-///
-/// # Examples
-///
-/// ```rust
-/// let kind = infer::get_from_ext("jpg").expect("extension is known");
-/// assert_eq!(kind.mime_type(), "image/jpeg");
-/// assert_eq!(kind.extension(), "jpg");
-/// ```
-pub fn get_from_ext<S: AsRef<str>>(val: S) -> Option<Type> {
-    INFER.get_from_ext(val)
 }
 
 /// Determines whether a buffer is of given extension.
