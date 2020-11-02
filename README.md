@@ -26,7 +26,7 @@ Add it to your `Cargo.toml` like so:
 
 ```toml
 [dependencies]
-infer = "0.2"
+infer = "0.3"
 ```
 
 If you are not using the custom matcher or the file type from file path functionality you
@@ -34,7 +34,7 @@ can make this crate even lighter by importing it with no default features, like 
 
 ```toml
 [dependencies]
-infer = { version = "0.2", default-features = false }
+infer = { version = "0.3", default-features = false }
 ```
 
 ## no_std and no_alloc support

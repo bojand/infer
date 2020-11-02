@@ -65,6 +65,8 @@ assert_eq!(kind.extension(), "foo");
 ```
 */
 #![crate_name = "infer"]
+#![doc(html_root_url = "https://docs.rs/infer/0.3.0")]
+#![forbid(unsafe_code)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
 #[cfg(feature = "alloc")]
