@@ -62,6 +62,12 @@ matcher_map!(
         "bc",
         matchers::app::is_llvm
     ),
+    (
+        MatcherType::APP,
+        "application/x-mach-binary",
+        "mach",
+        matchers::app::is_mach
+    ),
     // Image
     (
         MatcherType::IMAGE,

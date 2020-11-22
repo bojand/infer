@@ -193,6 +193,7 @@ assert_eq!(kind.extension(), "foo");
 - **exe** - `application/vnd.microsoft.portable-executable`
 - **elf** - `application/x-executable`
 - **bc** - `application/llvm`
+- **mach** - `application/x-mach-binary`
 - **class** - `application/java`
 
 ## Known Issues
