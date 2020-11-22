@@ -10,4 +10,36 @@ test_format!(
     "sample.exe"
 );
 
+test_format!(
+    APP,
+    "application/x-mach-binary",
+    "mach",
+    mach_x86,
+    "sample_mach_x86"
+);
+
+test_format!(
+    APP,
+    "application/x-mach-binary",
+    "mach",
+    mach_x64,
+    "sample_mach_x64"
+);
+
+test_format!(
+    APP,
+    "application/x-mach-binary",
+    "mach",
+    mach_ppc,
+    "sample_mach_ppc"
+);
+
+test_format!(
+    APP,
+    "application/x-mach-binary",
+    "mach",
+    mach_fat,
+    "sample_mach_fat"
+);
+
 test_format!(APP, "application/wasm", "wasm", wasm, "sample.wasm");

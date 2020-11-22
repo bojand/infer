@@ -52,3 +52,20 @@ pub fn is_java(buf: &[u8]) -> bool {
 pub fn is_llvm(buf: &[u8]) -> bool {
     buf.len() >= 2 && buf[0] == 0x42 && buf[1] == 0x43
 }
+
+/// Returns whether a buffer is a Mach-O binary.
+pub fn is_mach(buf: &[u8]) -> bool {
+    // Mach-O binaries can be one of four variants: x86, x64, PowerPC, "Fat" (x86 + PowerPC)
+    // https://ilostmynotes.blogspot.com/2014/05/mach-o-filetype-identification.html
+
+    if buf.len() < 4 {
+        return false;
+    }
+
+    match buf[0..4] {
+        [width, 0xfa, 0xed, 0xfe] if width == 0xcf || width == 0xce => true,
+        [0xfe, 0xed, 0xfa, width] if width == 0xcf || width == 0xce => true,
+        [0xca, 0xfe, 0xba, 0xbe] => true,
+        _ => false,
+    }
+}
