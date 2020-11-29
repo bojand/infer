@@ -65,9 +65,14 @@ fn starts_with_ignore_ascii_case(buf: &[u8], needle: &[u8]) -> bool {
     buf.len() >= needle.len() && buf[..needle.len()].eq_ignore_ascii_case(needle)
 }
 
+/// Returns whether a buffer is a shell script.
+pub fn is_shellscript(buf: &[u8]) -> bool {
+    buf.len() > 2 && &buf[..2] == b"#!"
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{is_html, trim_start_whitespaces};
+    use super::{is_html, is_shellscript, trim_start_whitespaces};
 
     #[test]
     fn trim_whitespaces() {
@@ -87,5 +92,10 @@ mod tests {
         assert_eq!(is_html(b"<HTML"), false);
         assert_eq!(is_html(b"<HTML "), true);
         assert_eq!(is_html(b"   <BODY>"), true);
+    }
+
+    #[test]
+    fn shellscript() {
+        assert_eq!(is_shellscript(b"#!"), false);
     }
 }

@@ -465,5 +465,11 @@ matcher_map!(
         "html",
         matchers::text::is_html
     ),
-    (MatcherType::TEXT, "text/xml", "xml", matchers::text::is_xml)
+    (MatcherType::TEXT, "text/xml", "xml", matchers::text::is_xml),
+    (
+        MatcherType::TEXT,
+        "text/x-shellscript",
+        "sh",
+        matchers::text::is_shellscript
+    )
 );
