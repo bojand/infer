@@ -68,6 +68,18 @@ matcher_map!(
         "mach",
         matchers::app::is_mach
     ),
+    (
+        MatcherType::APP,
+        "application/vnd.android.dex",
+        "dex",
+        matchers::app::is_dex
+    ),
+    (
+        MatcherType::APP,
+        "application/vnd.android.dey",
+        "dey",
+        matchers::app::is_dey
+    ),
     // Image
     (
         MatcherType::IMAGE,

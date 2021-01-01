@@ -69,3 +69,24 @@ pub fn is_mach(buf: &[u8]) -> bool {
         _ => false,
     }
 }
+
+/// Returns whether a buffer is a Dalvik Executable(DEX).
+pub fn is_dex(buf: &[u8]) -> bool {
+    // https://source.android.com/devices/tech/dalvik/dex-format#dex-file-magic
+
+    buf.len() > 36 && 
+    // magic
+    buf[0] == 0x64 && buf[1] == 0x65 && buf[2] == 0x78 && buf[3] == 0x0A 
+     // file sise
+    && buf[36] == 0x70
+}
+
+
+/// Returns whether a buffer is a Dey Optimized Dalvik Executable(ODEX)
+pub fn is_dey(buf: &[u8]) -> bool {
+    buf.len() > 100 && 
+    // magic
+    buf[0] == 0x64 && buf[1] == 0x65 && buf[2] == 0x79 && buf[3] == 0x0A
+     // file sise
+    && is_dex(&buf[40..100])
+}
