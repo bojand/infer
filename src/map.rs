@@ -327,7 +327,7 @@ matcher_map!(
     ),
     (
         MatcherType::DOC,
-        "application/application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
         "pptx",
         matchers::doc::is_pptx
     ),
