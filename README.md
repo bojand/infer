@@ -195,6 +195,8 @@ assert_eq!(kind.extension(), "foo");
 - **bc** - `application/llvm`
 - **mach** - `application/x-mach-binary`
 - **class** - `application/java`
+- **dex** - `application/vnd.android.dex`
+- **dey** - `application/vnd.android.dey`
 
 ## Known Issues
 
