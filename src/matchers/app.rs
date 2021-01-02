@@ -89,3 +89,14 @@ pub fn is_dey(buf: &[u8]) -> bool {
     // file sise
     && is_dex(&buf[40..100])
 }
+
+/// Returns whether a buffer DER encoded X.509 certificate.
+pub fn is_der(buf: &[u8]) -> bool {
+    // https://en.wikipedia.org/wiki/List_of_file_signatures
+    // https://github.com/ReFirmLabs/binwalk/blob/master/src/binwalk/magic/crypto#L25-L37
+    // https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs
+    // openssl req -newkey rsa:2048 -nodes -keyout domain.key -x509 -days 1 -out domain.crt
+    // openssl x509 -in domain.crt -outform der -out domain.der
+
+    buf.len() > 2 && buf[0] == 0x30 && buf[1] == 0x82
+}

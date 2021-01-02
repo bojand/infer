@@ -197,6 +197,7 @@ assert_eq!(kind.extension(), "foo");
 - **class** - `application/java`
 - **dex** - `application/vnd.android.dex`
 - **dey** - `application/vnd.android.dey`
+- **der** - `application/x-x509-ca-cert`
 
 ## Known Issues
 

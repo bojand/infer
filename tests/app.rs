@@ -47,3 +47,5 @@ test_format!(APP, "application/wasm", "wasm", wasm, "sample.wasm");
 test_format!(APP, "application/vnd.android.dex", "dex", dex, "sample.dex");
 
 test_format!(APP, "application/vnd.android.dey", "dey", dey, "sample.dey");
+
+test_format!(APP, "application/x-x509-ca-cert", "der", der, "sample.der");
