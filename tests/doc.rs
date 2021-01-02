@@ -20,7 +20,7 @@ test_format!(
 
 test_format!(
     DOC,
-    "application/application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     "pptx",
     pptx,
     "sample.pptx"
