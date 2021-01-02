@@ -80,6 +80,12 @@ matcher_map!(
         "dey",
         matchers::app::is_dey
     ),
+    (
+        MatcherType::APP,
+        "application/x-x509-ca-cert",
+        "der",
+        matchers::app::is_der
+    ),
     // Image
     (
         MatcherType::IMAGE,
