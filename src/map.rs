@@ -94,6 +94,12 @@ matcher_map!(
         "epub",
         matchers::book::is_epub
     ),
+    (
+        MatcherType::BOOK,
+        "application/x-mobipocket-ebook",
+        "mobi",
+        matchers::book::is_mobi
+    ),
     // Image
     (
         MatcherType::IMAGE,

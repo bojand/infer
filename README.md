@@ -174,6 +174,7 @@ assert_eq!(kind.extension(), "foo");
 #### Book
 
 - **epub** - `application/epub+zip`
+- **mobi** - `application/x-mobipocket-ebook`
 
 #### Documents
 
