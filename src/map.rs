@@ -5,6 +5,7 @@ pub enum MatcherType {
     APP,
     ARCHIVE,
     AUDIO,
+    BOOK,
     DOC,
     FONT,
     IMAGE,
@@ -85,6 +86,13 @@ matcher_map!(
         "application/x-x509-ca-cert",
         "der",
         matchers::app::is_der
+    ),
+    // Book
+    (
+        MatcherType::BOOK,
+        "application/epub+zip",
+        "epub",
+        matchers::book::is_epub
     ),
     // Image
     (

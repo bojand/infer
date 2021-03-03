@@ -305,6 +305,15 @@ impl Infer {
         self.is_type(buf, MatcherType::AUDIO)
     }
 
+    /// Determines whether a buffer is a book type.
+    ///
+    /// # Examples
+    ///
+    /// See [`is_book`](./fn.is_book.html).
+    pub fn is_book(&self, buf: &[u8]) -> bool {
+        self.is_type(buf, MatcherType::BOOK)
+    }
+
     /// Determines whether a buffer is a document type.
     ///
     /// # Examples
@@ -523,6 +532,18 @@ pub fn is_archive(buf: &[u8]) -> bool {
 /// ```
 pub fn is_audio(buf: &[u8]) -> bool {
     INFER.is_audio(buf)
+}
+
+/// Determines whether a buffer is a book type.
+///
+/// # Examples
+///
+/// ```rust
+/// use std::fs;
+/// assert!(infer::is_book(&fs::read("testdata/sample.epub").unwrap()));
+/// ```
+pub fn is_book(buf: &[u8]) -> bool {
+    INFER.is_book(buf)
 }
 
 /// Determines whether a buffer is a document type.
