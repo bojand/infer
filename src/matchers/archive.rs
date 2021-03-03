@@ -224,3 +224,18 @@ pub fn is_dcm(buf: &[u8]) -> bool {
 pub fn is_zst(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD
 }
+
+/// Returns whether a buffer is a mobi.
+pub fn is_mobi(buf: &[u8]) -> bool {
+    buf.len() > 67
+        // BOOK
+        && buf[60] == 0x42
+        && buf[61] == 0x4F
+        && buf[62] == 0x4F
+        && buf[63] == 0x4B
+        // MOBI
+        && buf[64] == 0x4D
+        && buf[65] == 0x4F
+        && buf[66] == 0x42
+        && buf[67] == 0x49
+}

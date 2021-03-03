@@ -476,6 +476,12 @@ matcher_map!(
         "zst",
         matchers::archive::is_zst
     ),
+    (
+        MatcherType::ARCHIVE,
+        "application/x-mobipocket-ebook",
+        "mobi",
+        matchers::archive::is_mobi
+    ),
     // Text
     (
         MatcherType::TEXT,

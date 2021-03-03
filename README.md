@@ -170,6 +170,7 @@ assert_eq!(kind.extension(), "foo");
 - **rpm** - `application/x-rpm`
 - **dcm** - `application/dicom`
 - **zst** - `application/zstd`
+- **mobi** - `application/x-mobipocket-ebook`
 
 #### Documents
 
