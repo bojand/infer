@@ -171,6 +171,11 @@ assert_eq!(kind.extension(), "foo");
 - **dcm** - `application/dicom`
 - **zst** - `application/zstd`
 
+#### Book
+
+- **epub** - `application/epub+zip`
+- **mobi** - `application/x-mobipocket-ebook`
+
 #### Documents
 
 - **doc** - `application/msword`
