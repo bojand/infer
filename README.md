@@ -170,6 +170,7 @@ assert_eq!(kind.extension(), "foo");
 - **rpm** - `application/x-rpm`
 - **dcm** - `application/dicom`
 - **zst** - `application/zstd`
+- **msi** - `application/x-ole-storage`
 
 #### Book
 
@@ -196,6 +197,7 @@ assert_eq!(kind.extension(), "foo");
 
 - **wasm** - `application/wasm`
 - **exe** - `application/vnd.microsoft.portable-executable`
+- **dll** - `application/vnd.microsoft.portable-executable`
 - **elf** - `application/x-executable`
 - **bc** - `application/llvm`
 - **mach** - `application/x-mach-binary`
@@ -203,10 +205,12 @@ assert_eq!(kind.extension(), "foo");
 - **dex** - `application/vnd.android.dex`
 - **dey** - `application/vnd.android.dey`
 - **der** - `application/x-x509-ca-cert`
+- **obj** - `application/x-executable`
 
 ## Known Issues
 
-- `doc`, `ppt`, `xls` all have the same magic number so it's not possible to tell which one just based on the binary data. `doc` is returned for all.
+- `doc`, `ppt`, `xls`, `msi` all have the same magic number so it's not possible to tell which one just based on the binary data. `doc` is returned for all.
+- `exe` and `dll` have the same magic number so it's not possible to tell which one just based on the binary data. `exe` is returned for all.
 
 ## License
 

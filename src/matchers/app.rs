@@ -32,6 +32,11 @@ pub fn is_exe(buf: &[u8]) -> bool {
     buf.len() > 1 && buf[0] == 0x4D && buf[1] == 0x5A
 }
 
+/// Returns whether a buffer is a DLL.
+pub fn is_dll(buf: &[u8]) -> bool {
+    is_exe(buf)
+}
+
 /// Returns whether a buffer is an ELF.
 pub fn is_elf(buf: &[u8]) -> bool {
     buf.len() > 52 && buf[0] == 0x7F && buf[1] == 0x45 && buf[2] == 0x4C && buf[3] == 0x46
@@ -99,4 +104,19 @@ pub fn is_der(buf: &[u8]) -> bool {
     // openssl x509 -in domain.crt -outform der -out domain.der
 
     buf.len() > 2 && buf[0] == 0x30 && buf[1] == 0x82
+}
+
+/// Returns whether a buffer is a Common Object File Format for i386 architecture.
+pub fn is_coff_i386(buf: &[u8]) -> bool {
+    buf.len() > 2 && buf[0] == 0x4C && buf[1] == 0x01
+}
+
+/// Returns whether a buffer is a Common Object File Format for x64 architecture.
+pub fn is_coff_x64(buf: &[u8]) -> bool {
+    buf.len() > 2 && buf[0] == 0x64 && buf[1] == 0x86
+}
+
+/// Returns whether a buffer is a Common Object File Format for Itanium architecture.
+pub fn is_coff_ia64(buf: &[u8]) -> bool {
+    buf.len() > 2 && buf[0] == 0x00 && buf[1] == 0x02
 }
