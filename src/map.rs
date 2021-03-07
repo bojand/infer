@@ -97,19 +97,7 @@ matcher_map!(
         MatcherType::APP,
         "application/x-executable",
         "obj",
-        matchers::app::is_coff_i386
-    ),
-    (
-        MatcherType::APP,
-        "application/x-executable",
-        "obj",
-        matchers::app::is_coff_x64
-    ),
-    (
-        MatcherType::APP,
-        "application/x-executable",
-        "obj",
-        matchers::app::is_coff_ia64
+        matchers::app::is_coff
     ),
     // Book
     (
