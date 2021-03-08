@@ -20,8 +20,7 @@ pub fn is_wasm(buf: &[u8]) -> bool {
         && buf[7] == 0x00
 }
 
-/// Returns whether a buffer is an EXE.
-/// DLL and EXE have the same magic number, so returns true also for a DLL.
+/// Returns whether a buffer is an EXE. DLL and EXE have the same magic number, so returns true also for a DLL.
 ///
 /// # Example
 ///
@@ -33,8 +32,7 @@ pub fn is_exe(buf: &[u8]) -> bool {
     buf.len() > 1 && buf[0] == 0x4D && buf[1] == 0x5A
 }
 
-/// Returns whether a buffer is a DLL. 
-/// DLL and EXE have the same magic number, so returns true also for an EXE.
+/// Returns whether a buffer is a DLL. DLL and EXE have the same magic number, so returns true also for an EXE.
 pub fn is_dll(buf: &[u8]) -> bool {
     is_exe(buf)
 }
@@ -125,5 +123,5 @@ pub fn is_coff_ia64(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is a Common Object File Format.
 pub fn is_coff(buf: &[u8]) -> bool {
-    is_coff_x64(buf) || is_coff_i386(buf) ||is_coff_ia64(buf) 
+    is_coff_x64(buf) || is_coff_i386(buf) || is_coff_ia64(buf)
 }
