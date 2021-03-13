@@ -192,3 +192,16 @@ pub fn is_dcm(buf: &[u8]) -> bool {
 pub fn is_zst(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD
 }
+
+/// Returns whether a buffer is a MSI Windows Installer archive.
+pub fn is_msi(buf: &[u8]) -> bool {
+    buf.len() > 7
+        && buf[0] == 0xD0
+        && buf[1] == 0xCF
+        && buf[2] == 0x11
+        && buf[3] == 0xE0
+        && buf[4] == 0xA1
+        && buf[5] == 0xB1
+        && buf[6] == 0x1A
+        && buf[7] == 0xE1
+}

@@ -53,6 +53,12 @@ matcher_map!(
     ),
     (
         MatcherType::APP,
+        "application/vnd.microsoft.portable-executable",
+        "dll",
+        matchers::app::is_dll
+    ),
+    (
+        MatcherType::APP,
         "application/java",
         "class",
         matchers::app::is_java
@@ -86,6 +92,12 @@ matcher_map!(
         "application/x-x509-ca-cert",
         "der",
         matchers::app::is_der
+    ),
+    (
+        MatcherType::APP,
+        "application/x-executable",
+        "obj",
+        matchers::app::is_coff
     ),
     // Book
     (
@@ -489,6 +501,12 @@ matcher_map!(
         "application/zstd",
         "zst",
         matchers::archive::is_zst
+    ),
+    (
+        MatcherType::ARCHIVE,
+        "application/x-ole-storage",
+        "msi",
+        matchers::archive::is_msi
     ),
     // Text
     (
