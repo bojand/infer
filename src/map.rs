@@ -1,5 +1,6 @@
 use super::{matchers, Matcher, Type};
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum MatcherType {
     APP,

@@ -1,5 +1,6 @@
 use core::convert::TryInto;
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Eq, PartialEq)]
 enum DocType {
     // DOC,
