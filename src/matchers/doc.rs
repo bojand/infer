@@ -9,7 +9,7 @@ enum DocType {
     XLSX,
     // PPT,
     PPTX,
-    OOXLM,
+    OOXML,
 }
 
 /// Returns whether a buffer is Microsoft Word Document (DOC) data.
@@ -108,7 +108,7 @@ fn msooxml(buf: &[u8]) -> Option<DocType> {
     let idx = search(buf, start_offset, 6000);
     match idx {
         Some(idx) => start_offset += idx + 4 + 26,
-        None => return Some(DocType::OOXLM),
+        None => return Some(DocType::OOXML),
     };
 
     let typo = check_msooml(buf, start_offset);
@@ -116,7 +116,7 @@ fn msooxml(buf: &[u8]) -> Option<DocType> {
         return typo;
     }
 
-    Some(DocType::OOXLM)
+    Some(DocType::OOXML)
 }
 
 fn compare_bytes(slice: &[u8], sub_slice: &[u8], start_offset: usize) -> bool {
