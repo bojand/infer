@@ -209,7 +209,6 @@ assert_eq!(kind.extension(), "foo");
 
 ## Known Issues
 
-- `doc`, `ppt`, `xls`, `msi` all have the same magic number so it's not possible to tell which one just based on the binary data. `doc` is returned for all.
 - `exe` and `dll` have the same magic number so it's not possible to tell which one just based on the binary data. `exe` is returned for all.
 
 ## License

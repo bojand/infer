@@ -3,26 +3,18 @@ use core::convert::TryInto;
 #[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Eq, PartialEq)]
 enum DocType {
-    // DOC,
+    DOC,
     DOCX,
-    // XLS,
+    XLS,
     XLSX,
-    // PPT,
+    PPT,
     PPTX,
     OOXML,
 }
 
 /// Returns whether a buffer is Microsoft Word Document (DOC) data.
 pub fn is_doc(buf: &[u8]) -> bool {
-    buf.len() > 7
-        && buf[0] == 0xD0
-        && buf[1] == 0xCF
-        && buf[2] == 0x11
-        && buf[3] == 0xE0
-        && buf[4] == 0xA1
-        && buf[5] == 0xB1
-        && buf[6] == 0x1A
-        && buf[7] == 0xE1
+    ole2(buf) == Some(DocType::DOC)
 }
 
 /// Returns whether a buffer is Microsoft Word Open XML Format Document (DOCX) data.
@@ -32,15 +24,7 @@ pub fn is_docx(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is Microsoft Excel 97-2003 Worksheet (XLS) data.
 pub fn is_xls(buf: &[u8]) -> bool {
-    buf.len() > 7
-        && buf[0] == 0xD0
-        && buf[1] == 0xCF
-        && buf[2] == 0x11
-        && buf[3] == 0xE0
-        && buf[4] == 0xA1
-        && buf[5] == 0xB1
-        && buf[6] == 0x1A
-        && buf[7] == 0xE1
+    ole2(buf) == Some(DocType::XLS)
 }
 
 /// Returns whether a buffer is Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
@@ -50,15 +34,7 @@ pub fn is_xlsx(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is Microsoft PowerPoint 97-2003 Presentation (PPT) data.
 pub fn is_ppt(buf: &[u8]) -> bool {
-    buf.len() > 7
-        && buf[0] == 0xD0
-        && buf[1] == 0xCF
-        && buf[2] == 0x11
-        && buf[3] == 0xE0
-        && buf[4] == 0xA1
-        && buf[5] == 0xB1
-        && buf[6] == 0x1A
-        && buf[7] == 0xE1
+    ole2(buf) == Some(DocType::PPT)
 }
 
 /// Returns whether a buffer is Microsoft PowerPoint Open XML Presentation (PPTX) data.
@@ -117,6 +93,34 @@ fn msooxml(buf: &[u8]) -> Option<DocType> {
     }
 
     Some(DocType::OOXML)
+}
+
+#[cfg(feature = "std")]
+fn ole2(buf: &[u8]) -> Option<DocType> {
+    use std::io::Cursor;
+
+    if !compare_bytes(buf, &[0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1], 0) {
+        return None;
+    }
+    if let Ok(file) = cfb::CompoundFile::open(Cursor::new(buf)) {
+        return match file.root_entry().clsid().to_string().as_str() {
+            "00020810-0000-0000-c000-000000000046" | "00020820-0000-0000-c000-000000000046" => {
+                Some(DocType::XLS)
+            }
+            "00020906-0000-0000-c000-000000000046" => Some(DocType::DOC),
+            "64818d10-4f9b-11cf-86ea-00aa00b929e8" => Some(DocType::PPT),
+            _ => None,
+        };
+    }
+    None
+}
+
+#[cfg(not(feature = "std"))]
+fn ole2(buf: &[u8]) -> Option<DocType> {
+    if !compare_bytes(buf, &[0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1], 0) {
+        return None;
+    }
+    Some(DocType::DOC)
 }
 
 fn compare_bytes(slice: &[u8], sub_slice: &[u8], start_offset: usize) -> bool {
