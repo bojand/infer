@@ -1,5 +1,6 @@
 use core::convert::TryInto;
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Eq, PartialEq)]
 enum DocType {
     // DOC,
@@ -80,6 +81,7 @@ fn msooxml(buf: &[u8]) -> Option<DocType> {
 
     if !compare_bytes(buf, b"[Content_Types].xml", 0x1E)
         && !compare_bytes(buf, b"_rels/.rels", 0x1E)
+        && !compare_bytes(buf, b"docProps", 0x1E)
     {
         return None;
     }
