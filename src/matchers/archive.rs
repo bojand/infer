@@ -191,7 +191,7 @@ pub fn is_dcm(buf: &[u8]) -> bool {
 }
 
 const ZSTD_SKIP_START: usize = 0x184D2A50;
-const ZSTD_SKIP_MASK: usize  = 0xFFFFFFF0;
+const ZSTD_SKIP_MASK: usize = 0xFFFFFFF0;
 
 /// Returns whether a buffer is a Zstd archive.
 // Zstandard compressed data is made of one or more frames.
@@ -212,7 +212,7 @@ pub fn is_zst(buf: &[u8]) -> bool {
         if buf.len() < 8 + data_len {
             return false;
         }
-        let next_frame = &buf[8+data_len..];
+        let next_frame = &buf[8 + data_len..];
         return is_zst(next_frame);
     }
 
