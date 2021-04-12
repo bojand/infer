@@ -9,3 +9,11 @@ test_format!(
 );
 
 test_format!(ARCHIVE, "application/zstd", "zst", zst, "sample.tar.zst");
+
+test_format!(
+    ARCHIVE,
+    "application/zstd",
+    "zst",
+    zst_skip,
+    "sample.skippable.zst"
+);
