@@ -216,7 +216,7 @@ pub fn is_zst(buf: &[u8]) -> bool {
         return is_zst(next_frame);
     }
 
-    return false;
+    false
 }
 
 /// Returns whether a buffer is a MSI Windows Installer archive.
