@@ -1,3 +1,5 @@
+use core::convert::TryInto;
+
 /// Returns whether a buffer is an ePub.
 pub fn is_epub(buf: &[u8]) -> bool {
     crate::book::is_epub(buf)
@@ -188,9 +190,33 @@ pub fn is_dcm(buf: &[u8]) -> bool {
     buf.len() > 131 && buf[128] == 0x44 && buf[129] == 0x49 && buf[130] == 0x43 && buf[131] == 0x4D
 }
 
+const ZSTD_SKIP_START: usize = 0x184D2A50;
+const ZSTD_SKIP_MASK: usize  = 0xFFFFFFF0;
+
 /// Returns whether a buffer is a Zstd archive.
+// Zstandard compressed data is made of one or more frames.
+// There are two frame formats defined by Zstandard: Zstandard frames and Skippable frames.
+// See more details from https://tools.ietf.org/id/draft-kucherawy-dispatch-zstd-00.html#rfc.section.2
 pub fn is_zst(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD
+    if buf.len() > 3 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD {
+        return true;
+    }
+
+    if buf.len() < 8 {
+        return false;
+    }
+
+    let magic = u32::from_le_bytes(buf[0..4].try_into().unwrap()) as usize;
+    if magic & ZSTD_SKIP_MASK == ZSTD_SKIP_START {
+        let data_len = u32::from_le_bytes(buf[4..8].try_into().unwrap()) as usize;
+        if buf.len() < 8 + data_len {
+            return false;
+        }
+        let next_frame = &buf[8+data_len..];
+        return is_zst(next_frame);
+    }
+
+    return false;
 }
 
 /// Returns whether a buffer is a MSI Windows Installer archive.
