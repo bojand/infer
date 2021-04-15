@@ -1,9 +1,9 @@
 mod common;
 
-test_format!(APP, "application/x-executable", "elf", elf, "sample_elf");
+test_format!(App, "application/x-executable", "elf", elf, "sample_elf");
 
 test_format!(
-    APP,
+    App,
     "application/vnd.microsoft.portable-executable",
     "exe",
     exe,
@@ -11,7 +11,7 @@ test_format!(
 );
 
 test_format!(
-    APP,
+    App,
     "application/x-mach-binary",
     "mach",
     mach_x86,
@@ -19,7 +19,7 @@ test_format!(
 );
 
 test_format!(
-    APP,
+    App,
     "application/x-mach-binary",
     "mach",
     mach_x64,
@@ -27,7 +27,7 @@ test_format!(
 );
 
 test_format!(
-    APP,
+    App,
     "application/x-mach-binary",
     "mach",
     mach_ppc,
@@ -35,13 +35,13 @@ test_format!(
 );
 
 test_format!(
-    APP,
+    App,
     "application/x-mach-binary",
     "mach",
     mach_fat,
     "sample_mach_fat"
 );
 
-test_format!(APP, "application/wasm", "wasm", wasm, "sample.wasm");
+test_format!(App, "application/wasm", "wasm", wasm, "sample.wasm");
 
-test_format!(APP, "application/x-x509-ca-cert", "der", der, "sample.der");
+test_format!(App, "application/x-x509-ca-cert", "der", der, "sample.der");

@@ -24,10 +24,10 @@ macro_rules! test_format_get_only {
 }
 
 #[cfg(feature = "std")]
-test_format_get_only!(DOC, "application/msword", "doc", doc, "sample.doc");
+test_format_get_only!(Doc, "application/msword", "doc", doc, "sample.doc");
 
 test_format!(
-    DOC,
+    Doc,
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "docx",
     docx,
@@ -35,10 +35,10 @@ test_format!(
 );
 
 #[cfg(feature = "std")]
-test_format_get_only!(DOC, "application/vnd.ms-excel", "xls", xls, "sample.xls");
+test_format_get_only!(Doc, "application/vnd.ms-excel", "xls", xls, "sample.xls");
 
 test_format!(
-    DOC,
+    Doc,
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "xlsx",
     xlsx,
@@ -47,7 +47,7 @@ test_format!(
 
 #[cfg(feature = "std")]
 test_format_get_only!(
-    DOC,
+    Doc,
     "application/vnd.ms-powerpoint",
     "ppt",
     ppt,
@@ -55,7 +55,7 @@ test_format_get_only!(
 );
 
 test_format!(
-    DOC,
+    Doc,
     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     "pptx",
     pptx,

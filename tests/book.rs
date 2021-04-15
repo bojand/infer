@@ -1,8 +1,8 @@
 mod common;
 
-test_format!(BOOK, "application/epub+zip", "epub", epub, "sample.epub");
+test_format!(Book, "application/epub+zip", "epub", epub, "sample.epub");
 test_format!(
-    BOOK,
+    Book,
     "application/x-mobipocket-ebook",
     "mobi",
     mobi,

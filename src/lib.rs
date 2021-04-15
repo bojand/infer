@@ -284,7 +284,7 @@ impl Infer {
     ///
     /// See [`is_app`](./fn.is_app.html).
     pub fn is_app(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::APP)
+        self.is_type(buf, MatcherType::App)
     }
 
     /// Determines whether a buffer is an archive type.
@@ -293,7 +293,7 @@ impl Infer {
     ///
     /// See [`is_archive`](./fn.is_archive.html).
     pub fn is_archive(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::ARCHIVE)
+        self.is_type(buf, MatcherType::Archive)
     }
 
     /// Determines whether a buffer is an audio type.
@@ -302,7 +302,7 @@ impl Infer {
     ///
     /// See [`is_audio`](./fn.is_audio.html).
     pub fn is_audio(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::AUDIO)
+        self.is_type(buf, MatcherType::Audio)
     }
 
     /// Determines whether a buffer is a book type.
@@ -311,7 +311,7 @@ impl Infer {
     ///
     /// See [`is_book`](./fn.is_book.html).
     pub fn is_book(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::BOOK)
+        self.is_type(buf, MatcherType::Book)
     }
 
     /// Determines whether a buffer is a document type.
@@ -320,7 +320,7 @@ impl Infer {
     ///
     /// See [`is_document`](./fn.is_document.html).
     pub fn is_document(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::DOC)
+        self.is_type(buf, MatcherType::Doc)
     }
 
     /// Determines whether a buffer is a font type.
@@ -329,7 +329,7 @@ impl Infer {
     ///
     /// See [`is_font`](./fn.is_font.html).
     pub fn is_font(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::FONT)
+        self.is_type(buf, MatcherType::Font)
     }
 
     /// Determines whether a buffer is an image type.
@@ -338,7 +338,7 @@ impl Infer {
     ///
     /// See [`is_image`](./fn.is_image.html).
     pub fn is_image(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::IMAGE)
+        self.is_type(buf, MatcherType::Image)
     }
 
     /// Determines whether a buffer is a video type.
@@ -347,7 +347,7 @@ impl Infer {
     ///
     /// See [`is_video`](./fn.is_video.html).
     pub fn is_video(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::VIDEO)
+        self.is_type(buf, MatcherType::Video)
     }
 
     /// Determines whether a buffer is one of the custom types added.
@@ -368,7 +368,7 @@ impl Infer {
     /// # }
     /// ```
     pub fn is_custom(&self, buf: &[u8]) -> bool {
-        self.is_type(buf, MatcherType::CUSTOM)
+        self.is_type(buf, MatcherType::Custom)
     }
 
     /// Adds a custom matcher.
@@ -394,7 +394,7 @@ impl Infer {
     #[cfg(feature = "alloc")]
     pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {
         self.mmap.push(Type::new_static(
-            MatcherType::CUSTOM,
+            MatcherType::Custom,
             mime_type,
             extension,
             WrapMatcher(m),

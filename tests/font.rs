@@ -1,3 +1,3 @@
 mod common;
 
-test_format!(FONT, "application/font-sfnt", "ttf", ttf, "sample.ttf");
+test_format!(Font, "application/font-sfnt", "ttf", ttf, "sample.ttf");
