@@ -1,18 +1,17 @@
 use super::{matchers, Matcher, Type};
 
-#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum MatcherType {
-    APP,
-    ARCHIVE,
-    AUDIO,
-    BOOK,
-    DOC,
-    FONT,
-    IMAGE,
-    TEXT,
-    VIDEO,
-    CUSTOM,
+    App,
+    Archive,
+    Audio,
+    Book,
+    Doc,
+    Font,
+    Image,
+    Text,
+    Video,
+    Custom,
 }
 
 // This is needed until function pointers can be used in `const fn`.
@@ -35,490 +34,490 @@ macro_rules! matcher_map {
 matcher_map!(
     // Application
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/wasm",
         "wasm",
         matchers::app::is_wasm
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/x-executable",
         "elf",
         matchers::app::is_elf
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/vnd.microsoft.portable-executable",
         "exe",
         matchers::app::is_exe
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/vnd.microsoft.portable-executable",
         "dll",
         matchers::app::is_dll
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/java",
         "class",
         matchers::app::is_java
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/x-llvm",
         "bc",
         matchers::app::is_llvm
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/x-mach-binary",
         "mach",
         matchers::app::is_mach
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/vnd.android.dex",
         "dex",
         matchers::app::is_dex
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/vnd.android.dey",
         "dey",
         matchers::app::is_dey
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/x-x509-ca-cert",
         "der",
         matchers::app::is_der
     ),
     (
-        MatcherType::APP,
+        MatcherType::App,
         "application/x-executable",
         "obj",
         matchers::app::is_coff
     ),
     // Book
     (
-        MatcherType::BOOK,
+        MatcherType::Book,
         "application/epub+zip",
         "epub",
         matchers::book::is_epub
     ),
     (
-        MatcherType::BOOK,
+        MatcherType::Book,
         "application/x-mobipocket-ebook",
         "mobi",
         matchers::book::is_mobi
     ),
     // Image
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/jpeg",
         "jpg",
         matchers::image::is_jpeg
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/jp2",
         "jp2",
         matchers::image::is_jpeg2000
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/png",
         "png",
         matchers::image::is_png
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/gif",
         "gif",
         matchers::image::is_gif
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/webp",
         "webp",
         matchers::image::is_webp
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/x-canon-cr2",
         "cr2",
         matchers::image::is_cr2
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/tiff",
         "tif",
         matchers::image::is_tiff
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/bmp",
         "bmp",
         matchers::image::is_bmp
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/vnd.ms-photo",
         "jxr",
         matchers::image::is_jxr
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/vnd.adobe.photoshop",
         "psd",
         matchers::image::is_psd
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/vnd.microsoft.icon",
         "ico",
         matchers::image::is_ico
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/heif",
         "heif",
         matchers::image::is_heif
     ),
     (
-        MatcherType::IMAGE,
+        MatcherType::Image,
         "image/avif",
         "avif",
         matchers::image::is_avif
     ),
     // Video
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/mp4",
         "mp4",
         matchers::video::is_mp4
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/x-m4v",
         "m4v",
         matchers::video::is_m4v
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/x-matroska",
         "mkv",
         matchers::video::is_mkv
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/webm",
         "webm",
         matchers::video::is_webm
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/quicktime",
         "mov",
         matchers::video::is_mov
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/x-msvideo",
         "avi",
         matchers::video::is_avi
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/x-ms-wmv",
         "wmv",
         matchers::video::is_wmv
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/mpeg",
         "mpg",
         matchers::video::is_mpeg
     ),
     (
-        MatcherType::VIDEO,
+        MatcherType::Video,
         "video/x-flv",
         "flv",
         matchers::video::is_flv
     ),
     // Audio
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/midi",
         "midi",
         matchers::audio::is_midi
     ),
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/mpeg",
         "mp3",
         matchers::audio::is_mp3
     ),
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/m4a",
         "m4a",
         matchers::audio::is_m4a
     ),
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/ogg",
         "ogg",
         matchers::audio::is_ogg
     ),
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/x-flac",
         "flac",
         matchers::audio::is_flac
     ),
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/x-wav",
         "wav",
         matchers::audio::is_wav
     ),
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/amr",
         "amr",
         matchers::audio::is_amr
     ),
     (
-        MatcherType::AUDIO,
+        MatcherType::Audio,
         "audio/aac",
         "aac",
         matchers::audio::is_aac
     ),
     // Font
     (
-        MatcherType::FONT,
+        MatcherType::Font,
         "application/font-woff",
         "woff",
         matchers::font::is_woff
     ),
     (
-        MatcherType::FONT,
+        MatcherType::Font,
         "application/font-woff",
         "woff2",
         matchers::font::is_woff2
     ),
     (
-        MatcherType::FONT,
+        MatcherType::Font,
         "application/font-sfnt",
         "ttf",
         matchers::font::is_ttf
     ),
     (
-        MatcherType::FONT,
+        MatcherType::Font,
         "application/font-sfnt",
         "otf",
         matchers::font::is_otf
     ),
     // Document
     (
-        MatcherType::DOC,
+        MatcherType::Doc,
         "application/msword",
         "doc",
         matchers::doc::is_doc
     ),
     (
-        MatcherType::DOC,
+        MatcherType::Doc,
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "docx",
         matchers::doc::is_docx
     ),
     (
-        MatcherType::DOC,
+        MatcherType::Doc,
         "application/vnd.ms-excel",
         "xls",
         matchers::doc::is_xls
     ),
     (
-        MatcherType::DOC,
+        MatcherType::Doc,
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "xlsx",
         matchers::doc::is_xlsx
     ),
     (
-        MatcherType::DOC,
+        MatcherType::Doc,
         "application/vnd.ms-powerpoint",
         "ppt",
         matchers::doc::is_ppt
     ),
     (
-        MatcherType::DOC,
+        MatcherType::Doc,
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
         "pptx",
         matchers::doc::is_pptx
     ),
     // Archive
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/epub+zip",
         "epub",
         matchers::archive::is_epub
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/zip",
         "zip",
         matchers::archive::is_zip
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-tar",
         "tar",
         matchers::archive::is_tar
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/vnd.rar",
         "rar",
         matchers::archive::is_rar
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/gzip",
         "gz",
         matchers::archive::is_gz
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-bzip2",
         "bz2",
         matchers::archive::is_bz2
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-7z-compressed",
         "7z",
         matchers::archive::is_7z
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-xz",
         "xz",
         matchers::archive::is_xz
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/pdf",
         "pdf",
         matchers::archive::is_pdf
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-shockwave-flash",
         "swf",
         matchers::archive::is_swf
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/rtf",
         "rtf",
         matchers::archive::is_rtf
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/octet-stream",
         "eot",
         matchers::archive::is_eot
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/postscript",
         "ps",
         matchers::archive::is_ps
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/vnd.sqlite3",
         "sqlite",
         matchers::archive::is_sqlite
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-nintendo-nes-rom",
         "nes",
         matchers::archive::is_nes
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-google-chrome-extension",
         "crx",
         matchers::archive::is_crx
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/vnd.ms-cab-compressed",
         "cab",
         matchers::archive::is_cab
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/vnd.debian.binary-package",
         "deb",
         matchers::archive::is_deb
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-unix-archive",
         "ar",
         matchers::archive::is_ar
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-compress",
         "Z",
         matchers::archive::is_z
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-lzip",
         "lz",
         matchers::archive::is_lz
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-rpm",
         "rpm",
         matchers::archive::is_rpm
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/dicom",
         "dcm",
         matchers::archive::is_dcm
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/zstd",
         "zst",
         matchers::archive::is_zst
     ),
     (
-        MatcherType::ARCHIVE,
+        MatcherType::Archive,
         "application/x-ole-storage",
         "msi",
         matchers::archive::is_msi
     ),
     // Text
     (
-        MatcherType::TEXT,
+        MatcherType::Text,
         "text/html",
         "html",
         matchers::text::is_html
     ),
-    (MatcherType::TEXT, "text/xml", "xml", matchers::text::is_xml),
+    (MatcherType::Text, "text/xml", "xml", matchers::text::is_xml),
     (
-        MatcherType::TEXT,
+        MatcherType::Text,
         "text/x-shellscript",
         "sh",
         matchers::text::is_shellscript
