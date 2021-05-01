@@ -185,6 +185,9 @@ assert_eq!(kind.extension(), "foo");
 - **xlsx** - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
 - **ppt** - `application/vnd.ms-powerpoint`
 - **pptx** - `application/vnd.openxmlformats-officedocument.presentationml.presentation`
+- **odt** - `application/vnd.oasis.opendocument.text`
+- **ods** - `application/vnd.oasis.opendocument.spreadsheet`
+- **odp** - `application/vnd.oasis.opendocument.presentation`
 
 #### Font
 

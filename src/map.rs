@@ -357,6 +357,25 @@ matcher_map!(
         "pptx",
         matchers::doc::is_pptx
     ),
+    // OpenDocument
+    (
+        MatcherType::Doc,
+        "application/vnd.oasis.opendocument.text",
+        "odt",
+        matchers::odf::is_odt
+    ),
+    (
+        MatcherType::Doc,
+        "application/vnd.oasis.opendocument.spreadsheet",
+        "ods",
+        matchers::odf::is_ods
+    ),
+    (
+        MatcherType::Doc,
+        "application/vnd.oasis.opendocument.presentation",
+        "odp",
+        matchers::odf::is_odp
+    ),
     // Archive
     (
         MatcherType::Archive,
