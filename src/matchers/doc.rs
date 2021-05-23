@@ -1,5 +1,7 @@
 use core::convert::TryInto;
 
+use super::compare_bytes;
+
 #[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Eq, PartialEq)]
 enum DocType {
@@ -121,24 +123,6 @@ fn ole2(buf: &[u8]) -> Option<DocType> {
         return None;
     }
     Some(DocType::DOC)
-}
-
-fn compare_bytes(slice: &[u8], sub_slice: &[u8], start_offset: usize) -> bool {
-    let sl = sub_slice.len();
-
-    if start_offset + sl > slice.len() {
-        return false;
-    }
-
-    for (i, v) in slice.iter().skip(start_offset).take(sl).enumerate() {
-        let v2 = sub_slice[i];
-
-        if *v != v2 {
-            return false;
-        }
-    }
-
-    true
 }
 
 fn check_msooml(buf: &[u8], offset: usize) -> Option<DocType> {
