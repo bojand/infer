@@ -12,6 +12,7 @@ let kind = infer::get(&buf).expect("file type is known");
 
 assert_eq!(kind.mime_type(), "image/jpeg");
 assert_eq!(kind.extension(), "jpg");
+assert_eq!(kind.matcher_type(), infer::MatcherType::Image);
 ```
 
 ### Check file type by path
@@ -129,6 +130,16 @@ impl Type {
     }
 
     /// Returns the type of matcher
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// let info = infer::Infer::new();
+    /// let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+    /// let kind = info.get(&buf).expect("file type is known");
+    ///
+    /// assert_eq!(kind.matcher_type(), infer::MatcherType::Image);
+    /// ```
     pub const fn matcher_type(&self) -> MatcherType {
         self.matcher_type
     }
@@ -611,6 +622,13 @@ mod tests {
         let kind = crate::get(&buf).expect("file type is known");
         assert_eq!(kind.extension(), "jpg");
         assert_eq!(kind.mime_type(), "image/jpeg");
+    }
+
+    #[test]
+    fn test_matcher_type() {
+        let buf = [0xFF, 0xD8, 0xFF, 0xAA];
+        let kind = crate::get(&buf).expect("file type is known");
+        assert_eq!(kind.matcher_type(), crate::MatcherType::Image);
     }
 
     #[cfg(feature = "alloc")]
