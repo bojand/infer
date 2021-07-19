@@ -88,14 +88,14 @@ mod tests {
 
     #[test]
     fn html() {
-        assert_eq!(is_html(b"<"), false);
-        assert_eq!(is_html(b"<HTML"), false);
-        assert_eq!(is_html(b"<HTML "), true);
-        assert_eq!(is_html(b"   <BODY>"), true);
+        assert!(!is_html(b"<"));
+        assert!(!is_html(b"<HTML"));
+        assert!(is_html(b"<HTML "));
+        assert!(is_html(b"   <BODY>"));
     }
 
     #[test]
     fn shellscript() {
-        assert_eq!(is_shellscript(b"#!"), false);
+        assert!(!is_shellscript(b"#!"));
     }
 }
