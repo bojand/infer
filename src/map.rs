@@ -295,6 +295,12 @@ matcher_map!(
         "aac",
         matchers::audio::is_aac
     ),
+    (
+        MatcherType::Audio,
+        "audio/x-aiff",
+        "aiff",
+        matchers::audio::is_aiff
+    ),
     // Font
     (
         MatcherType::Font,

@@ -62,3 +62,16 @@ pub fn is_amr(buf: &[u8]) -> bool {
 pub fn is_aac(buf: &[u8]) -> bool {
     buf.len() > 1 && buf[0] == 0xFF && (buf[1] == 0xF1 || buf[1] == 0xF9)
 }
+
+/// Returns whether a buffer is AIFF data.
+pub fn is_aiff(buf: &[u8]) -> bool {
+    buf.len() > 11
+        && buf[0] == 0x46
+        && buf[1] == 0x4F
+        && buf[2] == 0x52
+        && buf[3] == 0x4D
+        && buf[8] == 0x41
+        && buf[9] == 0x49
+        && buf[10] == 0x46
+        && buf[11] == 0x46
+}
