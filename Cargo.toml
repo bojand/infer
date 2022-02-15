@@ -1,6 +1,6 @@
 [package]
 name = "infer"
-version = "0.6.0"
+version = "0.7.0"
 authors = ["Bojan <dbojan@gmail.com>"]
 edition = "2018"
 description = "Small crate to infer file types based on its magic number signature"
