@@ -7,6 +7,7 @@ test_format!(Video, "video/x-matroska", "mkv", mkv, "sample.mkv");
 test_format!(Video, "video/webm", "webm", webm, "sample.webm");
 
 test_format!(Video, "video/quicktime", "mov", mov, "sample.mov");
+test_format!(Video, "video/quicktime", "mov", mov2, "sample2.mov");
 
 test_format!(Video, "video/x-msvideo", "avi", avi, "sample.avi");
 
