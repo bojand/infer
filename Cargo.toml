@@ -10,6 +10,7 @@ readme = "README.md"
 homepage = "https://github.com/bojand/infer"
 repository = "https://github.com/bojand/infer"
 documentation = "https://docs.rs/infer"
+exclude = ["/testdata", "/tests"]
 
 [features]
 default = ["std"]
