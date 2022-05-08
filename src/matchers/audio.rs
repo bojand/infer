@@ -75,3 +75,9 @@ pub fn is_aiff(buf: &[u8]) -> bool {
         && buf[10] == 0x46
         && buf[11] == 0x46
 }
+
+/// Returns whether a buffer is DSF data.
+pub fn is_dsf(buf: &[u8]) -> bool {
+    // ref: https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf
+    buf.len() > 4 && buf[0] == b'D' && buf[1] == b'S' && buf[2] == b'D' && buf[3] == b' '
+}
