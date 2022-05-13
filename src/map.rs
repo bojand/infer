@@ -307,6 +307,12 @@ matcher_map!(
         "dsf",
         matchers::audio::is_dsf
     ),
+    (
+        MatcherType::Audio,
+        "audio/x-ape",
+        "ape",
+        matchers::audio::is_ape
+    ),
     // Font
     (
         MatcherType::Font,

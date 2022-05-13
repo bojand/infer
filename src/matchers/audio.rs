@@ -81,3 +81,9 @@ pub fn is_dsf(buf: &[u8]) -> bool {
     // ref: https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf
     buf.len() > 4 && buf[0] == b'D' && buf[1] == b'S' && buf[2] == b'D' && buf[3] == b' '
 }
+
+/// Returns whether a buffer is APE (Monkey's Audio) data.
+pub fn is_ape(buf: &[u8]) -> bool {
+    // ref: https://github.com/fernandotcl/monkeys-audio/blob/master/src/MACLib/APEHeader.h
+    buf.len() > 4 && buf[0] == b'M' && buf[1] == b'A' && buf[2] == b'C' && buf[3] == b' '
+}
