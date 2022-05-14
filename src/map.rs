@@ -301,6 +301,18 @@ matcher_map!(
         "aiff",
         matchers::audio::is_aiff
     ),
+    (
+        MatcherType::Audio,
+        "audio/x-dsf",
+        "dsf",
+        matchers::audio::is_dsf
+    ),
+    (
+        MatcherType::Audio,
+        "audio/x-ape",
+        "ape",
+        matchers::audio::is_ape
+    ),
     // Font
     (
         MatcherType::Font,
