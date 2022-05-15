@@ -144,6 +144,8 @@ assert_eq!(kind.extension(), "foo");
 - **amr** - `audio/amr`
 - **aac** - `audio/aac`
 - **aiff** - `audio/x-aiff`
+- **dsf** - `audio/x-dsf`
+- **ape** - `audio/x-ape`
 
 #### Archive
 
