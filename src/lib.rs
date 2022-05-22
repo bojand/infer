@@ -250,6 +250,19 @@ impl Infer {
         Ok(self.get(&bytes))
     }
 
+    /// Returns the file type of the file
+    #[cfg(feature = "std")]
+    pub fn get_from_file(&self, file: &File) -> io::Result<Option<Type>> {
+        let limit = file
+            .metadata()
+            .map(|m| std::cmp::min(m.len(), 8192) as usize + 1)
+            .unwrap_or(0);
+        let mut bytes = Vec::with_capacity(limit);
+        file.take(8192).read_to_end(&mut bytes)?;
+
+        Ok(self.get(&bytes))
+    }
+
     /// Determines whether a buffer is of given extension.
     ///
     /// # Examples
