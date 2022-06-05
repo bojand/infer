@@ -213,6 +213,13 @@ assert_eq!(kind.extension(), "foo");
 - **der** - `application/x-x509-ca-cert`
 - **obj** - `application/x-executable`
 
+#### Text
+
+- **html** - `text/html`
+- **xml** - `text/xml`
+- **sh** - `text/x-shellscript`
+- **txt** - `text/plain`
+
 ## Known Issues
 
 - `exe` and `dll` have the same magic number so it's not possible to tell which one just based on the binary data. `exe` is returned for all.

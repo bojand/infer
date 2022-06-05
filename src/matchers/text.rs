@@ -70,9 +70,15 @@ pub fn is_shellscript(buf: &[u8]) -> bool {
     buf.len() > 2 && &buf[..2] == b"#!"
 }
 
+/// True when the buffer is readable characters.
+pub fn is_text_plain(buf: &[u8]) -> bool {
+    !buf.is_empty() &&
+        buf.iter().all(|&byte| byte > 0x1f || byte == 0x09 || byte == 0x0a || byte == 0x0d)
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{is_html, is_shellscript, trim_start_whitespaces};
+    use super::{is_html, is_shellscript, trim_start_whitespaces, is_text_plain};
 
     #[test]
     fn trim_whitespaces() {
@@ -97,5 +103,15 @@ mod tests {
     #[test]
     fn shellscript() {
         assert!(!is_shellscript(b"#!"));
+    }
+
+    #[test]
+    fn plain_text() {
+        assert!(is_text_plain(b"hello, world"));
+        assert!(is_text_plain(b"\xF0\x9F\x92\xA9")); // poop emoji
+        assert!(is_text_plain(b"\xE3\x81\x93")); // Japanese letter
+        assert!(is_text_plain(b"hello\tworld\nhow\r\nare you?"));
+        assert!(!is_text_plain(b"\x08")); // backspace
+        assert!(!is_text_plain(b"OK\x08")); // backspace
     }
 }

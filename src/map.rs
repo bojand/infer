@@ -558,5 +558,11 @@ matcher_map!(
         "text/x-shellscript",
         "sh",
         matchers::text::is_shellscript
+    ),
+    (
+        MatcherType::Text,
+        "text/plain",
+        "txt",
+        matchers::text::is_text_plain
     )
 );
