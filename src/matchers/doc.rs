@@ -67,7 +67,12 @@ fn msooxml(buf: &[u8]) -> Option<DocType> {
     // skip to the second local file header
     // since some documents include a 520-byte extra field following the file
     // header, we need to scan for the next header
-    let mut start_offset = (u32::from_le_bytes(buf[18..22].try_into().unwrap()) + 49) as usize;
+    let mut start_offset = match u32::from_le_bytes(buf[18..22].try_into().unwrap()).checked_add(49)
+    {
+        Some(int) => int as usize,
+        None => return None,
+    };
+
     let idx = search(buf, start_offset, 6000)?;
 
     // now skip to the *third* local file header; again, we need to scan due to a
