@@ -40,7 +40,7 @@ pub fn is_webp(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is Canon CR2 image data.
 pub fn is_cr2(buf: &[u8]) -> bool {
-    buf.len() > 9
+    buf.len() > 10
         && ((buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0x2A && buf[3] == 0x0)
             || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
         && buf[8] == 0x43
