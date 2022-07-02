@@ -8,8 +8,19 @@ pub fn is_zip(buf: &[u8]) -> bool {
     buf.len() > 3
         && buf[0] == 0x50
         && buf[1] == 0x4B
-        && (buf[2] == 0x3 || buf[2] == 0x5 || buf[2] == 0x7)
-        && (buf[3] == 0x4 || buf[3] == 0x6 || buf[3] == 0x8)
+        && (((buf[2] == 0x3 && buf[3] == 0x4)
+            || (buf[2] == 0x5 && buf[3] == 0x6)
+            || (buf[2] == 0x7 && buf[3] == 0x8))
+            || (
+                // winzip
+                buf.len() > 7
+                    && (buf[2] == 0x30
+                        && buf[3] == 0x30
+                        && buf[4] == 0x50
+                        && buf[5] == 0x4B
+                        && buf[6] == 0x3
+                        && buf[7] == 0x4)
+            ))
 }
 
 /// Returns whether a buffer is a tar archive.
