@@ -1,3 +1,6 @@
+use std::io::Read;
+use std::io;
+
 /// Returns whether a buffer is an ePub.
 pub fn is_epub(buf: &[u8]) -> bool {
     buf.len() > 57
@@ -35,6 +38,11 @@ pub fn is_epub(buf: &[u8]) -> bool {
         && buf[57] == 0x70
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is an ePub.
+    (is_epub_read, is_epub, 58)
+}
+
 /// Returns whether a buffer is a mobi.
 pub fn is_mobi(buf: &[u8]) -> bool {
     buf.len() > 67
@@ -48,4 +56,9 @@ pub fn is_mobi(buf: &[u8]) -> bool {
         && buf[65] == 0x4F
         && buf[66] == 0x42
         && buf[67] == 0x49
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is a mobi.
+    (is_mobi_read, is_mobi, 68)
 }

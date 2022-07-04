@@ -120,7 +120,7 @@ pub fn is_swf(buf: &[u8]) -> bool {
 }
 
 super::build_fn_read! {
-    /// Returns whether data from reader a PDF.
+    /// Returns whether data from reader is a PDF.
     (is_swf_read, is_swf, 3)
 }
 
@@ -134,14 +134,29 @@ pub fn is_rtf(buf: &[u8]) -> bool {
         && buf[4] == 0x66
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is an RTF.
+    (is_rtf_read, is_rtf, 5)
+}
+
 /// Returns whether a buffer is a Nintendo NES ROM.
 pub fn is_nes(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x4E && buf[1] == 0x45 && buf[2] == 0x53 && buf[3] == 0x1A
 }
 
-/// Returns whether a buffer is Google Chrome Extension
+super::build_fn_read! {
+    /// Returns whether data from reader is a Nintendo NES ROM.
+    (is_nes_read, is_nes, 4)
+}
+
+/// Returns whether a buffer is Google Chrome Extension.
 pub fn is_crx(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x43 && buf[1] == 0x72 && buf[2] == 0x32 && buf[3] == 0x34
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is is Google Chrome Extension.
+    (is_crx_read, is_crx, 4)
 }
 
 /// Returns whether a buffer is a CAB.
@@ -151,7 +166,12 @@ pub fn is_cab(buf: &[u8]) -> bool {
             || (buf[0] == 0x49 && buf[1] == 0x53 && buf[2] == 0x63 && buf[3] == 0x28))
 }
 
-/// Returns whether a buffer is a eot octet stream.
+super::build_fn_read! {
+    /// Returns whether data from reader is a CAB.
+    (is_cab_read, is_cab, 4)
+}
+
+/// Returns whether a buffer is an eot octet stream.
 pub fn is_eot(buf: &[u8]) -> bool {
     buf.len() > 35
         && buf[34] == 0x4C
@@ -161,9 +181,19 @@ pub fn is_eot(buf: &[u8]) -> bool {
             || (buf[8] == 0x02 && buf[9] == 0x00 && buf[10] == 0x02))
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is an eot octet stream.
+    (is_eot_read, is_eot, 36)
+}
+
 /// Returns whether a buffer is postscript.
 pub fn is_ps(buf: &[u8]) -> bool {
     buf.len() > 1 && buf[0] == 0x25 && buf[1] == 0x21
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is postscript.
+    (is_ps_read, is_ps, 2)
 }
 
 /// Returns whether a buffer is xz archive.
@@ -177,6 +207,11 @@ pub fn is_xz(buf: &[u8]) -> bool {
         && buf[5] == 0x00
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is xz archive.
+    (is_xz_read, is_xz, 6)
+}
+
 /// Returns whether a buffer is a sqlite3 database.
 ///
 /// # Example
@@ -187,6 +222,25 @@ pub fn is_xz(buf: &[u8]) -> bool {
 /// ```
 pub fn is_sqlite(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x53 && buf[1] == 0x51 && buf[2] == 0x4C && buf[3] == 0x69
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is xz archive.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::fs;
+    /// use std::io::prelude::*;
+    /// use std::fs::File;
+    /// 
+    /// fn main() -> std::io::Result<()> {
+    ///     let mut f = File::open("testdata/sample.db")?;
+    ///     assert!(infer::archive::is_sqlite_read(&mut f).unwrap());
+    ///     Ok(())
+    /// }
+    /// ```
+    (is_sqlite_read, is_sqlite, 4)
 }
 
 /// Returns whether a buffer is a deb archive.
@@ -215,7 +269,12 @@ pub fn is_deb(buf: &[u8]) -> bool {
         && buf[20] == 0x79
 }
 
-/// Returns whether a buffer is a ar archive.
+super::build_fn_read! {
+    /// Returns whether data from reader is a deb archive.
+    (is_deb_read, is_deb, 21)
+}
+
+/// Returns whether a buffer is an ar archive.
 pub fn is_ar(buf: &[u8]) -> bool {
     buf.len() > 6
         && buf[0] == 0x21
@@ -227,9 +286,19 @@ pub fn is_ar(buf: &[u8]) -> bool {
         && buf[6] == 0x3E
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is an ar archive.
+    (is_ar_read, is_ar, 7)
+}
+
 /// Returns whether a buffer is a z archive.
 pub fn is_z(buf: &[u8]) -> bool {
     buf.len() > 1 && buf[0] == 0x1F && (buf[1] == 0xA0 || buf[1] == 0x9D)
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is an z archive.
+    (is_z_read, is_z, 2)
 }
 
 /// Returns whether a buffer is a lzip archive.
@@ -237,9 +306,19 @@ pub fn is_lz(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x4C && buf[1] == 0x5A && buf[2] == 0x49 && buf[3] == 0x50
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is a lzip archive.
+    (is_lz_read, is_lz, 4)
+}
+
 /// Returns whether a buffer is an RPM.
 pub fn is_rpm(buf: &[u8]) -> bool {
     buf.len() > 96 && buf[0] == 0xED && buf[1] == 0xAB && buf[2] == 0xEE && buf[3] == 0xDB
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is an RPM.
+    (is_rpm_read, is_rpm, 97)
 }
 
 /// Returns whether a buffer is a dcm archive.
@@ -247,9 +326,19 @@ pub fn is_dcm(buf: &[u8]) -> bool {
     buf.len() > 131 && buf[128] == 0x44 && buf[129] == 0x49 && buf[130] == 0x43 && buf[131] == 0x4D
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is a dcm archive.
+    (is_dcm_read, is_dcm, 132)
+}
+
 /// Returns whether a buffer is a Zstd archive.
 pub fn is_zst(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is a Zstd archive.
+    (is_zst_read, is_zst, 132)
 }
 
 /// Returns whether a buffer is a MSI Windows Installer archive.
@@ -263,4 +352,9 @@ pub fn is_msi(buf: &[u8]) -> bool {
         && buf[5] == 0xB1
         && buf[6] == 0x1A
         && buf[7] == 0xE1
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is a Zstd archive.
+    (is_msi_read, is_msi, 8)
 }
