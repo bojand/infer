@@ -1,6 +1,14 @@
+use std::io::Read;
+use std::io;
+
 /// Returns whether a buffer is an ePub.
 pub fn is_epub(buf: &[u8]) -> bool {
     crate::book::is_epub(buf)
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is an ePub.
+    (is_epub_read, is_epub, 58)
 }
 
 /// Returns whether a buffer is a zip archive.
@@ -23,6 +31,11 @@ pub fn is_zip(buf: &[u8]) -> bool {
             ))
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is a zip archive.
+    (is_zip_read, is_zip, 4)
+}
+
 /// Returns whether a buffer is a tar archive.
 pub fn is_tar(buf: &[u8]) -> bool {
     buf.len() > 261
@@ -31,6 +44,11 @@ pub fn is_tar(buf: &[u8]) -> bool {
         && buf[259] == 0x74
         && buf[260] == 0x61
         && buf[261] == 0x72
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is a tar archive.
+    (is_tar_read, is_tar, 262)
 }
 
 /// Returns whether a buffer is a RAR archive.
@@ -45,14 +63,29 @@ pub fn is_rar(buf: &[u8]) -> bool {
         && (buf[6] == 0x0 || buf[6] == 0x1)
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is a RAR archive.
+    (is_rar_read, is_rar, 7)
+}
+
 /// Returns whether a buffer is a gzip archive.
 pub fn is_gz(buf: &[u8]) -> bool {
     buf.len() > 2 && buf[0] == 0x1F && buf[1] == 0x8B && buf[2] == 0x8
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is a gzip archive.
+    (is_gz_read, is_gz, 3)
+}
+
 /// Returns whether a buffer is a bzip archive.
 pub fn is_bz2(buf: &[u8]) -> bool {
     buf.len() > 2 && buf[0] == 0x42 && buf[1] == 0x5A && buf[2] == 0x68
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is a gzip archive.
+    (is_bz2_read, is_bz2, 3)
 }
 
 /// Returns whether a buffer is a 7z archive.
@@ -66,14 +99,29 @@ pub fn is_7z(buf: &[u8]) -> bool {
         && buf[5] == 0x1C
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader a 7z archive.
+    (is_7z_read, is_7z, 6)
+}
+
 /// Returns whether a buffer is a PDF.
 pub fn is_pdf(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x25 && buf[1] == 0x50 && buf[2] == 0x44 && buf[3] == 0x46
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader a PDF.
+    (is_pdf_read, is_pdf, 4)
+}
+
 /// Returns whether a buffer is a SWF.
 pub fn is_swf(buf: &[u8]) -> bool {
     buf.len() > 2 && (buf[0] == 0x43 || buf[0] == 0x46) && buf[1] == 0x57 && buf[2] == 0x53
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader a PDF.
+    (is_swf_read, is_swf, 3)
 }
 
 /// Returns whether a buffer is an RTF.

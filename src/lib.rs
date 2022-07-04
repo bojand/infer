@@ -610,6 +610,7 @@ pub fn is_video(buf: &[u8]) -> bool {
 mod tests {
     #[cfg(feature = "alloc")]
     use super::Infer;
+    use std::fs::File;
 
     #[test]
     fn test_get_unknown() {
@@ -658,5 +659,15 @@ mod tests {
         let typ = info.get(buf_bar).expect("type is matched");
         assert_eq!(typ.mime_type(), "custom/bar");
         assert_eq!(typ.extension(), "bar");
+    }
+
+    #[test]
+    fn test_is_wasm_read() {
+        let fr = File::open("testdata/sample.wasm");
+        if fr.is_err() {
+            assert!(fr.is_err(), "{:?}", fr.unwrap_err());
+        }
+        let mut f = fr.unwrap();
+        assert!(crate::app::is_wasm_read(&mut f).unwrap());
     }
 }
