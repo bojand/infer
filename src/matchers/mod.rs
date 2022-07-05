@@ -34,10 +34,10 @@ macro_rules! build_fn_read
         ($name:tt, $impl_fn:ident, $sz:literal) 
     ) => {
         $(#[$outer])*
-        pub fn $name<R: Read>(r: &mut R) -> io::Result<bool> {
+        pub fn $name<R: Read>(r: &mut R) -> io::Result<(usize, bool)> {
             let mut buffer = [0; $sz];
-            r.read(&mut buffer[..])?;
-            Ok($impl_fn(&buffer))
+            let n = r.read(&mut buffer[..])?;
+            Ok((n, $impl_fn(&buffer)))
         }
     };
 }

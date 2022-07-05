@@ -236,7 +236,9 @@ super::build_fn_read! {
     /// 
     /// fn main() -> std::io::Result<()> {
     ///     let mut f = File::open("testdata/sample.db")?;
-    ///     assert!(infer::archive::is_sqlite_read(&mut f).unwrap());
+    ///     let (n, sqlite) = infer::archive::is_sqlite_read(&mut f).unwrap();
+    ///     assert!(n > 0);
+    ///     assert!(sqlite);
     ///     Ok(())
     /// }
     /// ```

@@ -35,7 +35,9 @@ super::build_fn_read! {
     /// 
     /// fn main() -> std::io::Result<()> {
     ///     let mut f = File::open("testdata/sample.wasm")?;
-    ///     assert!(infer::app::is_wasm_read(&mut f).unwrap());
+    ///     let (n, wasm) = infer::app::is_wasm_read(&mut f).unwrap();
+    ///     assert!(n > 0);
+    ///     assert!(wasm);
     ///     Ok(())
     /// }
     /// ```
@@ -67,7 +69,9 @@ super::build_fn_read! {
     /// 
     /// fn main() -> std::io::Result<()> {
     ///     let mut f = File::open("testdata/sample.exe")?;
-    ///     assert!(infer::app::is_exe_read(&mut f).unwrap());
+    ///     let (n, exe) = infer::app::is_exe_read(&mut f).unwrap();
+    ///     assert!(n > 0);
+    ///     assert!(exe);
     ///     Ok(())
     /// }
     /// ```
