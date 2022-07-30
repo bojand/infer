@@ -1,8 +1,31 @@
+use std::io::Read;
+use std::io;
 use core::convert::TryInto;
 
 /// Returns whether a buffer is JPEG image data.
 pub fn is_jpeg(buf: &[u8]) -> bool {
     buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF
+}
+
+super::build_fn_read! {
+    /// Returns whether a data from reader is a JPEG. 
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::fs;
+    /// use std::io::prelude::*;
+    /// use std::fs::File;
+    /// 
+    /// fn main() -> std::io::Result<()> {
+    ///     let mut f = File::open("testdata/sample.jpg")?;
+    ///     let (n, jpeg) = infer::image::is_jpeg_read(&mut f).unwrap();
+    ///     assert!(n > 0);
+    ///     assert!(jpeg);
+    ///     Ok(())
+    /// }
+    /// ```
+    (is_jpeg_read, is_jpeg, 3)
 }
 
 /// Returns whether a buffer is jpg2 image data.
@@ -23,9 +46,19 @@ pub fn is_jpeg2000(buf: &[u8]) -> bool {
         && buf[12] == 0x0
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is jpg2 image data.
+    (is_jpeg2000_read, is_jpeg2000, 13)
+}
+
 /// Returns whether a buffer is PNG image data.
 pub fn is_png(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is PNG image data.
+    (is_png_read, is_png, 4)
 }
 
 /// Returns whether a buffer is GIF image data.
@@ -33,9 +66,19 @@ pub fn is_gif(buf: &[u8]) -> bool {
     buf.len() > 2 && buf[0] == 0x47 && buf[1] == 0x49 && buf[2] == 0x46
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is GIF image data.
+    (is_gif_read, is_gif, 3)
+}
+
 /// Returns whether a buffer is WEBP image data.
 pub fn is_webp(buf: &[u8]) -> bool {
     buf.len() > 11 && buf[8] == 0x57 && buf[9] == 0x45 && buf[10] == 0x42 && buf[11] == 0x50
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is WEBP image data.
+    (is_webp_read, is_webp, 12)
 }
 
 /// Returns whether a buffer is Canon CR2 image data.
@@ -48,6 +91,11 @@ pub fn is_cr2(buf: &[u8]) -> bool {
         && buf[10] == 0x02 // CR2 major version
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is Canon CR2 image data.
+    (is_cr2_read, is_cr2, 11)
+}
+
 /// Returns whether a buffer is TIFF image data.
 pub fn is_tiff(buf: &[u8]) -> bool {
     buf.len() > 9
@@ -58,9 +106,19 @@ pub fn is_tiff(buf: &[u8]) -> bool {
         && !is_cr2(buf) // To avoid conflicts differentiate Tiff from CR2
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is TIFF image data.
+    (is_tiff_read, is_tiff, 10)
+}
+
 /// Returns whether a buffer is BMP image data.
 pub fn is_bmp(buf: &[u8]) -> bool {
     buf.len() > 1 && buf[0] == 0x42 && buf[1] == 0x4D
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is BMP image data.
+    (is_bmp_read, is_bmp, 2)
 }
 
 /// Returns whether a buffer is jxr image data.
@@ -68,14 +126,29 @@ pub fn is_jxr(buf: &[u8]) -> bool {
     buf.len() > 2 && buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0xBC
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is jxr image data.
+    (is_jxr_read, is_jxr, 3)
+}
+
 /// Returns whether a buffer is Photoshop PSD image data.
 pub fn is_psd(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x38 && buf[1] == 0x42 && buf[2] == 0x50 && buf[3] == 0x53
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is Photoshop PSD image data.
+    (is_psd_read, is_psd, 4)
+}
+
 /// Returns whether a buffer is ICO icon image data.
 pub fn is_ico(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01 && buf[3] == 0x00
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is ICO icon image data.
+    (is_ico_read, is_ico, 4)
 }
 
 /// Returns whether a buffer is HEIF image data.
@@ -105,6 +178,11 @@ pub fn is_heif(buf: &[u8]) -> bool {
     false
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is ICO icon image data.
+    (is_heif_read, is_heif, 4)
+}
+
 /// Returns whether a buffer is AVIF image data.
 pub fn is_avif(buf: &[u8]) -> bool {
     if buf.is_empty() {
@@ -130,6 +208,11 @@ pub fn is_avif(buf: &[u8]) -> bool {
     false
 }
 
+super::build_fn_read! {
+    /// Returns whether data from reader is AVIF image data.
+    (is_avif_read, is_avif, 16)
+}
+
 // IsISOBMFF checks whether the given buffer represents ISO Base Media File Format data
 fn is_isobmff(buf: &[u8]) -> bool {
     if buf.len() < 16 {
@@ -142,6 +225,11 @@ fn is_isobmff(buf: &[u8]) -> bool {
 
     let ftyp_length = u32::from_be_bytes(buf[0..4].try_into().unwrap()) as usize;
     buf.len() >= ftyp_length
+}
+
+super::build_fn_read! {
+    /// Returns whether data from reader is ISO Base Media File Format data
+    (is_isobmff_read, is_isobmff, 16)
 }
 
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data

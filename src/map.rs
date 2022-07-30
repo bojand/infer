@@ -1,4 +1,4 @@
-use super::{matchers, Matcher, Type};
+use super::{matchers, Matcher, ReadMatcher, Type};
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum MatcherType {
@@ -19,6 +19,10 @@ pub enum MatcherType {
 #[repr(transparent)]
 #[derive(Copy, Clone)]
 pub struct WrapMatcher(pub Matcher);
+
+#[repr(transparent)]
+#[derive(Copy, Clone)]
+pub struct WrapReadMatcher(pub ReadMatcher);
 
 macro_rules! matcher_map {
     ($(($mtype:expr, $mime_type:literal, $extension:literal, $matcher:expr)),*) => {

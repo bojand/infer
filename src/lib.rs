@@ -82,19 +82,21 @@ use alloc::vec::Vec;
 use core::fmt;
 #[cfg(feature = "std")]
 use std::fs::File;
+use std::io::Seek;
 #[cfg(feature = "std")]
 use std::io::{self, Read};
 #[cfg(feature = "std")]
 use std::path::Path;
 
 pub use map::MatcherType;
-use map::{WrapMatcher, MATCHER_MAP};
+use map::{WrapMatcher, WrapReadMatcher, MATCHER_MAP};
 
 /// All the supported matchers categorized and exposed as functions
 pub use matchers::*;
 
 /// Matcher function
 pub type Matcher = fn(buf: &[u8]) -> bool;
+pub type ReadMatcher = fn(r: &mut dyn Read) -> io::Result<(usize, bool)>;
 
 /// Generic information for a type
 #[derive(Copy, Clone)]
@@ -103,6 +105,8 @@ pub struct Type {
     mime_type: &'static str,
     extension: &'static str,
     matcher: WrapMatcher,
+    read_matcher: Option<WrapReadMatcher>,
+    read_size: Option<usize>,
 }
 
 impl Type {
@@ -117,6 +121,8 @@ impl Type {
             mime_type,
             extension,
             matcher,
+            read_matcher: None,
+            read_size: None,
         }
     }
 
@@ -158,6 +164,19 @@ impl Type {
     /// Checks if buf matches this Type
     fn matches(&self, buf: &[u8]) -> bool {
         (self.matcher.0)(buf)
+    }
+
+    /// Checks if reader matches this Type
+    fn matches_read(&self, r: &mut impl Read) -> io::Result<(usize, bool)> {
+        match self.read_matcher {
+            Some(m) => m.0(r),
+            None => Ok((0, false)),
+        }
+    }
+
+    /// Returns the file extension
+    pub fn read_size(&self) -> usize {
+        self.read_size.unwrap_or(0)
     }
 }
 
@@ -229,6 +248,48 @@ impl Infer {
     /// ```
     pub fn get(&self, buf: &[u8]) -> Option<Type> {
         self.iter_matchers().find(|kind| kind.matches(buf)).copied()
+    }
+
+    /// Returns the file type of the data in the reader.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::fs;
+    /// use std::io::prelude::*;
+    /// use std::fs::File;
+    ///
+    /// fn main() -> std::io::Result<()> {
+    ///     let info = infer::Infer::new();
+    ///     let mut f = File::open("testdata/sample.jpg")?;
+    ///     let (n, kind_result) = info.get_read(&mut f).unwrap();
+    ///     let kind = kind_result.expect("file type is known");
+    ///     assert_eq!(kind.mime_type(), "image/jpeg");
+    ///     assert_eq!(kind.extension(), "jpg");
+    ///     assert_eq!(n, 3);
+    ///     Ok(())
+    /// }
+    /// ```
+    pub fn get_read<R>(&self, r: &mut R) -> io::Result<(usize, Option<Type>)>
+    where
+        R: Read + Seek,
+    {
+        let mut bytes_read: usize = 0;
+        let mut res_value: Option<Type> = None;
+
+        for kind in self.iter_matchers() {
+            let match_res = kind.matches_read(r)?;
+            println!("{:?}\n", match_res);
+            bytes_read = match_res.0;
+            if match_res.1 {
+                res_value = Some(kind.clone());
+                break;
+            }
+
+            r.rewind().ok();
+        }
+
+        Ok((bytes_read, res_value))
     }
 
     /// Returns the file type of the file given a path.
