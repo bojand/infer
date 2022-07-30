@@ -213,7 +213,7 @@ super::build_fn_read! {
     (is_avif_read, is_avif, 16)
 }
 
-// IsISOBMFF checks whether the given buffer represents ISO Base Media File Format data
+// IsISOBMFF checks whether the given buffer represents ISO Base Media File Format data.
 fn is_isobmff(buf: &[u8]) -> bool {
     if buf.len() < 16 {
         return false;
@@ -228,11 +228,11 @@ fn is_isobmff(buf: &[u8]) -> bool {
 }
 
 super::build_fn_read! {
-    /// Returns whether data from reader is ISO Base Media File Format data
+    /// Returns whether data from reader is ISO Base Media File Format data.
     (is_isobmff_read, is_isobmff, 16)
 }
 
-// GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
+// GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data.
 fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
     if buf.len() < 16 {
         return None;
