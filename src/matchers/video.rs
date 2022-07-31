@@ -13,11 +13,6 @@ pub fn is_m4v(buf: &[u8]) -> bool {
         && buf[10] == 0x56
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is M4V video data.
-    (is_m4v_read, is_m4v, 11)
-}
-
 /// Returns whether a buffer is MKV video data.
 pub fn is_mkv(buf: &[u8]) -> bool {
     (buf.len() > 15
@@ -48,19 +43,9 @@ pub fn is_mkv(buf: &[u8]) -> bool {
             && buf[38] == 0x61)
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is MKV video data.
-    (is_mkv_read, is_mkv, 16)
-}
-
 /// Returns whether a buffer is WEBM video data.
 pub fn is_webm(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x1A && buf[1] == 0x45 && buf[2] == 0xDF && buf[3] == 0xA3
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is WEBM video data.
-    (is_webm_read, is_webm, 4)
 }
 
 /// Returns whether a buffer is Quicktime MOV video data.
@@ -79,11 +64,6 @@ pub fn is_mov(buf: &[u8]) -> bool {
             || (buf[12] == 0x6d && buf[13] == 0x64 && buf[14] == 0x61 && buf[15] == 0x74))
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is Quicktime MOV video data.
-    (is_mov_read, is_mov, 16)
-}
-
 /// Returns whether a buffer is AVI video data.
 pub fn is_avi(buf: &[u8]) -> bool {
     buf.len() > 10
@@ -94,11 +74,6 @@ pub fn is_avi(buf: &[u8]) -> bool {
         && buf[8] == 0x41
         && buf[9] == 0x56
         && buf[10] == 0x49
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is AVI video data.
-    (is_avi_read, is_avi, 11)
 }
 
 /// Returns whether a buffer is WMV video data.
@@ -116,11 +91,6 @@ pub fn is_wmv(buf: &[u8]) -> bool {
         && buf[9] == 0xD9
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is WMV video data.
-    (is_wmv_read, is_wmv, 11)
-}
-
 /// Returns whether a buffer is MPEG video data.
 pub fn is_mpeg(buf: &[u8]) -> bool {
     buf.len() > 3
@@ -131,19 +101,9 @@ pub fn is_mpeg(buf: &[u8]) -> bool {
         && buf[3] <= 0xbf
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is MPEG video data.
-    (is_mpeg_read, is_mpeg, 4)
-}
-
 /// Returns whether a buffer is FLV video data.
 pub fn is_flv(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x46 && buf[1] == 0x4C && buf[2] == 0x56 && buf[3] == 0x01
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is FLV video data.
-    (is_flv_read, is_flv, 4)
 }
 
 /// Returns whether a buffer is MP4 video data.
@@ -180,7 +140,31 @@ pub fn is_mp4(buf: &[u8]) -> bool {
             || (buf[8] == b'F' && buf[9] == b'4' && buf[10] == b'P' && buf[11] == b' '))
 }
 
-super::build_fn_read! {
+super::build_fn_read_api! (
+    /// Returns whether data from reader is M4V video data.
+    (is_m4v_read, is_m4v, 11),
+
+    /// Returns whether data from reader is MKV video data.
+    (is_mkv_read, is_mkv, 16),
+
+    /// Returns whether data from reader is WEBM video data.
+    (is_webm_read, is_webm, 4),
+
+    /// Returns whether data from reader is Quicktime MOV video data.
+    (is_mov_read, is_mov, 16),
+
+    /// Returns whether data from reader is AVI video data.
+    (is_avi_read, is_avi, 11),
+
+    /// Returns whether data from reader is WMV video data.
+    (is_wmv_read, is_wmv, 11),
+
+    /// Returns whether data from reader is MPEG video data.
+    (is_mpeg_read, is_mpeg, 4),
+
+    /// Returns whether data from reader is FLV video data.
+    (is_flv_read, is_flv, 4),
+
     /// Returns whether data from reader is MP4 video data.
     (is_mp4_read, is_mp4, 12)
-}
+);

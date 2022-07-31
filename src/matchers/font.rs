@@ -14,11 +14,6 @@ pub fn is_woff(buf: &[u8]) -> bool {
         && buf[7] == 0x00
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is WOFF font data.
-    (is_woff_read, is_woff, 8)
-}
-
 /// Returns whether a buffer is WOFF2 font data.
 pub fn is_woff2(buf: &[u8]) -> bool {
     buf.len() > 7
@@ -32,11 +27,6 @@ pub fn is_woff2(buf: &[u8]) -> bool {
         && buf[7] == 0x00
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is WOFF2 font data.
-    (is_woff2_read, is_woff2, 8)
-}
-
 /// Returns whether a buffer is TTF font data.
 pub fn is_ttf(buf: &[u8]) -> bool {
     buf.len() > 4
@@ -45,11 +35,6 @@ pub fn is_ttf(buf: &[u8]) -> bool {
         && buf[2] == 0x00
         && buf[3] == 0x00
         && buf[4] == 0x00
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is TTF font data.
-    (is_ttf_read, is_ttf, 5)
 }
 
 /// Returns whether a buffer is OTF font data.
@@ -62,7 +47,16 @@ pub fn is_otf(buf: &[u8]) -> bool {
         && buf[4] == 0x00
 }
 
-super::build_fn_read! {
+super::build_fn_read_api! (
+    /// Returns whether data from reader is WOFF font data.
+    (is_woff_read, is_woff, 8),
+    
+    /// Returns whether data from reader is WOFF2 font data.
+    (is_woff2_read, is_woff2, 8),
+
+    /// Returns whether data from reader is TTF font data.
+    (is_ttf_read, is_ttf, 5),
+    
     /// Returns whether data from reader is OTF font data.
     (is_otf_read, is_otf, 5)
-}
+);

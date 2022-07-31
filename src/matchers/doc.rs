@@ -21,19 +21,9 @@ pub fn is_doc(buf: &[u8]) -> bool {
     ole2(buf) == Some(DocType::DOC)
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is Microsoft Word Document (DOC) data.
-    (is_doc_read, is_doc, 36)
-}
-
 /// Returns whether a buffer is Microsoft Word Open XML Format Document (DOCX) data.
 pub fn is_docx(buf: &[u8]) -> bool {
     msooxml(buf) == Some(DocType::DOCX)
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is Microsoft Word Open XML Format Document (DOCX) data.
-    (is_docx_read, is_docx, 6000)
 }
 
 /// Returns whether a buffer is Microsoft Excel 97-2003 Worksheet (XLS) data.
@@ -41,19 +31,9 @@ pub fn is_xls(buf: &[u8]) -> bool {
     ole2(buf) == Some(DocType::XLS)
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is Microsoft Excel 97-2003 Worksheet (XLS) data.
-    (is_xls_read, is_xls, 6000)
-}
-
 /// Returns whether a buffer is Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
 pub fn is_xlsx(buf: &[u8]) -> bool {
     msooxml(buf) == Some(DocType::XLSX)
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
-    (is_xlsx_read, is_xlsx, 6000)
 }
 
 /// Returns whether a buffer is Microsoft PowerPoint 97-2003 Presentation (PPT) data.
@@ -61,19 +41,9 @@ pub fn is_ppt(buf: &[u8]) -> bool {
     ole2(buf) == Some(DocType::PPT)
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is Microsoft PowerPoint 97-2003 Presentation (PPT) data.
-    (is_ppt_read, is_ppt, 6000)
-}
-
 /// Returns whether a buffer is Microsoft PowerPoint Open XML Presentation (PPTX) data.
 pub fn is_pptx(buf: &[u8]) -> bool {
     msooxml(buf) == Some(DocType::PPTX)
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is Microsoft PowerPoint Open XML Presentation (PPTX) data.
-    (is_pptx_read, is_pptx, 6000)
 }
 
 fn msooxml(buf: &[u8]) -> Option<DocType> {
@@ -191,3 +161,23 @@ fn search(buf: &[u8], start: usize, range: usize) -> Option<usize> {
         .windows(signature.len())
         .position(|window| window == signature)
 }
+
+super::build_fn_read_api! (
+    /// Returns whether data from reader is Microsoft Word Open XML Format Document (DOCX) data.
+    (is_docx_read, is_docx, 6000),
+
+    /// Returns whether data from reader is Microsoft Excel 97-2003 Worksheet (XLS) data.
+    (is_xls_read, is_xls, 6000),
+
+    /// Returns whether data from reader is Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
+    (is_xlsx_read, is_xlsx, 6000),
+
+    /// Returns whether data from reader is Microsoft PowerPoint 97-2003 Presentation (PPT) data.
+    (is_ppt_read, is_ppt, 6000),
+
+    /// Returns whether data from reader is Microsoft PowerPoint Open XML Presentation (PPTX) data.
+    (is_pptx_read, is_pptx, 6000),
+
+    /// Returns whether data from reader is Microsoft Word Document (DOC) data.
+    (is_doc_read, is_doc, 36)
+);

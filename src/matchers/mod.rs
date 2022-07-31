@@ -27,19 +27,23 @@ pub(crate) fn compare_bytes(slice: &[u8], sub_slice: &[u8], start_offset: usize)
     true
 }
 
-macro_rules! build_fn_read
+macro_rules! build_fn_read_api
 {
     (
-        $(#[$outer:meta])*
-        ($name:tt, $impl_fn:ident, $sz:literal) 
+        $(
+            $(#[$outer:meta])*
+            ($name:tt, $impl_fn:ident, $sz:literal)
+        ),*
     ) => {
+        $(
         $(#[$outer])*
         pub fn $name<R: Read>(r: &mut R) -> io::Result<(usize, bool)> {
             let mut buffer = [0; $sz];
             let n = r.read(&mut buffer[..])?;
             Ok((n, $impl_fn(&buffer)))
         }
+    )   *
     };
 }
 
-pub(crate) use build_fn_read;
+pub(crate) use build_fn_read_api;

@@ -252,24 +252,24 @@ impl Infer {
 
     /// Returns the file type of the data in the reader.
     ///
-    /// # Examples
-    ///
-    /// ```rust
-    /// use std::fs;
-    /// use std::io::prelude::*;
-    /// use std::fs::File;
-    ///
-    /// fn main() -> std::io::Result<()> {
-    ///     let info = infer::Infer::new();
-    ///     let mut f = File::open("testdata/sample.jpg")?;
-    ///     let (n, kind_result) = info.get_read(&mut f).unwrap();
-    ///     let kind = kind_result.expect("file type is known");
-    ///     assert_eq!(kind.mime_type(), "image/jpeg");
-    ///     assert_eq!(kind.extension(), "jpg");
-    ///     assert_eq!(n, 3);
-    ///     Ok(())
-    /// }
-    /// ```
+    // / # Examples
+    // /
+    // / ```rust
+    // / use std::fs;
+    // / use std::io::prelude::*;
+    // / use std::fs::File;
+    // /
+    // / fn main() -> std::io::Result<()> {
+    // /     let info = infer::Infer::new();
+    // /     let mut f = File::open("testdata/sample.jpg")?;
+    // /     let (n, kind_result) = info.get_read(&mut f).unwrap();
+    // /     let kind = kind_result.expect("file type is known");
+    // /     assert_eq!(kind.mime_type(), "image/jpeg");
+    // /     assert_eq!(kind.extension(), "jpg");
+    // /     assert_eq!(n, 3);
+    // /     Ok(())
+    // / }
+    // / ```
     pub fn get_read<R>(&self, r: &mut R) -> io::Result<(usize, Option<Type>)>
     where
         R: Read + Seek,

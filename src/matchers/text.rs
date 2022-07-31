@@ -50,11 +50,6 @@ pub fn is_xml(buf: &[u8]) -> bool {
     starts_with_ignore_ascii_case(buf, val)
 }
 
-super::build_fn_read! {
-    /// Returns whether data from reader is xml data.
-    (is_xml_read, is_xml, 16)
-}
-
 /// Strip whitespaces at the beginning of the buffer.
 ///
 /// Follows https://mimesniff.spec.whatwg.org
@@ -76,11 +71,6 @@ fn starts_with_ignore_ascii_case(buf: &[u8], needle: &[u8]) -> bool {
 /// Returns whether a buffer is a shell script.
 pub fn is_shellscript(buf: &[u8]) -> bool {
     buf.len() > 2 && &buf[..2] == b"#!"
-}
-
-super::build_fn_read! {
-    /// Returns whether data from reader is a shell script.
-    (is_shellscript_read, is_shellscript, 3)
 }
 
 #[cfg(test)]
@@ -112,3 +102,14 @@ mod tests {
         assert!(!is_shellscript(b"#!"));
     }
 }
+
+super::build_fn_read_api! (
+    /// Returns whether data from reader is html data.
+    (is_html_read, is_html, 16),
+
+    /// Returns whether data from reader is xml data.
+    (is_xml_read, is_xml, 16),
+
+    /// Returns whether data from reader is a shell script.
+    (is_shellscript_read, is_shellscript, 3)
+);
