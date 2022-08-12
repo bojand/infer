@@ -95,8 +95,8 @@ use map::{WrapMatcher, WrapReadMatcher, MATCHER_MAP};
 pub use matchers::*;
 
 /// Matcher function
-pub type Matcher = fn(buf: &[u8]) -> bool;
-pub type ReadMatcher = fn(r: &mut dyn Read) -> io::Result<(usize, bool)>;
+pub type Matcher = fn(&[u8]) -> bool;
+pub type ReadMatcher = fn(&mut dyn Read) -> io::Result<(usize, bool)>;
 
 /// Generic information for a type
 #[derive(Copy, Clone)]
@@ -115,13 +115,14 @@ impl Type {
         mime_type: &'static str,
         extension: &'static str,
         matcher: WrapMatcher,
+        read_matcher: Option<WrapReadMatcher>,
     ) -> Self {
         Self {
             matcher_type,
             mime_type,
             extension,
             matcher,
-            read_matcher: None,
+            read_matcher: read_matcher,
             read_size: None,
         }
     }
@@ -132,8 +133,14 @@ impl Type {
         mime_type: &'static str,
         extension: &'static str,
         matcher: Matcher,
+        read_matcher: Option<ReadMatcher>,
     ) -> Self {
-        Self::new_static(matcher_type, mime_type, extension, WrapMatcher(matcher))
+        let wrapped_read_matcher = match read_matcher {
+            Some(rm) => Some(WrapReadMatcher(rm)),
+            None => None,
+        };
+
+        Self::new_static(matcher_type, mime_type, extension, WrapMatcher(matcher), wrapped_read_matcher)
     }
 
     /// Returns the type of matcher
@@ -252,24 +259,24 @@ impl Infer {
 
     /// Returns the file type of the data in the reader.
     ///
-    // / # Examples
-    // /
-    // / ```rust
-    // / use std::fs;
-    // / use std::io::prelude::*;
-    // / use std::fs::File;
-    // /
-    // / fn main() -> std::io::Result<()> {
-    // /     let info = infer::Infer::new();
-    // /     let mut f = File::open("testdata/sample.jpg")?;
-    // /     let (n, kind_result) = info.get_read(&mut f).unwrap();
-    // /     let kind = kind_result.expect("file type is known");
-    // /     assert_eq!(kind.mime_type(), "image/jpeg");
-    // /     assert_eq!(kind.extension(), "jpg");
-    // /     assert_eq!(n, 3);
-    // /     Ok(())
-    // / }
-    // / ```
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::fs;
+    /// use std::io::prelude::*;
+    /// use std::fs::File;
+    ///
+    /// fn main() -> std::io::Result<()> {
+    ///     let info = infer::Infer::new();
+    ///     let mut f = File::open("testdata/sample.jpg")?;
+    ///     let (n, kind_result) = info.get_read(&mut f).unwrap();
+    ///     let kind = kind_result.expect("file type is known");
+    ///     assert_eq!(kind.mime_type(), "image/jpeg");
+    ///     assert_eq!(kind.extension(), "jpg");
+    ///     assert_eq!(n, 3);
+    ///     Ok(())
+    /// }
+    /// ```
     pub fn get_read<R>(&self, r: &mut R) -> io::Result<(usize, Option<Type>)>
     where
         R: Read + Seek,
@@ -465,12 +472,18 @@ impl Infer {
     /// assert_eq!(kind.extension(), "foo");
     /// ```
     #[cfg(feature = "alloc")]
-    pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher) {
+    pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher, rm: Option<ReadMatcher>) {
+        let wrapped_read_matcher = match rm {
+            Some(readm) => Some(WrapReadMatcher(readm)),
+            None => None,
+        };
+
         self.mmap.push(Type::new_static(
             MatcherType::Custom,
             mime_type,
             extension,
             WrapMatcher(m),
+            wrapped_read_matcher,
         ));
     }
 
@@ -708,8 +721,8 @@ mod tests {
         }
 
         let mut info = Infer::new();
-        info.add("custom/foo", "foo", foo_matcher);
-        info.add("custom/bar", "bar", bar_matcher);
+        info.add("custom/foo", "foo", foo_matcher, None);
+        info.add("custom/bar", "bar", bar_matcher, None);
 
         let buf_foo = &[0xFF, 0xD8, 0xFF];
         let typ = info.get(buf_foo).expect("type is matched");

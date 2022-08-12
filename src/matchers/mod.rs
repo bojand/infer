@@ -37,7 +37,7 @@ macro_rules! build_fn_read_api
     ) => {
         $(
         $(#[$outer])*
-        pub fn $name<R: Read>(r: &mut R) -> io::Result<(usize, bool)> {
+        pub fn $name(r: &mut dyn Read) -> io::Result<(usize, bool)> {
             let mut buffer = [0; $sz];
             let n = r.read(&mut buffer[..])?;
             Ok((n, $impl_fn(&buffer)))
