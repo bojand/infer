@@ -211,11 +211,5 @@ super::build_fn_read_api! (
     (is_psd_read, is_psd, 4),
 
     /// Returns whether data from reader is ICO icon image data.
-    (is_ico_read, is_ico, 4),
-
-    /// Returns whether data from reader is ICO icon image data.
-    (is_heif_read, is_heif, 4),
-
-    /// Returns whether data from reader is AVIF image data.
-    (is_avif_read, is_avif, 16)
+    (is_ico_read, is_ico, 4)
 );

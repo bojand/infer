@@ -145,7 +145,7 @@ super::build_fn_read_api! (
     (is_m4v_read, is_m4v, 11),
 
     /// Returns whether data from reader is MKV video data.
-    (is_mkv_read, is_mkv, 16),
+    (is_mkv_read, is_mkv, 39),
 
     /// Returns whether data from reader is WEBM video data.
     (is_webm_read, is_webm, 4),

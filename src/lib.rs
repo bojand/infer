@@ -55,7 +55,7 @@ fn custom_matcher(buf: &[u8]) -> bool {
 }
 
 let mut info = infer::Infer::new();
-info.add("custom/foo", "foo", custom_matcher);
+info.add("custom/foo", "foo", custom_matcher, None);
 
 let buf = [0x10, 0x11, 0x12, 0x13];
 let kind = info.get(&buf).unwrap();
@@ -140,7 +140,13 @@ impl Type {
             None => None,
         };
 
-        Self::new_static(matcher_type, mime_type, extension, WrapMatcher(matcher), wrapped_read_matcher)
+        Self::new_static(
+            matcher_type,
+            mime_type,
+            extension,
+            WrapMatcher(matcher),
+            wrapped_read_matcher,
+        )
     }
 
     /// Returns the type of matcher
@@ -184,6 +190,11 @@ impl Type {
     /// Returns the file extension
     pub fn read_size(&self) -> usize {
         self.read_size.unwrap_or(0)
+    }
+
+    /// Returns whether the type supports matching by Read.
+    pub fn supports_read_match(&self) -> bool {
+        self.read_matcher.is_some()
     }
 }
 
@@ -285,15 +296,17 @@ impl Infer {
         let mut res_value: Option<Type> = None;
 
         for kind in self.iter_matchers() {
-            let match_res = kind.matches_read(r)?;
-            println!("{:?}\n", match_res);
-            bytes_read = match_res.0;
-            if match_res.1 {
-                res_value = Some(kind.clone());
-                break;
-            }
+            if res_value.is_none() {
+                let match_res = kind.matches_read(r)?;
+                // println!("{:?} {:?}", match_res, kind);
+                bytes_read = match_res.0;
+                if match_res.1 {
+                    res_value = Some(kind.clone());
+                    break;
+                }
 
-            r.rewind().ok();
+                r.rewind().ok();
+            }
         }
 
         Ok((bytes_read, res_value))
@@ -346,6 +359,28 @@ impl Infer {
     pub fn is_supported(&self, extension: &str) -> bool {
         self.iter_matchers()
             .any(|kind| kind.extension() == extension)
+    }
+
+    /// Returns the type for the mime type if supported.
+    ///
+    /// # Examples
+    ///
+    /// See [`is_supported`](./fn.get_type_by_mime.html).
+    pub fn get_type_by_mime(&self, mime_type: &str) -> Option<Type> {
+        self.iter_matchers()
+            .find(|kind| kind.mime_type() == mime_type)
+            .copied()
+    }
+
+    /// Returns the type for the extension if supported.
+    ///
+    /// # Examples
+    ///
+    /// See [`is_supported`](./fn.get_type_by_extension.html).
+    pub fn get_type_by_extension(&self, extension: &str) -> Option<Type> {
+        self.iter_matchers()
+            .find(|kind| kind.extension() == extension)
+            .copied()
     }
 
     /// Returns whether a mime type is supported.
@@ -442,7 +477,7 @@ impl Infer {
     /// }
     ///
     /// let mut info = infer::Infer::new();
-    /// info.add("custom/foo", "foo", custom_matcher);
+    /// info.add("custom/foo", "foo", custom_matcher, None);
     /// let buf = [0x10, 0x11, 0x12, 0x13];
     /// assert!(info.is_custom(&buf));
     /// # }
@@ -464,7 +499,7 @@ impl Infer {
     /// }
     ///
     /// let mut info = infer::Infer::new();
-    /// info.add("custom/foo", "foo", custom_matcher);
+    /// info.add("custom/foo", "foo", custom_matcher, None);
     /// let buf = [0x10, 0x11, 0x12, 0x13];
     /// let kind =  info.get(&buf).expect("file type is known");
     ///
@@ -472,7 +507,13 @@ impl Infer {
     /// assert_eq!(kind.extension(), "foo");
     /// ```
     #[cfg(feature = "alloc")]
-    pub fn add(&mut self, mime_type: &'static str, extension: &'static str, m: Matcher, rm: Option<ReadMatcher>) {
+    pub fn add(
+        &mut self,
+        mime_type: &'static str,
+        extension: &'static str,
+        m: Matcher,
+        rm: Option<ReadMatcher>,
+    ) {
         let wrapped_read_matcher = match rm {
             Some(readm) => Some(WrapReadMatcher(readm)),
             None => None,
@@ -506,15 +547,40 @@ static INFER: Infer = Infer::new();
 /// # Examples
 ///
 /// ```rust
-/// let info = infer::Infer::new();
 /// let buf = [0xFF, 0xD8, 0xFF, 0xAA];
-/// let kind = info.get(&buf).expect("file type is known");
+/// let kind = infer::get(&buf).expect("file type is known");
 ///
 /// assert_eq!(kind.mime_type(), "image/jpeg");
 /// assert_eq!(kind.extension(), "jpg");
 /// ```
 pub fn get(buf: &[u8]) -> Option<Type> {
     INFER.get(buf)
+}
+
+/// Returns the file type of the data in the reader.
+///
+/// # Examples
+///
+/// ```rust
+/// use std::fs;
+/// use std::io::prelude::*;
+/// use std::fs::File;
+///
+/// fn main() -> std::io::Result<()> {
+///     let mut f = File::open("testdata/sample.jpg")?;
+///     let (n, kind_result) = infer::get_read(&mut f).unwrap();
+///     let kind = kind_result.expect("file type is known");
+///     assert_eq!(kind.mime_type(), "image/jpeg");
+///     assert_eq!(kind.extension(), "jpg");
+///     assert_eq!(n, 3);
+///     Ok(())
+/// }
+/// ```
+pub fn get_read<R>(r: &mut R) -> io::Result<(usize, Option<Type>)>
+where
+    R: Read + Seek,
+{
+    INFER.get_read(r)
 }
 
 /// Returns the file type of the file given a path.
@@ -678,6 +744,34 @@ pub fn is_image(buf: &[u8]) -> bool {
 /// ```
 pub fn is_video(buf: &[u8]) -> bool {
     INFER.is_video(buf)
+}
+
+/// Returns the file type for the mime type if supported.
+///
+/// # Examples
+///
+/// ```rust
+/// let kind = infer::get_type_by_mime("image/jpeg").expect("mime type is known");
+///
+/// assert_eq!(kind.mime_type(), "image/jpeg");
+/// assert_eq!(kind.extension(), "jpg");
+/// ```
+pub fn get_type_by_mime(mime_type: &str) -> Option<Type> {
+    INFER.get_type_by_mime(mime_type)
+}
+
+/// Returns the type for the extension if supported.
+///
+/// # Examples
+///
+/// ```rust
+/// let kind = infer::get_type_by_extension("jpg").expect("extension is known");
+///
+/// assert_eq!(kind.mime_type(), "image/jpeg");
+/// assert_eq!(kind.extension(), "jpg");
+/// ```
+pub fn get_type_by_extension(extension: &str) -> Option<Type> {
+    INFER.get_type_by_extension(extension)
 }
 
 #[cfg(test)]

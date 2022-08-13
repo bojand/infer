@@ -51,11 +51,11 @@ fn odf(buf: &[u8]) -> Option<DocType> {
 
 super::build_fn_read_api! (
     /// Returns whether data from reader is OpenDocument Text.
-    (is_odt_read, is_odt, 72),
+    (is_odt_read, is_odt, 104),
 
     /// Returns whether data from reader is OpenDocument Spreadsheet.
-    (is_ods_read, is_ods, 72),
+    (is_ods_read, is_ods, 104),
 
     /// Returns whether data from reader is OpenDocument Presentation.
-    (is_odp_read, is_odp, 72)
+    (is_odp_read, is_odp, 104)
 );

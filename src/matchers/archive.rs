@@ -307,7 +307,7 @@ super::build_fn_read_api! (
     (is_dcm_read, is_dcm, 132),
 
      /// Returns whether data from reader is a Zstd archive.
-     (is_zst_read, is_zst, 132),
+     (is_zst_read, is_zst, 4),
 
     /// Returns whether data from reader is a Zstd archive.
     (is_msi_read, is_msi, 8)

@@ -8,11 +8,20 @@ macro_rules! test_format {
                 false
             }
 
+            fn matcher_read(_r: &mut dyn std::io::Read) -> std::io::Result<(usize, bool)> {
+                Ok((0, false))
+            }
+
             #[cfg(feature = "std")]
             #[test]
             fn get_from_path() {
-                let expected_kind =
-                    Type::new(MatcherType::$exp_matchert, $exp_mimet, $exp_ext, matcher);
+                let expected_kind = Type::new(
+                    MatcherType::$exp_matchert,
+                    $exp_mimet,
+                    $exp_ext,
+                    matcher,
+                    Some(matcher_read),
+                );
                 let kind = infer::get_from_path(concat!("testdata/", $file))
                     .expect("test file read")
                     .expect("test file matches");
@@ -22,12 +31,41 @@ macro_rules! test_format {
 
             #[test]
             fn get() {
-                let expected_kind =
-                    Type::new(MatcherType::$exp_matchert, $exp_mimet, $exp_ext, matcher);
+                let expected_kind = Type::new(
+                    MatcherType::$exp_matchert,
+                    $exp_mimet,
+                    $exp_ext,
+                    matcher,
+                    Some(matcher_read),
+                );
                 let buf = include_bytes!(concat!("../testdata/", $file));
                 let kind = infer::get(buf).expect("test file matches");
 
                 assert_eq!(expected_kind, kind);
+            }
+
+            #[test]
+            fn get_read() {
+                let expected_kind = Type::new(
+                    MatcherType::$exp_matchert,
+                    $exp_mimet,
+                    $exp_ext,
+                    matcher,
+                    Some(matcher_read),
+                );
+
+                let mut f = std::fs::File::open(concat!("./testdata/", $file)).unwrap();
+
+                let tp = infer::get_type_by_extension($exp_ext).unwrap();
+                println!("!!! {:?}", tp);
+                let file_size = f.metadata().unwrap().len();
+
+                if tp.supports_read_match() {
+                    let (n, kind) = infer::get_read(&mut f).unwrap();
+                    assert!(n > 0);
+                    assert!((n as u64) < file_size);
+                    assert_eq!(expected_kind, kind.unwrap());
+                } 
             }
         }
     };
