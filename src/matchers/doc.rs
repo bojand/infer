@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
 use core::convert::TryInto;
 
 use super::compare_bytes;
@@ -162,7 +162,7 @@ fn search(buf: &[u8], start: usize, range: usize) -> Option<usize> {
         .position(|window| window == signature)
 }
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether data from reader is Microsoft Word Open XML Format Document (DOCX) data.
     (is_docx_read, is_docx, 6000),
 

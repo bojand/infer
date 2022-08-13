@@ -54,12 +54,26 @@ fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
 }
 
+fn custom_matcher_read(r: &mut dyn std::io::Read) -> std::io::Result<(usize, bool)> {
+    let mut buffer = [0; 4];
+    let n = r.read(&mut buffer[..])?;
+    Ok((n, custom_matcher(&buffer)))
+}
+
 let mut info = infer::Infer::new();
-info.add("custom/foo", "foo", custom_matcher, None);
+info.add("custom/foo", "foo", custom_matcher, Some(custom_matcher_read));
 
-let buf = [0x10, 0x11, 0x12, 0x13];
-let kind = info.get(&buf).unwrap();
+let buf = [0x10, 0x11, 0x12, 0x13, 0x14];
+let mut kind = info.get(&buf).unwrap();
 
+assert_eq!(kind.mime_type(), "custom/foo");
+assert_eq!(kind.extension(), "foo");
+
+let mut f = std::io::Cursor::new(buf);
+let (n , kind_result) = info.get_read(&mut f).unwrap();
+kind = kind_result.expect("file type is known");
+
+assert_eq!(4, n);
 assert_eq!(kind.mime_type(), "custom/foo");
 assert_eq!(kind.extension(), "foo");
 # }
@@ -779,6 +793,7 @@ mod tests {
     #[cfg(feature = "alloc")]
     use super::Infer;
     use std::fs::File;
+    use std::io::{self, Cursor, Read};
 
     #[test]
     fn test_get_unknown() {
@@ -814,19 +829,33 @@ mod tests {
             buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47
         }
 
+        fn bar_matcher_read(r: &mut dyn Read) -> io::Result<(usize, bool)> {
+            let mut buffer = [0; 4];
+            let n = r.read(&mut buffer[..])?;
+            Ok((n, bar_matcher(&buffer)))
+        }
+
         let mut info = Infer::new();
         info.add("custom/foo", "foo", foo_matcher, None);
-        info.add("custom/bar", "bar", bar_matcher, None);
+        info.add("custom/bar", "bar", bar_matcher, Some(bar_matcher_read));
 
         let buf_foo = &[0xFF, 0xD8, 0xFF];
         let typ = info.get(buf_foo).expect("type is matched");
         assert_eq!(typ.mime_type(), "custom/foo");
         assert_eq!(typ.extension(), "foo");
 
-        let buf_bar = &[0x89, 0x50, 0x4E, 0x47];
+        let buf_bar = &[0x89, 0x50, 0x4E, 0x47, 0x12];
         let typ = info.get(buf_bar).expect("type is matched");
         assert_eq!(typ.mime_type(), "custom/bar");
         assert_eq!(typ.extension(), "bar");
+
+        let mut f = Cursor::new(buf_bar);
+        let (n , kind_result) = info.get_read(&mut f).unwrap();
+        let kind = kind_result.expect("file type is known");
+
+        assert_eq!(4, n);
+        assert_eq!(kind.mime_type(), "custom/bar");
+        assert_eq!(kind.extension(), "bar");
     }
 
     #[test]

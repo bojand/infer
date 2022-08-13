@@ -103,7 +103,7 @@ mod tests {
     }
 }
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether data from reader is html data.
     (is_html_read, is_html, 16),
 

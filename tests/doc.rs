@@ -16,8 +16,13 @@ macro_rules! test_format_get_only {
 
             #[test]
             fn get() {
-                let expected_kind =
-                    Type::new(MatcherType::$exp_matchert, $exp_mimet, $exp_ext, matcher, Some(matcher_read));
+                let expected_kind = Type::new(
+                    MatcherType::$exp_matchert,
+                    $exp_mimet,
+                    $exp_ext,
+                    matcher,
+                    Some(matcher_read),
+                );
                 let buf = include_bytes!(concat!("../testdata/", $file));
                 let kind = infer::get(buf).expect("test file matches");
 

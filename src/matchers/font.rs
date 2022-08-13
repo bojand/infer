@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
 
 /// Returns whether a buffer is WOFF font data.
 pub fn is_woff(buf: &[u8]) -> bool {
@@ -47,7 +47,7 @@ pub fn is_otf(buf: &[u8]) -> bool {
         && buf[4] == 0x00
 }
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether data from reader is WOFF font data.
     (is_woff_read, is_woff, 8),
     

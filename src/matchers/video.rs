@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
 
 /// Returns whether a buffer is M4V video data.
 pub fn is_m4v(buf: &[u8]) -> bool {
@@ -140,7 +140,7 @@ pub fn is_mp4(buf: &[u8]) -> bool {
             || (buf[8] == b'F' && buf[9] == b'4' && buf[10] == b'P' && buf[11] == b' '))
 }
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether data from reader is M4V video data.
     (is_m4v_read, is_m4v, 11),
 

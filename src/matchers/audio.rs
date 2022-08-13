@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
 
 /// Returns whether a buffer is MIDI data.
 pub fn is_midi(buf: &[u8]) -> bool {
@@ -91,7 +91,7 @@ pub fn is_ape(buf: &[u8]) -> bool {
     buf.len() > 4 && buf[0] == b'M' && buf[1] == b'A' && buf[2] == b'C' && buf[3] == b' '
 }
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether data from reader is MIDI data.
     (is_midi_read, is_midi, 4),
     

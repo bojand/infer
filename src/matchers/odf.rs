@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
 use super::compare_bytes;
 
 #[derive(Debug, Eq, PartialEq)]
@@ -49,7 +49,7 @@ fn odf(buf: &[u8]) -> Option<DocType> {
     None
 }
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether data from reader is OpenDocument Text.
     (is_odt_read, is_odt, 104),
 

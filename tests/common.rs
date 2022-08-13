@@ -65,7 +65,7 @@ macro_rules! test_format {
                     assert!(n > 0);
                     assert!((n as u64) < file_size);
                     assert_eq!(expected_kind, kind.unwrap());
-                } 
+                }
             }
         }
     };

@@ -1,5 +1,6 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
+
 
 /// Returns whether a buffer is a wasm.
 ///
@@ -130,7 +131,7 @@ pub fn is_coff(buf: &[u8]) -> bool {
 }
 
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether data from a reader is a wasm.
     ///
     /// # Examples

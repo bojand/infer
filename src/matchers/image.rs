@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
 use core::convert::TryInto;
 
 /// Returns whether a buffer is JPEG image data.
@@ -163,7 +163,7 @@ fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
     Some((major, minor, compatible))
 }
 
-super::build_fn_read_api! (
+super::build_fn_read_api!(
     /// Returns whether a data from reader is a JPEG. 
     ///
     /// # Examples
