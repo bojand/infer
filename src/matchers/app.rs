@@ -1,6 +1,3 @@
-use std::io;
-use std::io::Read;
-
 /// Returns whether a buffer is a wasm.
 ///
 /// # Examples
@@ -129,65 +126,70 @@ pub fn is_coff(buf: &[u8]) -> bool {
     is_coff_x64(buf) || is_coff_i386(buf) || is_coff_ia64(buf)
 }
 
-super::build_fn_read_api!(
-    /// Returns whether data from a reader is a wasm.
-    ///
-    /// # Examples
-    ///
-    /// ```rust
-    /// use std::fs;
-    /// use std::io::prelude::*;
-    /// use std::fs::File;
-    ///
-    /// fn main() -> std::io::Result<()> {
-    ///     let mut f = File::open("testdata/sample.wasm")?;
-    ///     let wasm = infer::app::is_wasm_read(&mut f).unwrap();
-    ///     assert!(wasm);
-    ///     Ok(())
-    /// }
-    /// ```
-    (is_wasm_read, is_wasm, 8),
-    /// Returns whether a data from reader is an EXE.
-    /// DLL and EXE have the same magic number, so returns true also for a DLL.
-    ///
-    /// # Examples
-    ///
-    /// ```rust
-    /// use std::fs;
-    /// use std::io::prelude::*;
-    /// use std::fs::File;
-    ///
-    /// fn main() -> std::io::Result<()> {
-    ///     let mut f = File::open("testdata/sample.exe")?;
-    ///     let exe = infer::app::is_exe_read(&mut f).unwrap();
-    ///     assert!(exe);
-    ///     Ok(())
-    /// }
-    /// ```
-    (is_exe_read, is_exe, 2),
-    /// Returns whether data from a reader is a DLL.
-    /// DLL and EXE have the same magic number, so returns true also for an EXE.
-    (is_dll_read, is_dll, 2),
-    /// Returns whether data from reader is an ELF.
-    (is_elf_read, is_elf, 53),
-    /// Returns whether data from reader is compiled Java bytecode.
-    (is_java_read, is_java, 8),
-    /// Returns whether data from reader is LLVM Bitcode.
-    (is_llvm_read, is_llvm, 2),
-    /// Returns whether data from reader is a Mach-O binary.
-    (is_mach_read, is_mach, 4),
-    /// Returns whether data from reader is a Dalvik Executable (DEX).
-    (is_dex_read, is_dex, 4),
-    /// Returns whether data from reader is a Dey Optimized Dalvik Executable (ODEX).
-    (is_dey_read, is_dey, 101),
-    /// Returns whether data from reader is DER encoded X.509 certificate.
-    (is_der_read, is_der, 101),
-    /// Returns whether data from reader is a Common Object File Format for i386 architecture.
-    (is_coff_i386_read, is_coff_i386, 3),
-    /// Returns whether data from reader is a Common Object File Format for x64 architecture.
-    (is_coff_x64_read, is_coff_x64, 3),
-    /// Returns whether data from reader is a Common Object File Format for Itanium architecture.
-    (is_coff_ia64_read, is_coff_ia64, 3),
-    /// Returns whether data from reader is a Common Object File Format.
-    (is_coff_read, is_coff, 3)
-);
+pub mod read {
+    use std::io;
+    use std::io::Read;
+
+    super::super::build_fn_read_api!(
+        /// Returns whether data from a reader is a wasm.
+        ///
+        /// # Examples
+        ///
+        /// ```rust
+        /// use std::fs;
+        /// use std::io::prelude::*;
+        /// use std::fs::File;
+        ///
+        /// fn main() -> std::io::Result<()> {
+        ///     let mut f = File::open("testdata/sample.wasm")?;
+        ///     let wasm = infer::app::is_wasm_read(&mut f).unwrap();
+        ///     assert!(wasm);
+        ///     Ok(())
+        /// }
+        /// ```
+        (is_wasm, super::is_wasm, 8),
+        /// Returns whether a data from reader is an EXE.
+        /// DLL and EXE have the same magic number, so returns true also for a DLL.
+        ///
+        /// # Examples
+        ///
+        /// ```rust
+        /// use std::fs;
+        /// use std::io::prelude::*;
+        /// use std::fs::File;
+        ///
+        /// fn main() -> std::io::Result<()> {
+        ///     let mut f = File::open("testdata/sample.exe")?;
+        ///     let exe = infer::app::is_exe_read(&mut f).unwrap();
+        ///     assert!(exe);
+        ///     Ok(())
+        /// }
+        /// ```
+        (is_exe, super::is_exe, 2),
+        /// Returns whether data from a reader is a DLL.
+        /// DLL and EXE have the same magic number, so returns true also for an EXE.
+        (is_dll, super::is_dll, 2),
+        /// Returns whether data from reader is an ELF.
+        (is_elf, super::is_elf, 53),
+        /// Returns whether data from reader is compiled Java bytecode.
+        (is_java, super::is_java, 8),
+        /// Returns whether data from reader is LLVM Bitcode.
+        (is_llvm, super::is_llvm, 2),
+        /// Returns whether data from reader is a Mach-O binary.
+        (is_mach, super::is_mach, 4),
+        /// Returns whether data from reader is a Dalvik Executable (DEX).
+        (is_dex, super::is_dex, 4),
+        /// Returns whether data from reader is a Dey Optimized Dalvik Executable (ODEX).
+        (is_dey, super::is_dey, 101),
+        /// Returns whether data from reader is DER encoded X.509 certificate.
+        (is_der, super::is_der, 101),
+        /// Returns whether data from reader is a Common Object File Format for i386 architecture.
+        (is_coff_i386, super::is_coff_i386, 3),
+        /// Returns whether data from reader is a Common Object File Format for x64 architecture.
+        (is_coff_x64, super::is_coff_x64, 3),
+        /// Returns whether data from reader is a Common Object File Format for Itanium architecture.
+        (is_coff_ia64, super::is_coff_ia64, 3),
+        /// Returns whether data from reader is a Common Object File Format.
+        (is_coff, super::is_coff, 3)
+    );
+}

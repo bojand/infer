@@ -845,7 +845,7 @@ mod tests {
             assert!(fr.is_err(), "{:?}", fr.unwrap_err());
         }
         let mut f = fr.unwrap();
-        let result = crate::app::is_wasm_read(&mut f).unwrap();
+        let result = crate::app::read::is_wasm(&mut f).unwrap();
         assert!(result);
     }
 }

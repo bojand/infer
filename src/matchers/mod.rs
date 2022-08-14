@@ -32,7 +32,7 @@ macro_rules! build_fn_read_api
     (
         $(
             $(#[$outer:meta])*
-            ($name:tt, $impl_fn:ident, $sz:literal)
+            ($name:tt, $impl_fn:expr, $sz:literal)
         ),*
     ) => {
         $(

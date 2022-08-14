@@ -42,77 +42,77 @@ matcher_map!(
         "application/wasm",
         "wasm",
         matchers::app::is_wasm,
-        Some(WrapReadMatcher(matchers::app::is_wasm_read))
+        Some(WrapReadMatcher(matchers::app::read::is_wasm))
     ),
     (
         MatcherType::App,
         "application/x-executable",
         "elf",
         matchers::app::is_elf,
-        Some(WrapReadMatcher(matchers::app::is_elf_read))
+        Some(WrapReadMatcher(matchers::app::read::is_elf))
     ),
     (
         MatcherType::App,
         "application/vnd.microsoft.portable-executable",
         "exe",
         matchers::app::is_exe,
-        Some(WrapReadMatcher(matchers::app::is_exe_read))
+        Some(WrapReadMatcher(matchers::app::read::is_exe))
     ),
     (
         MatcherType::App,
         "application/vnd.microsoft.portable-executable",
         "dll",
         matchers::app::is_dll,
-        Some(WrapReadMatcher(matchers::app::is_dll_read))
+        Some(WrapReadMatcher(matchers::app::read::is_dll))
     ),
     (
         MatcherType::App,
         "application/java",
         "class",
         matchers::app::is_java,
-        Some(WrapReadMatcher(matchers::app::is_java_read))
+        Some(WrapReadMatcher(matchers::app::read::is_java))
     ),
     (
         MatcherType::App,
         "application/x-llvm",
         "bc",
         matchers::app::is_llvm,
-        Some(WrapReadMatcher(matchers::app::is_llvm_read))
+        Some(WrapReadMatcher(matchers::app::read::is_llvm))
     ),
     (
         MatcherType::App,
         "application/x-mach-binary",
         "mach",
         matchers::app::is_mach,
-        Some(WrapReadMatcher(matchers::app::is_mach_read))
+        Some(WrapReadMatcher(matchers::app::read::is_mach))
     ),
     (
         MatcherType::App,
         "application/vnd.android.dex",
         "dex",
         matchers::app::is_dex,
-        Some(WrapReadMatcher(matchers::app::is_dex_read))
+        Some(WrapReadMatcher(matchers::app::read::is_dex))
     ),
     (
         MatcherType::App,
         "application/vnd.android.dey",
         "dey",
         matchers::app::is_dey,
-        Some(WrapReadMatcher(matchers::app::is_dey_read))
+        Some(WrapReadMatcher(matchers::app::read::is_dey))
     ),
     (
         MatcherType::App,
         "application/x-x509-ca-cert",
         "der",
         matchers::app::is_der,
-        Some(WrapReadMatcher(matchers::app::is_der_read))
+        Some(WrapReadMatcher(matchers::app::read::is_der))
     ),
     (
         MatcherType::App,
         "application/x-executable",
         "obj",
         matchers::app::is_coff,
-        Some(WrapReadMatcher(matchers::app::is_coff_read))
+        Some(WrapReadMatcher(matchers::app::read::is_coff))
     ),
     // Book
     (
@@ -369,28 +369,28 @@ matcher_map!(
         "application/font-woff",
         "woff",
         matchers::font::is_woff,
-        Some(WrapReadMatcher(matchers::font::is_woff_read))
+        Some(WrapReadMatcher(matchers::font::read::is_woff))
     ),
     (
         MatcherType::Font,
         "application/font-woff",
         "woff2",
         matchers::font::is_woff2,
-        Some(WrapReadMatcher(matchers::font::is_woff2_read))
+        Some(WrapReadMatcher(matchers::font::read::is_woff2))
     ),
     (
         MatcherType::Font,
         "application/font-sfnt",
         "ttf",
         matchers::font::is_ttf,
-        Some(WrapReadMatcher(matchers::font::is_ttf_read))
+        Some(WrapReadMatcher(matchers::font::read::is_ttf))
     ),
     (
         MatcherType::Font,
         "application/font-sfnt",
         "otf",
         matchers::font::is_otf,
-        Some(WrapReadMatcher(matchers::font::is_otf_read))
+        Some(WrapReadMatcher(matchers::font::read::is_otf))
     ),
     // Document
     (
