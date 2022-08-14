@@ -1,6 +1,3 @@
-use std::io;
-use std::io::Read;
-
 /// Returns whether a buffer is html data.
 ///
 /// Conforms to [whatwg](https://mimesniff.spec.whatwg.org/)
@@ -103,11 +100,16 @@ mod tests {
     }
 }
 
-super::build_fn_read_api!(
-    /// Returns whether data from reader is html data.
-    (is_html_read, is_html, 16),
-    /// Returns whether data from reader is xml data.
-    (is_xml_read, is_xml, 16),
-    /// Returns whether data from reader is a shell script.
-    (is_shellscript_read, is_shellscript, 3)
-);
+pub mod read {
+    use std::io;
+    use std::io::Read;
+
+    super::super::build_fn_read_api!(
+        /// Returns whether data from reader is html data.
+        (is_html, super::is_html, 16),
+        /// Returns whether data from reader is xml data.
+        (is_xml, super::is_xml, 16),
+        /// Returns whether data from reader is a shell script.
+        (is_shellscript, super::is_shellscript, 3)
+    );
+}

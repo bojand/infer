@@ -1,6 +1,4 @@
 use super::compare_bytes;
-use std::io;
-use std::io::Read;
 
 #[derive(Debug, Eq, PartialEq)]
 enum DocType {
@@ -49,11 +47,16 @@ fn odf(buf: &[u8]) -> Option<DocType> {
     None
 }
 
-super::build_fn_read_api!(
-    /// Returns whether data from reader is OpenDocument Text.
-    (is_odt_read, is_odt, 104),
-    /// Returns whether data from reader is OpenDocument Spreadsheet.
-    (is_ods_read, is_ods, 104),
-    /// Returns whether data from reader is OpenDocument Presentation.
-    (is_odp_read, is_odp, 104)
-);
+pub mod read {
+    use std::io;
+    use std::io::Read;
+
+    super::super::build_fn_read_api!(
+        /// Returns whether data from reader is OpenDocument Text.
+        (is_odt, super::is_odt, 104),
+        /// Returns whether data from reader is OpenDocument Spreadsheet.
+        (is_ods, super::is_ods, 104),
+        /// Returns whether data from reader is OpenDocument Presentation.
+        (is_odp, super::is_odp, 104)
+    );
+}

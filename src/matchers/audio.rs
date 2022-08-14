@@ -1,6 +1,3 @@
-use std::io;
-use std::io::Read;
-
 /// Returns whether a buffer is MIDI data.
 pub fn is_midi(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x4D && buf[1] == 0x54 && buf[2] == 0x68 && buf[3] == 0x64
@@ -91,27 +88,32 @@ pub fn is_ape(buf: &[u8]) -> bool {
     buf.len() > 4 && buf[0] == b'M' && buf[1] == b'A' && buf[2] == b'C' && buf[3] == b' '
 }
 
-super::build_fn_read_api!(
-    /// Returns whether data from reader is MIDI data.
-    (is_midi_read, is_midi, 4),
-    /// Returns whether data from reader is is MP3 data.
-    (is_mp3_read, is_mp3, 3),
-    /// Returns whether data from reader is M4A data.
-    (is_m4a_read, is_m4a, 11),
-    /// Returns whether data from reader is OGG data.
-    (is_ogg_read, is_ogg, 4),
-    /// Returns whether data from reader is FLAC data.
-    (is_flac_read, is_flac, 4),
-    /// Returns whether data from reader is WAV data.
-    (is_wav_read, is_wav, 12),
-    /// Returns whether data from reader is AMR data.
-    (is_amr_read, is_amr, 12),
-    /// Returns whether data from reader is AAC data.
-    (is_aac_read, is_aac, 2),
-    /// Returns whether data from reader is AIFF data.
-    (is_aiff_read, is_aiff, 12),
-    /// Returns whether data from reader is DSF data.
-    (is_dsf_read, is_dsf, 5),
-    /// Returns whether data from reader is APE (Monkey's Audio) data.
-    (is_ape_read, is_ape, 5)
-);
+pub mod read {
+    use std::io;
+    use std::io::Read;
+
+    super::super::build_fn_read_api!(
+        /// Returns whether data from reader is MIDI data.
+        (is_midi, super::is_midi, 4),
+        /// Returns whether data from reader is is MP3 data.
+        (is_mp3, super::is_mp3, 3),
+        /// Returns whether data from reader is M4A data.
+        (is_m4a, super::is_m4a, 11),
+        /// Returns whether data from reader is OGG data.
+        (is_ogg, super::is_ogg, 4),
+        /// Returns whether data from reader is FLAC data.
+        (is_flac, super::is_flac, 4),
+        /// Returns whether data from reader is WAV data.
+        (is_wav, super::is_wav, 12),
+        /// Returns whether data from reader is AMR data.
+        (is_amr, super::is_amr, 12),
+        /// Returns whether data from reader is AAC data.
+        (is_aac, super::is_aac, 2),
+        /// Returns whether data from reader is AIFF data.
+        (is_aiff, super::is_aiff, 12),
+        /// Returns whether data from reader is DSF data.
+        (is_dsf, super::is_dsf, 5),
+        /// Returns whether data from reader is APE (Monkey's Audio) data.
+        (is_ape, super::is_ape, 5)
+    );
+}

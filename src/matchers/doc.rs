@@ -1,8 +1,5 @@
-use core::convert::TryInto;
-use std::io;
-use std::io::Read;
-
 use super::compare_bytes;
+use core::convert::TryInto;
 
 #[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Eq, PartialEq)]
@@ -162,17 +159,22 @@ fn search(buf: &[u8], start: usize, range: usize) -> Option<usize> {
         .position(|window| window == signature)
 }
 
-super::build_fn_read_api!(
-    /// Returns whether data from reader is Microsoft Word Open XML Format Document (DOCX) data.
-    (is_docx_read, is_docx, 6000),
-    /// Returns whether data from reader is Microsoft Excel 97-2003 Worksheet (XLS) data.
-    (is_xls_read, is_xls, 6000),
-    /// Returns whether data from reader is Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
-    (is_xlsx_read, is_xlsx, 6000),
-    /// Returns whether data from reader is Microsoft PowerPoint 97-2003 Presentation (PPT) data.
-    (is_ppt_read, is_ppt, 6000),
-    /// Returns whether data from reader is Microsoft PowerPoint Open XML Presentation (PPTX) data.
-    (is_pptx_read, is_pptx, 6000),
-    /// Returns whether data from reader is Microsoft Word Document (DOC) data.
-    (is_doc_read, is_doc, 36)
-);
+pub mod read {
+    use std::io;
+    use std::io::Read;
+
+    super::super::build_fn_read_api!(
+        /// Returns whether data from reader is Microsoft Word Open XML Format Document (DOCX) data.
+        (is_docx, super::is_docx, 6000),
+        /// Returns whether data from reader is Microsoft Excel 97-2003 Worksheet (XLS) data.
+        (is_xls, super::is_xls, 6000),
+        /// Returns whether data from reader is Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
+        (is_xlsx, super::is_xlsx, 6000),
+        /// Returns whether data from reader is Microsoft PowerPoint 97-2003 Presentation (PPT) data.
+        (is_ppt, super::is_ppt, 6000),
+        /// Returns whether data from reader is Microsoft PowerPoint Open XML Presentation (PPTX) data.
+        (is_pptx, super::is_pptx, 6000),
+        /// Returns whether data from reader is Microsoft Word Document (DOC) data.
+        (is_doc, super::is_doc, 36)
+    );
+}

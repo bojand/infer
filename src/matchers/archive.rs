@@ -1,6 +1,3 @@
-use std::io;
-use std::io::Read;
-
 /// Returns whether a buffer is an ePub.
 pub fn is_epub(buf: &[u8]) -> bool {
     crate::book::is_epub(buf)
@@ -268,7 +265,7 @@ pub mod read {
         ///
         /// fn main() -> std::io::Result<()> {
         ///     let mut f = File::open("testdata/sample.db")?;
-        ///     let sqlite = infer::archive::is_sqlite_read(&mut f).unwrap();
+        ///     let sqlite = infer::archive::read::is_sqlite(&mut f).unwrap();
         ///     assert!(sqlite);
         ///     Ok(())
         /// }

@@ -120,14 +120,14 @@ matcher_map!(
         "application/epub+zip",
         "epub",
         matchers::book::is_epub,
-        Some(WrapReadMatcher(matchers::book::is_epub_read))
+        Some(WrapReadMatcher(matchers::book::read::is_epub))
     ),
     (
         MatcherType::Book,
         "application/x-mobipocket-ebook",
         "mobi",
         matchers::book::is_mobi,
-        Some(WrapReadMatcher(matchers::book::is_mobi_read))
+        Some(WrapReadMatcher(matchers::book::read::is_mobi))
     ),
     // Image
     (
@@ -135,77 +135,77 @@ matcher_map!(
         "image/jpeg",
         "jpg",
         matchers::image::is_jpeg,
-        Some(WrapReadMatcher(matchers::image::is_jpeg_read))
+        Some(WrapReadMatcher(matchers::image::read::is_jpeg))
     ),
     (
         MatcherType::Image,
         "image/jp2",
         "jp2",
         matchers::image::is_jpeg2000,
-        Some(WrapReadMatcher(matchers::image::is_jpeg2000_read))
+        Some(WrapReadMatcher(matchers::image::read::is_jpeg2000))
     ),
     (
         MatcherType::Image,
         "image/png",
         "png",
         matchers::image::is_png,
-        Some(WrapReadMatcher(matchers::image::is_png_read))
+        Some(WrapReadMatcher(matchers::image::read::is_png))
     ),
     (
         MatcherType::Image,
         "image/gif",
         "gif",
         matchers::image::is_gif,
-        Some(WrapReadMatcher(matchers::image::is_gif_read))
+        Some(WrapReadMatcher(matchers::image::read::is_gif))
     ),
     (
         MatcherType::Image,
         "image/webp",
         "webp",
         matchers::image::is_webp,
-        Some(WrapReadMatcher(matchers::image::is_webp_read))
+        Some(WrapReadMatcher(matchers::image::read::is_webp))
     ),
     (
         MatcherType::Image,
         "image/x-canon-cr2",
         "cr2",
         matchers::image::is_cr2,
-        Some(WrapReadMatcher(matchers::image::is_cr2_read))
+        Some(WrapReadMatcher(matchers::image::read::is_cr2))
     ),
     (
         MatcherType::Image,
         "image/tiff",
         "tif",
         matchers::image::is_tiff,
-        Some(WrapReadMatcher(matchers::image::is_tiff_read))
+        Some(WrapReadMatcher(matchers::image::read::is_tiff))
     ),
     (
         MatcherType::Image,
         "image/bmp",
         "bmp",
         matchers::image::is_bmp,
-        Some(WrapReadMatcher(matchers::image::is_bmp_read))
+        Some(WrapReadMatcher(matchers::image::read::is_bmp))
     ),
     (
         MatcherType::Image,
         "image/vnd.ms-photo",
         "jxr",
         matchers::image::is_jxr,
-        Some(WrapReadMatcher(matchers::image::is_jxr_read))
+        Some(WrapReadMatcher(matchers::image::read::is_jxr))
     ),
     (
         MatcherType::Image,
         "image/vnd.adobe.photoshop",
         "psd",
         matchers::image::is_psd,
-        Some(WrapReadMatcher(matchers::image::is_psd_read))
+        Some(WrapReadMatcher(matchers::image::read::is_psd))
     ),
     (
         MatcherType::Image,
         "image/vnd.microsoft.icon",
         "ico",
         matchers::image::is_ico,
-        Some(WrapReadMatcher(matchers::image::is_ico_read))
+        Some(WrapReadMatcher(matchers::image::read::is_ico))
     ),
     (
         MatcherType::Image,
@@ -227,63 +227,63 @@ matcher_map!(
         "video/mp4",
         "mp4",
         matchers::video::is_mp4,
-        Some(WrapReadMatcher(matchers::video::is_mp4_read))
+        Some(WrapReadMatcher(matchers::video::read::is_mp4))
     ),
     (
         MatcherType::Video,
         "video/x-m4v",
         "m4v",
         matchers::video::is_m4v,
-        Some(WrapReadMatcher(matchers::video::is_m4v_read))
+        Some(WrapReadMatcher(matchers::video::read::is_m4v))
     ),
     (
         MatcherType::Video,
         "video/x-matroska",
         "mkv",
         matchers::video::is_mkv,
-        Some(WrapReadMatcher(matchers::video::is_mkv_read))
+        Some(WrapReadMatcher(matchers::video::read::is_mkv))
     ),
     (
         MatcherType::Video,
         "video/webm",
         "webm",
         matchers::video::is_webm,
-        Some(WrapReadMatcher(matchers::video::is_webm_read))
+        Some(WrapReadMatcher(matchers::video::read::is_webm))
     ),
     (
         MatcherType::Video,
         "video/quicktime",
         "mov",
         matchers::video::is_mov,
-        Some(WrapReadMatcher(matchers::video::is_mov_read))
+        Some(WrapReadMatcher(matchers::video::read::is_mov))
     ),
     (
         MatcherType::Video,
         "video/x-msvideo",
         "avi",
         matchers::video::is_avi,
-        Some(WrapReadMatcher(matchers::video::is_avi_read))
+        Some(WrapReadMatcher(matchers::video::read::is_avi))
     ),
     (
         MatcherType::Video,
         "video/x-ms-wmv",
         "wmv",
         matchers::video::is_wmv,
-        Some(WrapReadMatcher(matchers::video::is_wmv_read))
+        Some(WrapReadMatcher(matchers::video::read::is_wmv))
     ),
     (
         MatcherType::Video,
         "video/mpeg",
         "mpg",
         matchers::video::is_mpeg,
-        Some(WrapReadMatcher(matchers::video::is_mpeg_read))
+        Some(WrapReadMatcher(matchers::video::read::is_mpeg))
     ),
     (
         MatcherType::Video,
         "video/x-flv",
         "flv",
         matchers::video::is_flv,
-        Some(WrapReadMatcher(matchers::video::is_flv_read))
+        Some(WrapReadMatcher(matchers::video::read::is_flv))
     ),
     // Audio
     (
@@ -291,77 +291,77 @@ matcher_map!(
         "audio/midi",
         "midi",
         matchers::audio::is_midi,
-        Some(WrapReadMatcher(matchers::audio::is_midi_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_midi))
     ),
     (
         MatcherType::Audio,
         "audio/mpeg",
         "mp3",
         matchers::audio::is_mp3,
-        Some(WrapReadMatcher(matchers::audio::is_mp3_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_mp3))
     ),
     (
         MatcherType::Audio,
         "audio/m4a",
         "m4a",
         matchers::audio::is_m4a,
-        Some(WrapReadMatcher(matchers::audio::is_m4a_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_m4a))
     ),
     (
         MatcherType::Audio,
         "audio/ogg",
         "ogg",
         matchers::audio::is_ogg,
-        Some(WrapReadMatcher(matchers::audio::is_ogg_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_ogg))
     ),
     (
         MatcherType::Audio,
         "audio/x-flac",
         "flac",
         matchers::audio::is_flac,
-        Some(WrapReadMatcher(matchers::audio::is_flac_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_flac))
     ),
     (
         MatcherType::Audio,
         "audio/x-wav",
         "wav",
         matchers::audio::is_wav,
-        Some(WrapReadMatcher(matchers::audio::is_wav_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_wav))
     ),
     (
         MatcherType::Audio,
         "audio/amr",
         "amr",
         matchers::audio::is_amr,
-        Some(WrapReadMatcher(matchers::audio::is_amr_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_amr))
     ),
     (
         MatcherType::Audio,
         "audio/aac",
         "aac",
         matchers::audio::is_aac,
-        Some(WrapReadMatcher(matchers::audio::is_aac_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_aac))
     ),
     (
         MatcherType::Audio,
         "audio/x-aiff",
         "aiff",
         matchers::audio::is_aiff,
-        Some(WrapReadMatcher(matchers::audio::is_aiff_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_aiff))
     ),
     (
         MatcherType::Audio,
         "audio/x-dsf",
         "dsf",
         matchers::audio::is_dsf,
-        Some(WrapReadMatcher(matchers::audio::is_dsf_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_dsf))
     ),
     (
         MatcherType::Audio,
         "audio/x-ape",
         "ape",
         matchers::audio::is_ape,
-        Some(WrapReadMatcher(matchers::audio::is_ape_read))
+        Some(WrapReadMatcher(matchers::audio::read::is_ape))
     ),
     // Font
     (
@@ -398,42 +398,42 @@ matcher_map!(
         "application/msword",
         "doc",
         matchers::doc::is_doc,
-        Some(WrapReadMatcher(matchers::doc::is_doc_read))
+        Some(WrapReadMatcher(matchers::doc::read::is_doc))
     ),
     (
         MatcherType::Doc,
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "docx",
         matchers::doc::is_docx,
-        Some(WrapReadMatcher(matchers::doc::is_docx_read))
+        Some(WrapReadMatcher(matchers::doc::read::is_docx))
     ),
     (
         MatcherType::Doc,
         "application/vnd.ms-excel",
         "xls",
         matchers::doc::is_xls,
-        Some(WrapReadMatcher(matchers::doc::is_xls_read))
+        Some(WrapReadMatcher(matchers::doc::read::is_xls))
     ),
     (
         MatcherType::Doc,
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "xlsx",
         matchers::doc::is_xlsx,
-        Some(WrapReadMatcher(matchers::doc::is_xlsx_read))
+        Some(WrapReadMatcher(matchers::doc::read::is_xlsx))
     ),
     (
         MatcherType::Doc,
         "application/vnd.ms-powerpoint",
         "ppt",
         matchers::doc::is_ppt,
-        Some(WrapReadMatcher(matchers::doc::is_ppt_read))
+        Some(WrapReadMatcher(matchers::doc::read::is_ppt))
     ),
     (
         MatcherType::Doc,
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
         "pptx",
         matchers::doc::is_pptx,
-        Some(WrapReadMatcher(matchers::doc::is_pptx_read))
+        Some(WrapReadMatcher(matchers::doc::read::is_pptx))
     ),
     // OpenDocument
     (
@@ -441,21 +441,21 @@ matcher_map!(
         "application/vnd.oasis.opendocument.text",
         "odt",
         matchers::odf::is_odt,
-        Some(WrapReadMatcher(matchers::odf::is_odt_read))
+        Some(WrapReadMatcher(matchers::odf::read::is_odt))
     ),
     (
         MatcherType::Doc,
         "application/vnd.oasis.opendocument.spreadsheet",
         "ods",
         matchers::odf::is_ods,
-        Some(WrapReadMatcher(matchers::odf::is_ods_read))
+        Some(WrapReadMatcher(matchers::odf::read::is_ods))
     ),
     (
         MatcherType::Doc,
         "application/vnd.oasis.opendocument.presentation",
         "odp",
         matchers::odf::is_odp,
-        Some(WrapReadMatcher(matchers::odf::is_odp_read))
+        Some(WrapReadMatcher(matchers::odf::read::is_odp))
     ),
     // Archive
     (
@@ -639,20 +639,20 @@ matcher_map!(
         "text/html",
         "html",
         matchers::text::is_html,
-        Some(WrapReadMatcher(matchers::text::is_html_read))
+        Some(WrapReadMatcher(matchers::text::read::is_html))
     ),
     (
         MatcherType::Text,
         "text/xml",
         "xml",
         matchers::text::is_xml,
-        Some(WrapReadMatcher(matchers::text::is_xml_read))
+        Some(WrapReadMatcher(matchers::text::read::is_xml))
     ),
     (
         MatcherType::Text,
         "text/x-shellscript",
         "sh",
         matchers::text::is_shellscript,
-        Some(WrapReadMatcher(matchers::text::is_shellscript_read))
+        Some(WrapReadMatcher(matchers::text::read::is_shellscript))
     )
 );

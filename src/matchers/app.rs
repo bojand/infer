@@ -142,7 +142,7 @@ pub mod read {
         ///
         /// fn main() -> std::io::Result<()> {
         ///     let mut f = File::open("testdata/sample.wasm")?;
-        ///     let wasm = infer::app::is_wasm_read(&mut f).unwrap();
+        ///     let wasm = infer::app::read::is_wasm(&mut f).unwrap();
         ///     assert!(wasm);
         ///     Ok(())
         /// }
@@ -160,7 +160,7 @@ pub mod read {
         ///
         /// fn main() -> std::io::Result<()> {
         ///     let mut f = File::open("testdata/sample.exe")?;
-        ///     let exe = infer::app::is_exe_read(&mut f).unwrap();
+        ///     let exe = infer::app::read::is_exe(&mut f).unwrap();
         ///     assert!(exe);
         ///     Ok(())
         /// }
