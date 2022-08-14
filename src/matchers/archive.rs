@@ -220,70 +220,75 @@ pub fn is_msi(buf: &[u8]) -> bool {
         && buf[7] == 0xE1
 }
 
-super::build_fn_read_api!(
-    /// Returns whether data from reader is an ePub.
-    (is_epub_read, is_epub, 58),
-    /// Returns whether data from reader is a zip archive.
-    (is_zip_read, is_zip, 4),
-    /// Returns whether data from reader is a tar archive.
-    (is_tar_read, is_tar, 262),
-    /// Returns whether data from reader is a RAR archive.
-    (is_rar_read, is_rar, 7),
-    /// Returns whether data from reader is a gzip archive.
-    (is_gz_read, is_gz, 3),
-    /// Returns whether data from reader is a gzip archive.
-    (is_bz2_read, is_bz2, 3),
-    /// Returns whether data from reader a 7z archive.
-    (is_7z_read, is_7z, 6),
-    /// Returns whether data from reader a PDF.
-    (is_pdf_read, is_pdf, 4),
-    /// Returns whether data from reader is a PDF.
-    (is_swf_read, is_swf, 3),
-    /// Returns whether data from reader is an RTF.
-    (is_rtf_read, is_rtf, 5),
-    /// Returns whether data from reader is a Nintendo NES ROM.
-    (is_nes_read, is_nes, 4),
-    /// Returns whether data from reader is is Google Chrome Extension.
-    (is_crx_read, is_crx, 4),
-    /// Returns whether data from reader is a CAB.
-    (is_cab_read, is_cab, 4),
-    /// Returns whether data from reader is an eot octet stream.
-    (is_eot_read, is_eot, 36),
-    /// Returns whether data from reader is postscript.
-    (is_ps_read, is_ps, 2),
-    /// Returns whether data from reader is xz archive.
-    (is_xz_read, is_xz, 6),
-    /// Returns whether data from reader is xz archive.
-    ///
-    /// # Examples
-    ///
-    /// ```rust
-    /// use std::fs;
-    /// use std::io::prelude::*;
-    /// use std::fs::File;
-    ///
-    /// fn main() -> std::io::Result<()> {
-    ///     let mut f = File::open("testdata/sample.db")?;
-    ///     let sqlite = infer::archive::is_sqlite_read(&mut f).unwrap();
-    ///     assert!(sqlite);
-    ///     Ok(())
-    /// }
-    /// ```
-    (is_sqlite_read, is_sqlite, 4),
-    /// Returns whether data from reader is a deb archive.
-    (is_deb_read, is_deb, 21),
-    /// Returns whether data from reader is an ar archive.
-    (is_ar_read, is_ar, 7),
-    /// Returns whether data from reader is an z archive.
-    (is_z_read, is_z, 2),
-    /// Returns whether data from reader is a lzip archive.
-    (is_lz_read, is_lz, 4),
-    /// Returns whether data from reader is an RPM.
-    (is_rpm_read, is_rpm, 97),
-    /// Returns whether data from reader is a dcm archive.
-    (is_dcm_read, is_dcm, 132),
-    /// Returns whether data from reader is a Zstd archive.
-    (is_zst_read, is_zst, 4),
-    /// Returns whether data from reader is a Zstd archive.
-    (is_msi_read, is_msi, 8)
-);
+pub mod read {
+    use std::io;
+    use std::io::Read;
+
+    super::super::build_fn_read_api!(
+        /// Returns whether data from reader is an ePub.
+        (is_epub, super::is_epub, 58),
+        /// Returns whether data from reader is a zip archive.
+        (is_zip, super::is_zip, 4),
+        /// Returns whether data from reader is a tar archive.
+        (is_tar, super::is_tar, 262),
+        /// Returns whether data from reader is a RAR archive.
+        (is_rar, super::is_rar, 7),
+        /// Returns whether data from reader is a gzip archive.
+        (is_gz, super::is_gz, 3),
+        /// Returns whether data from reader is a gzip archive.
+        (is_bz2, super::is_bz2, 3),
+        /// Returns whether data from reader a 7z archive.
+        (is_7z, super::is_7z, 6),
+        /// Returns whether data from reader a PDF.
+        (is_pdf, super::is_pdf, 4),
+        /// Returns whether data from reader is a PDF.
+        (is_swf, super::is_swf, 3),
+        /// Returns whether data from reader is an RTF.
+        (is_rtf, super::is_rtf, 5),
+        /// Returns whether data from reader is a Nintendo NES ROM.
+        (is_nes, super::is_nes, 4),
+        /// Returns whether data from reader is is Google Chrome Extension.
+        (is_crx, super::is_crx, 4),
+        /// Returns whether data from reader is a CAB.
+        (is_cab, super::is_cab, 4),
+        /// Returns whether data from reader is an eot octet stream.
+        (is_eot, super::is_eot, 36),
+        /// Returns whether data from reader is postscript.
+        (is_ps, super::is_ps, 2),
+        /// Returns whether data from reader is xz archive.
+        (is_xz, super::is_xz, 6),
+        /// Returns whether data from reader is xz archive.
+        ///
+        /// # Examples
+        ///
+        /// ```rust
+        /// use std::fs;
+        /// use std::io::prelude::*;
+        /// use std::fs::File;
+        ///
+        /// fn main() -> std::io::Result<()> {
+        ///     let mut f = File::open("testdata/sample.db")?;
+        ///     let sqlite = infer::archive::is_sqlite_read(&mut f).unwrap();
+        ///     assert!(sqlite);
+        ///     Ok(())
+        /// }
+        /// ```
+        (is_sqlite, super::is_sqlite, 4),
+        /// Returns whether data from reader is a deb archive.
+        (is_deb, super::is_deb, 21),
+        /// Returns whether data from reader is an ar archive.
+        (is_ar, super::is_ar, 7),
+        /// Returns whether data from reader is an z archive.
+        (is_z, super::is_z, 2),
+        /// Returns whether data from reader is a lzip archive.
+        (is_lz, super::is_lz, 4),
+        /// Returns whether data from reader is an RPM.
+        (is_rpm, super::is_rpm, 97),
+        /// Returns whether data from reader is a dcm archive.
+        (is_dcm, super::is_dcm, 132),
+        /// Returns whether data from reader is a Zstd archive.
+        (is_zst, super::is_zst, 4),
+        /// Returns whether data from reader is a Zstd archive.
+        (is_msi, super::is_msi, 8)
+    );
+}

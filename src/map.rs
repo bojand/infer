@@ -463,175 +463,175 @@ matcher_map!(
         "application/epub+zip",
         "epub",
         matchers::archive::is_epub,
-        Some(WrapReadMatcher(matchers::archive::is_epub_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_epub))
     ),
     (
         MatcherType::Archive,
         "application/zip",
         "zip",
         matchers::archive::is_zip,
-        Some(WrapReadMatcher(matchers::archive::is_zip_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_zip))
     ),
     (
         MatcherType::Archive,
         "application/x-tar",
         "tar",
         matchers::archive::is_tar,
-        Some(WrapReadMatcher(matchers::archive::is_tar_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_tar))
     ),
     (
         MatcherType::Archive,
         "application/vnd.rar",
         "rar",
         matchers::archive::is_rar,
-        Some(WrapReadMatcher(matchers::archive::is_rar_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_rar))
     ),
     (
         MatcherType::Archive,
         "application/gzip",
         "gz",
         matchers::archive::is_gz,
-        Some(WrapReadMatcher(matchers::archive::is_gz_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_gz))
     ),
     (
         MatcherType::Archive,
         "application/x-bzip2",
         "bz2",
         matchers::archive::is_bz2,
-        Some(WrapReadMatcher(matchers::archive::is_bz2_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_bz2))
     ),
     (
         MatcherType::Archive,
         "application/x-7z-compressed",
         "7z",
         matchers::archive::is_7z,
-        Some(WrapReadMatcher(matchers::archive::is_7z_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_7z))
     ),
     (
         MatcherType::Archive,
         "application/x-xz",
         "xz",
         matchers::archive::is_xz,
-        Some(WrapReadMatcher(matchers::archive::is_xz_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_xz))
     ),
     (
         MatcherType::Archive,
         "application/pdf",
         "pdf",
         matchers::archive::is_pdf,
-        Some(WrapReadMatcher(matchers::archive::is_pdf_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_pdf))
     ),
     (
         MatcherType::Archive,
         "application/x-shockwave-flash",
         "swf",
         matchers::archive::is_swf,
-        Some(WrapReadMatcher(matchers::archive::is_swf_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_swf))
     ),
     (
         MatcherType::Archive,
         "application/rtf",
         "rtf",
         matchers::archive::is_rtf,
-        Some(WrapReadMatcher(matchers::archive::is_rtf_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_rtf))
     ),
     (
         MatcherType::Archive,
         "application/octet-stream",
         "eot",
         matchers::archive::is_eot,
-        Some(WrapReadMatcher(matchers::archive::is_eot_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_eot))
     ),
     (
         MatcherType::Archive,
         "application/postscript",
         "ps",
         matchers::archive::is_ps,
-        Some(WrapReadMatcher(matchers::archive::is_ps_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_ps))
     ),
     (
         MatcherType::Archive,
         "application/vnd.sqlite3",
         "sqlite",
         matchers::archive::is_sqlite,
-        Some(WrapReadMatcher(matchers::archive::is_sqlite_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_sqlite))
     ),
     (
         MatcherType::Archive,
         "application/x-nintendo-nes-rom",
         "nes",
         matchers::archive::is_nes,
-        Some(WrapReadMatcher(matchers::archive::is_nes_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_nes))
     ),
     (
         MatcherType::Archive,
         "application/x-google-chrome-extension",
         "crx",
         matchers::archive::is_crx,
-        Some(WrapReadMatcher(matchers::archive::is_crx_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_crx))
     ),
     (
         MatcherType::Archive,
         "application/vnd.ms-cab-compressed",
         "cab",
         matchers::archive::is_cab,
-        Some(WrapReadMatcher(matchers::archive::is_cab_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_cab))
     ),
     (
         MatcherType::Archive,
         "application/vnd.debian.binary-package",
         "deb",
         matchers::archive::is_deb,
-        Some(WrapReadMatcher(matchers::archive::is_deb_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_deb))
     ),
     (
         MatcherType::Archive,
         "application/x-unix-archive",
         "ar",
         matchers::archive::is_ar,
-        Some(WrapReadMatcher(matchers::archive::is_ar_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_ar))
     ),
     (
         MatcherType::Archive,
         "application/x-compress",
         "Z",
         matchers::archive::is_z,
-        Some(WrapReadMatcher(matchers::archive::is_z_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_z))
     ),
     (
         MatcherType::Archive,
         "application/x-lzip",
         "lz",
         matchers::archive::is_lz,
-        Some(WrapReadMatcher(matchers::archive::is_lz_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_lz))
     ),
     (
         MatcherType::Archive,
         "application/x-rpm",
         "rpm",
         matchers::archive::is_rpm,
-        Some(WrapReadMatcher(matchers::archive::is_rpm_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_rpm))
     ),
     (
         MatcherType::Archive,
         "application/dicom",
         "dcm",
         matchers::archive::is_dcm,
-        Some(WrapReadMatcher(matchers::archive::is_dcm_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_dcm))
     ),
     (
         MatcherType::Archive,
         "application/zstd",
         "zst",
         matchers::archive::is_zst,
-        Some(WrapReadMatcher(matchers::archive::is_zst_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_zst))
     ),
     (
         MatcherType::Archive,
         "application/x-ole-storage",
         "msi",
         matchers::archive::is_msi,
-        Some(WrapReadMatcher(matchers::archive::is_msi_read))
+        Some(WrapReadMatcher(matchers::archive::read::is_msi))
     ),
     // Text
     (
