@@ -642,11 +642,11 @@ matcher_map!(
         Some(WrapReadMatcher(matchers::text::is_html_read))
     ),
     (
-        MatcherType::Text, 
+        MatcherType::Text,
         "text/xml",
-         "xml", 
-         matchers::text::is_xml,
-         Some(WrapReadMatcher(matchers::text::is_xml_read))
+        "xml",
+        matchers::text::is_xml,
+        Some(WrapReadMatcher(matchers::text::is_xml_read))
     ),
     (
         MatcherType::Text,

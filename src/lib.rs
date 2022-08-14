@@ -50,14 +50,16 @@ Here we actually need to use the `Infer` struct to be able to declare custom mat
 ```rust
 # #[cfg(feature = "alloc")]
 # fn run() {
+use std::io::{Result, Read};
+
 fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
 }
 
-fn custom_matcher_read(r: &mut dyn std::io::Read) -> std::io::Result<(usize, bool)> {
+fn custom_matcher_read(r: &mut dyn Read) -> Result<bool> {
     let mut buffer = [0; 4];
-    let n = r.read(&mut buffer[..])?;
-    Ok((n, custom_matcher(&buffer)))
+    r.read_exact(&mut buffer[..])?;
+    Ok(custom_matcher(&buffer))
 }
 
 let mut info = infer::Infer::new();
@@ -70,10 +72,8 @@ assert_eq!(kind.mime_type(), "custom/foo");
 assert_eq!(kind.extension(), "foo");
 
 let mut f = std::io::Cursor::new(buf);
-let (n , kind_result) = info.get_read(&mut f).unwrap();
-kind = kind_result.expect("file type is known");
+kind = info.get_read(&mut f).unwrap().expect("file type is known");
 
-assert_eq!(4, n);
 assert_eq!(kind.mime_type(), "custom/foo");
 assert_eq!(kind.extension(), "foo");
 # }
@@ -110,7 +110,7 @@ pub use matchers::*;
 
 /// Matcher function
 pub type Matcher = fn(&[u8]) -> bool;
-pub type ReadMatcher = fn(&mut dyn Read) -> io::Result<(usize, bool)>;
+pub type ReadMatcher = fn(&mut dyn Read) -> io::Result<bool>;
 
 /// Generic information for a type
 #[derive(Copy, Clone)]
@@ -136,7 +136,7 @@ impl Type {
             mime_type,
             extension,
             matcher,
-            read_matcher: read_matcher,
+            read_matcher,
             read_size: None,
         }
     }
@@ -149,17 +149,12 @@ impl Type {
         matcher: Matcher,
         read_matcher: Option<ReadMatcher>,
     ) -> Self {
-        let wrapped_read_matcher = match read_matcher {
-            Some(rm) => Some(WrapReadMatcher(rm)),
-            None => None,
-        };
-
         Self::new_static(
             matcher_type,
             mime_type,
             extension,
             WrapMatcher(matcher),
-            wrapped_read_matcher,
+            read_matcher.map(WrapReadMatcher),
         )
     }
 
@@ -194,10 +189,10 @@ impl Type {
     }
 
     /// Checks if reader matches this Type
-    fn matches_read(&self, r: &mut impl Read) -> io::Result<(usize, bool)> {
+    fn matches_read(&self, r: &mut impl Read) -> io::Result<bool> {
         match self.read_matcher {
             Some(m) => m.0(r),
-            None => Ok((0, false)),
+            None => Ok(false),
         }
     }
 
@@ -294,36 +289,30 @@ impl Infer {
     /// fn main() -> std::io::Result<()> {
     ///     let info = infer::Infer::new();
     ///     let mut f = File::open("testdata/sample.jpg")?;
-    ///     let (n, kind_result) = info.get_read(&mut f).unwrap();
-    ///     let kind = kind_result.expect("file type is known");
+    ///     let kind = info.get_read(&mut f).unwrap().expect("file type is known");
     ///     assert_eq!(kind.mime_type(), "image/jpeg");
     ///     assert_eq!(kind.extension(), "jpg");
-    ///     assert_eq!(n, 3);
     ///     Ok(())
     /// }
     /// ```
-    pub fn get_read<R>(&self, r: &mut R) -> io::Result<(usize, Option<Type>)>
+    pub fn get_read<R>(&self, r: &mut R) -> io::Result<Option<Type>>
     where
         R: Read + Seek,
     {
-        let mut bytes_read: usize = 0;
         let mut res_value: Option<Type> = None;
 
         for kind in self.iter_matchers() {
             if res_value.is_none() {
                 let match_res = kind.matches_read(r)?;
-                // println!("{:?} {:?}", match_res, kind);
-                bytes_read = match_res.0;
-                if match_res.1 {
-                    res_value = Some(kind.clone());
-                    break;
+                if match_res {
+                    res_value = Some(*kind);
                 }
 
                 r.rewind().ok();
             }
         }
 
-        Ok((bytes_read, res_value))
+        Ok(res_value)
     }
 
     /// Returns the file type of the file given a path.
@@ -528,17 +517,12 @@ impl Infer {
         m: Matcher,
         rm: Option<ReadMatcher>,
     ) {
-        let wrapped_read_matcher = match rm {
-            Some(readm) => Some(WrapReadMatcher(readm)),
-            None => None,
-        };
-
         self.mmap.push(Type::new_static(
             MatcherType::Custom,
             mime_type,
             extension,
             WrapMatcher(m),
-            wrapped_read_matcher,
+            rm.map(WrapReadMatcher),
         ));
     }
 
@@ -582,15 +566,13 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 ///
 /// fn main() -> std::io::Result<()> {
 ///     let mut f = File::open("testdata/sample.jpg")?;
-///     let (n, kind_result) = infer::get_read(&mut f).unwrap();
-///     let kind = kind_result.expect("file type is known");
+///     let kind = infer::get_read(&mut f).unwrap().expect("file type is known");
 ///     assert_eq!(kind.mime_type(), "image/jpeg");
 ///     assert_eq!(kind.extension(), "jpg");
-///     assert_eq!(n, 3);
 ///     Ok(())
 /// }
 /// ```
-pub fn get_read<R>(r: &mut R) -> io::Result<(usize, Option<Type>)>
+pub fn get_read<R>(r: &mut R) -> io::Result<Option<Type>>
 where
     R: Read + Seek,
 {
@@ -829,10 +811,10 @@ mod tests {
             buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47
         }
 
-        fn bar_matcher_read(r: &mut dyn Read) -> io::Result<(usize, bool)> {
+        fn bar_matcher_read(r: &mut dyn Read) -> io::Result<bool> {
             let mut buffer = [0; 4];
-            let n = r.read(&mut buffer[..])?;
-            Ok((n, bar_matcher(&buffer)))
+            r.read_exact(&mut buffer[..])?;
+            Ok(bar_matcher(&buffer))
         }
 
         let mut info = Infer::new();
@@ -850,10 +832,8 @@ mod tests {
         assert_eq!(typ.extension(), "bar");
 
         let mut f = Cursor::new(buf_bar);
-        let (n , kind_result) = info.get_read(&mut f).unwrap();
-        let kind = kind_result.expect("file type is known");
+        let kind = info.get_read(&mut f).unwrap().expect("type is matched");
 
-        assert_eq!(4, n);
         assert_eq!(kind.mime_type(), "custom/bar");
         assert_eq!(kind.extension(), "bar");
     }
@@ -865,8 +845,7 @@ mod tests {
             assert!(fr.is_err(), "{:?}", fr.unwrap_err());
         }
         let mut f = fr.unwrap();
-        let (rsz, result) = crate::app::is_wasm_read(&mut f).unwrap();
-        assert!(rsz > 0);
+        let result = crate::app::is_wasm_read(&mut f).unwrap();
         assert!(result);
     }
 }

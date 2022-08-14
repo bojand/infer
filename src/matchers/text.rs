@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::io;
+use std::io::Read;
 
 /// Returns whether a buffer is html data.
 ///
@@ -106,10 +106,8 @@ mod tests {
 super::build_fn_read_api!(
     /// Returns whether data from reader is html data.
     (is_html_read, is_html, 16),
-
     /// Returns whether data from reader is xml data.
     (is_xml_read, is_xml, 16),
-
     /// Returns whether data from reader is a shell script.
     (is_shellscript_read, is_shellscript, 3)
 );

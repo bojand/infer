@@ -143,28 +143,20 @@ pub fn is_mp4(buf: &[u8]) -> bool {
 super::build_fn_read_api!(
     /// Returns whether data from reader is M4V video data.
     (is_m4v_read, is_m4v, 11),
-
     /// Returns whether data from reader is MKV video data.
     (is_mkv_read, is_mkv, 39),
-
     /// Returns whether data from reader is WEBM video data.
     (is_webm_read, is_webm, 4),
-
     /// Returns whether data from reader is Quicktime MOV video data.
     (is_mov_read, is_mov, 16),
-
     /// Returns whether data from reader is AVI video data.
     (is_avi_read, is_avi, 11),
-
     /// Returns whether data from reader is WMV video data.
     (is_wmv_read, is_wmv, 11),
-
     /// Returns whether data from reader is MPEG video data.
     (is_mpeg_read, is_mpeg, 4),
-
     /// Returns whether data from reader is FLV video data.
     (is_flv_read, is_flv, 4),
-
     /// Returns whether data from reader is MP4 video data.
     (is_mp4_read, is_mp4, 12)
 );

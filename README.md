@@ -94,10 +94,10 @@ fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
 }
 
-fn custom_matcher_read(r: &mut dyn Read) -> Result<(usize, bool)> {
+fn custom_matcher_read(r: &mut dyn Read) -> Result<bool> {
     let mut buffer = [0; 4];
-    let n = r.read(&mut buffer[..])?;
-    Ok((n, custom_matcher(&buffer)))
+    r.read_exact(&mut buffer[..])?;
+    Ok(custom_matcher(&buffer))
 }
 
 let mut info = infer::Infer::new();
@@ -110,10 +110,8 @@ assert_eq!(kind.mime_type(), "custom/foo");
 assert_eq!(kind.extension(), "foo");
 
 let mut f = Cursor::new(buf);
-let (n , kind_result) = info.get_read(&mut f).unwrap();
-kind = kind_result.expect("file type is known");
+kind = info.get_read(&mut f).unwrap().expect("file type is known");
 
-assert_eq!(4, n);
 assert_eq!(kind.mime_type(), "custom/foo");
 assert_eq!(kind.extension(), "foo");
 

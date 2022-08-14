@@ -50,13 +50,10 @@ pub fn is_otf(buf: &[u8]) -> bool {
 super::build_fn_read_api!(
     /// Returns whether data from reader is WOFF font data.
     (is_woff_read, is_woff, 8),
-    
     /// Returns whether data from reader is WOFF2 font data.
     (is_woff2_read, is_woff2, 8),
-
     /// Returns whether data from reader is TTF font data.
     (is_ttf_read, is_ttf, 5),
-    
     /// Returns whether data from reader is OTF font data.
     (is_otf_read, is_otf, 5)
 );

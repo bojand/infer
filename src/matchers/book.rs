@@ -56,7 +56,6 @@ pub fn is_mobi(buf: &[u8]) -> bool {
 super::build_fn_read_api!(
     /// Returns whether data from reader is an ePub.
     (is_epub_read, is_epub, 58),
-    
     /// Returns whether data from reader is a mobi.
     (is_mobi_read, is_mobi, 68)
 );

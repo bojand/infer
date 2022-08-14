@@ -8,8 +8,8 @@ macro_rules! test_format {
                 false
             }
 
-            fn matcher_read(_r: &mut dyn std::io::Read) -> std::io::Result<(usize, bool)> {
-                Ok((0, false))
+            fn matcher_read(_r: &mut dyn std::io::Read) -> std::io::Result<bool> {
+                Ok(false)
             }
 
             #[cfg(feature = "std")]
@@ -55,16 +55,11 @@ macro_rules! test_format {
                 );
 
                 let mut f = std::fs::File::open(concat!("./testdata/", $file)).unwrap();
-
                 let tp = infer::get_type_by_extension($exp_ext).unwrap();
-                println!("!!! {:?}", tp);
-                let file_size = f.metadata().unwrap().len();
 
                 if tp.supports_read_match() {
-                    let (n, kind) = infer::get_read(&mut f).unwrap();
-                    assert!(n > 0);
-                    assert!((n as u64) < file_size);
-                    assert_eq!(expected_kind, kind.unwrap());
+                    let kind = infer::get_read(&mut f).unwrap().expect("test file matches");
+                    assert_eq!(expected_kind, kind);
                 }
             }
         }

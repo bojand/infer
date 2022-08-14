@@ -94,34 +94,24 @@ pub fn is_ape(buf: &[u8]) -> bool {
 super::build_fn_read_api!(
     /// Returns whether data from reader is MIDI data.
     (is_midi_read, is_midi, 4),
-    
     /// Returns whether data from reader is is MP3 data.
     (is_mp3_read, is_mp3, 3),
-
     /// Returns whether data from reader is M4A data.
     (is_m4a_read, is_m4a, 11),
-
     /// Returns whether data from reader is OGG data.
     (is_ogg_read, is_ogg, 4),
-
     /// Returns whether data from reader is FLAC data.
     (is_flac_read, is_flac, 4),
-
     /// Returns whether data from reader is WAV data.
     (is_wav_read, is_wav, 12),
-
     /// Returns whether data from reader is AMR data.
     (is_amr_read, is_amr, 12),
-
     /// Returns whether data from reader is AAC data.
     (is_aac_read, is_aac, 2),
-
     /// Returns whether data from reader is AIFF data.
     (is_aiff_read, is_aiff, 12),
-
     /// Returns whether data from reader is DSF data.
     (is_dsf_read, is_dsf, 5),
-
     /// Returns whether data from reader is APE (Monkey's Audio) data.
     (is_ape_read, is_ape, 5)
 );

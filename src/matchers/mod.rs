@@ -37,10 +37,10 @@ macro_rules! build_fn_read_api
     ) => {
         $(
         $(#[$outer])*
-        pub fn $name(r: &mut dyn Read) -> io::Result<(usize, bool)> {
-            let mut buffer = [0; $sz];
-            let n = r.read(&mut buffer[..])?;
-            Ok((n, $impl_fn(&buffer)))
+        pub fn $name(r: &mut dyn Read) -> io::Result<bool> {
+            let mut buffer = Vec::with_capacity($sz);
+            r.take($sz).read_to_end(&mut buffer)?;
+            Ok($impl_fn(&buffer))
         }
     )   *
     };

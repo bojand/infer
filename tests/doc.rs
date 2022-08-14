@@ -10,8 +10,8 @@ macro_rules! test_format_get_only {
                 false
             }
 
-            fn matcher_read(_r: &mut dyn std::io::Read) -> std::io::Result<(usize, bool)> {
-                Ok((0, false))
+            fn matcher_read(_r: &mut dyn std::io::Read) -> std::io::Result<bool> {
+                Ok(false)
             }
 
             #[test]

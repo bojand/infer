@@ -1,6 +1,6 @@
+use core::convert::TryInto;
 use std::io;
 use std::io::Read;
-use core::convert::TryInto;
 
 /// Returns whether a buffer is JPEG image data.
 pub fn is_jpeg(buf: &[u8]) -> bool {
@@ -164,7 +164,7 @@ fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
 }
 
 super::build_fn_read_api!(
-    /// Returns whether a data from reader is a JPEG. 
+    /// Returns whether a data from reader is a JPEG.
     ///
     /// # Examples
     ///
@@ -172,44 +172,37 @@ super::build_fn_read_api!(
     /// use std::fs;
     /// use std::io::prelude::*;
     /// use std::fs::File;
-    /// 
+    ///
     /// fn main() -> std::io::Result<()> {
     ///     let mut f = File::open("testdata/sample.jpg")?;
-    ///     let (n, jpeg) = infer::image::is_jpeg_read(&mut f).unwrap();
-    ///     assert!(n == 3);
+    ///     let jpeg = infer::image::is_jpeg_read(&mut f).unwrap();
     ///     assert!(jpeg);
     ///     Ok(())
     /// }
     /// ```
     (is_jpeg_read, is_jpeg, 3),
-
-     /// Returns whether data from reader is jpg2 image data.
-     (is_jpeg2000_read, is_jpeg2000, 13),
-
-     /// Returns whether data from reader is PNG image data.
+    /// Returns whether data from reader is jpg2 image data.
+    (is_jpeg2000_read, is_jpeg2000, 13),
+    /// Returns whether data from reader is PNG image data.
     (is_png_read, is_png, 4),
-
     /// Returns whether data from reader is GIF image data.
     (is_gif_read, is_gif, 3),
-
     /// Returns whether data from reader is WEBP image data.
     (is_webp_read, is_webp, 12),
-
     /// Returns whether data from reader is Canon CR2 image data.
     (is_cr2_read, is_cr2, 11),
-
     /// Returns whether data from reader is TIFF image data.
     (is_tiff_read, is_tiff, 10),
-
     /// Returns whether data from reader is BMP image data.
     (is_bmp_read, is_bmp, 2),
-
     /// Returns whether data from reader is jxr image data.
     (is_jxr_read, is_jxr, 3),
-
     /// Returns whether data from reader is Photoshop PSD image data.
     (is_psd_read, is_psd, 4),
-
     /// Returns whether data from reader is ICO icon image data.
-    (is_ico_read, is_ico, 4)
+    (is_ico_read, is_ico, 4),
+    /// Returns whether data from reader is HEIF image data.
+    (is_heif_read, is_heif, 8192),
+    /// Returns whether data from reader is AVIF image data.
+    (is_avif_read, is_avif, 8192)
 );
