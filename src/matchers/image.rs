@@ -160,3 +160,9 @@ fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
 
     Some((major, minor, compatible))
 }
+
+/// Returns whether a buffer is SVG.
+pub fn is_svg(buf: &[u8]) -> bool {
+    // ref: https://stackoverflow.com/a/66975778
+    buf.len() > 4 && buf[0] == b'<' && buf[1] == b's' && buf[2] == b'v' && buf[3] == b'g'
+}
