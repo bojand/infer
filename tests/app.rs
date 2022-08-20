@@ -45,3 +45,5 @@ test_format!(
 test_format!(App, "application/wasm", "wasm", wasm, "sample.wasm");
 
 test_format!(App, "application/x-x509-ca-cert", "der", der, "sample.der");
+
+test_format!(App, "application/x-x509-ca-cert", "pem", pem, "sample.pem");
