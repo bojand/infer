@@ -8,6 +8,7 @@ macro_rules! test_format {
                 false
             }
 
+            #[cfg(feature = "std")]
             fn matcher_read(_r: &mut dyn std::io::Read) -> std::io::Result<bool> {
                 Ok(false)
             }
@@ -29,6 +30,7 @@ macro_rules! test_format {
                 assert_eq!(expected_kind, kind);
             }
 
+            #[cfg(feature = "std")]
             #[test]
             fn get() {
                 let expected_kind = Type::new(
@@ -36,14 +38,28 @@ macro_rules! test_format {
                     $exp_mimet,
                     $exp_ext,
                     matcher,
-                    Some(matcher_read),
+                    None,
                 );
+
                 let buf = include_bytes!(concat!("../testdata/", $file));
                 let kind = infer::get(buf).expect("test file matches");
 
                 assert_eq!(expected_kind, kind);
             }
 
+            #[cfg(not(feature = "std"))]
+            #[test]
+            fn get() {
+                let expected_kind =
+                    Type::new(MatcherType::$exp_matchert, $exp_mimet, $exp_ext, matcher);
+
+                let buf = include_bytes!(concat!("../testdata/", $file));
+                let kind = infer::get(buf).expect("test file matches");
+
+                assert_eq!(expected_kind, kind);
+            }
+
+            #[cfg(feature = "std")]
             #[test]
             fn get_read() {
                 let expected_kind = Type::new(

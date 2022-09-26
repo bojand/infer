@@ -1,6 +1,7 @@
 use core::convert::TryInto;
-use std::io;
-use std::io::Read;
+
+#[cfg(feature = "std")]
+use std::io::{self, Read};
 
 /// Returns whether a buffer is JPEG image data.
 pub fn is_jpeg(buf: &[u8]) -> bool {

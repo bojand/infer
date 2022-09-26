@@ -1,4 +1,7 @@
+#[cfg(feature = "std")]
 use super::{matchers, Matcher, ReadMatcher, Type};
+#[cfg(not(feature = "std"))]
+use super::{matchers, Matcher, Type};
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum MatcherType {
@@ -20,14 +23,20 @@ pub enum MatcherType {
 #[derive(Copy, Clone)]
 pub struct WrapMatcher(pub Matcher);
 
+#[cfg(feature = "std")]
 #[repr(transparent)]
 #[derive(Copy, Clone)]
 pub struct WrapReadMatcher(pub ReadMatcher);
 
 macro_rules! matcher_map {
     ($(($mtype:expr, $mime_type:literal, $extension:literal, $matcher:expr, $read_matcher:expr)),*) => {
+        #[cfg(feature = "std")]
         pub const MATCHER_MAP: &[Type] = &[
             $(Type::new_static($mtype, $mime_type, $extension, WrapMatcher($matcher), $read_matcher),)*
+        ];
+        #[cfg(not(feature = "std"))]
+        pub const MATCHER_MAP: &[Type] = &[
+            $(Type::new_static($mtype, $mime_type, $extension, WrapMatcher($matcher)),)*
         ];
     };
 }

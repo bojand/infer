@@ -37,6 +37,7 @@ macro_rules! build_fn_read_api
     ) => {
         $(
         $(#[$outer])*
+        #[cfg(feature = "std")]
         pub fn $name(r: &mut dyn Read) -> io::Result<bool> {
             let mut buffer = Vec::with_capacity($sz);
             r.take($sz).read_to_end(&mut buffer)?;

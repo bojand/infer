@@ -1,5 +1,5 @@
-use std::io;
-use std::io::Read;
+#[cfg(feature = "std")]
+use std::io::{self, Read};
 
 /// Returns whether a buffer is M4V video data.
 pub fn is_m4v(buf: &[u8]) -> bool {

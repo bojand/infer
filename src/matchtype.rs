@@ -1,16 +1,22 @@
-use std::io;
-use std::io::Read;
+#[cfg(feature = "std")]
+use std::io::{self, Read};
 
-#[cfg(feature = "alloc")]
+// #[cfg(feature = "alloc")]
 use core::fmt;
 
+#[cfg(not(feature = "std"))]
+use super::map::{MatcherType, WrapMatcher};
+#[cfg(feature = "std")]
 use super::map::{MatcherType, WrapMatcher, WrapReadMatcher};
 
 /// Matcher function
 pub type Matcher = fn(&[u8]) -> bool;
+
+#[cfg(feature = "std")]
 pub type ReadMatcher = fn(&mut dyn Read) -> io::Result<bool>;
 
 /// Generic information for a type
+#[cfg(feature = "std")]
 #[derive(Copy, Clone)]
 pub struct Type {
     matcher_type: MatcherType,
@@ -21,7 +27,18 @@ pub struct Type {
     read_size: Option<usize>,
 }
 
+/// Generic information for a type
+#[cfg(not(feature = "std"))]
+#[derive(Copy, Clone)]
+pub struct Type {
+    matcher_type: MatcherType,
+    mime_type: &'static str,
+    extension: &'static str,
+    matcher: WrapMatcher,
+}
+
 impl Type {
+    #[cfg(feature = "std")]
     pub(crate) const fn new_static(
         matcher_type: MatcherType,
         mime_type: &'static str,
@@ -39,7 +56,23 @@ impl Type {
         }
     }
 
+    #[cfg(not(feature = "std"))]
+    pub(crate) const fn new_static(
+        matcher_type: MatcherType,
+        mime_type: &'static str,
+        extension: &'static str,
+        matcher: WrapMatcher,
+    ) -> Self {
+        Self {
+            matcher_type,
+            mime_type,
+            extension,
+            matcher,
+        }
+    }
+
     /// Returns a new `Type` with matcher and extension.
+    #[cfg(feature = "std")]
     pub fn new(
         matcher_type: MatcherType,
         mime_type: &'static str,
@@ -54,6 +87,17 @@ impl Type {
             WrapMatcher(matcher),
             read_matcher.map(WrapReadMatcher),
         )
+    }
+
+    /// Returns a new `Type` with matcher and extension.
+    #[cfg(not(feature = "std"))]
+    pub fn new(
+        matcher_type: MatcherType,
+        mime_type: &'static str,
+        extension: &'static str,
+        matcher: Matcher,
+    ) -> Self {
+        Self::new_static(matcher_type, mime_type, extension, WrapMatcher(matcher))
     }
 
     /// Returns the type of matcher
@@ -87,6 +131,7 @@ impl Type {
     }
 
     /// Checks if reader matches this Type
+    #[cfg(feature = "std")]
     pub(crate) fn matches_read(&self, r: &mut impl Read) -> io::Result<bool> {
         match self.read_matcher {
             Some(m) => m.0(r),
@@ -95,11 +140,13 @@ impl Type {
     }
 
     /// Returns the file extension
+    #[cfg(feature = "std")]
     pub fn read_size(&self) -> usize {
         self.read_size.unwrap_or(0)
     }
 
     /// Returns whether the type supports matching by Read.
+    #[cfg(feature = "std")]
     pub fn supports_read_match(&self) -> bool {
         self.read_matcher.is_some()
     }
