@@ -1,6 +1,6 @@
 #[cfg(feature = "std")]
-use super::{matchers, Matcher, ReadMatcher, Type};
-#[cfg(not(feature = "std"))]
+use super::ReadMatcher;
+
 use super::{matchers, Matcher, Type};
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]

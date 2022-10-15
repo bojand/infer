@@ -1,13 +1,12 @@
 #[cfg(feature = "std")]
 use std::io::{self, Read};
 
-// #[cfg(feature = "alloc")]
 use core::fmt;
 
-#[cfg(not(feature = "std"))]
 use super::map::{MatcherType, WrapMatcher};
+
 #[cfg(feature = "std")]
-use super::map::{MatcherType, WrapMatcher, WrapReadMatcher};
+use super::map::WrapReadMatcher;
 
 /// Matcher function
 pub type Matcher = fn(&[u8]) -> bool;

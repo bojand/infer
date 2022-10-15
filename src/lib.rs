@@ -105,9 +105,8 @@ use std::path::Path;
 pub use map::MatcherType;
 
 #[cfg(feature = "std")]
-use map::{WrapMatcher, WrapReadMatcher, MATCHER_MAP};
+use map::{WrapMatcher, WrapReadMatcher};
 
-#[cfg(not(feature = "std"))]
 use map::MATCHER_MAP;
 
 /// All the supported matchers categorized and exposed as functions
