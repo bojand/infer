@@ -49,6 +49,7 @@ Here we actually need to use the `Infer` struct to be able to declare custom mat
 
 ```rust
 # #[cfg(feature = "alloc")]
+# #[cfg(feature = "std")]
 # fn run() {
 use std::io::{Result, Read};
 
@@ -96,14 +97,17 @@ mod matchtype;
 use alloc::vec::Vec;
 #[cfg(feature = "std")]
 use std::fs::File;
-use std::io::Seek;
 #[cfg(feature = "std")]
-use std::io::{self, Read};
+use std::io::{self, Read, Seek};
 #[cfg(feature = "std")]
 use std::path::Path;
 
 pub use map::MatcherType;
-use map::{WrapMatcher, WrapReadMatcher, MATCHER_MAP};
+
+#[cfg(feature = "std")]
+use map::{WrapMatcher, WrapReadMatcher};
+
+use map::MATCHER_MAP;
 
 /// All the supported matchers categorized and exposed as functions
 pub use matchers::*;
@@ -174,6 +178,7 @@ impl Infer {
     ///     Ok(())
     /// }
     /// ```
+    #[cfg(feature = "std")]
     pub fn get_read<R>(&self, r: &mut R) -> io::Result<Option<Type>>
     where
         R: Read + Seek,
@@ -227,6 +232,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_read`](./fn.is_read.html).
+    #[cfg(feature = "std")]
     pub fn is_read<R>(&self, r: &mut R, extension: &str) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -263,6 +269,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_mime_read`](./fn.is_mime_read.html).
+    #[cfg(feature = "std")]
     pub fn is_mime_read<R>(&self, r: &mut R, mime_type: &str) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -339,6 +346,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_app_read`](./fn.is_app_read.html).
+    #[cfg(feature = "std")]
     pub fn is_app_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -360,6 +368,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_archive_read`](./fn.is_archive_read.html).
+    #[cfg(feature = "std")]
     pub fn is_archive_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -381,6 +390,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_audio_read`](./fn.is_audio_read.html).
+    #[cfg(feature = "std")]
     pub fn is_audio_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -402,6 +412,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_book_read`](./fn.is_book_read.html).
+    #[cfg(feature = "std")]
     pub fn is_book_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -423,6 +434,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_document_read`](./fn.is_document_read.html).
+    #[cfg(feature = "std")]
     pub fn is_document_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -444,6 +456,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_font_read`](./fn.is_font_read.html).
+    #[cfg(feature = "std")]
     pub fn is_font_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -465,6 +478,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_image_read`](./fn.is_image_read.html).
+    #[cfg(feature = "std")]
     pub fn is_image_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -486,6 +500,7 @@ impl Infer {
     /// # Examples
     ///
     /// See [`is_video_read`](./fn.is_video_read.html).
+    #[cfg(feature = "std")]
     pub fn is_video_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -499,6 +514,7 @@ impl Infer {
     ///
     /// ```rust
     /// # #[cfg(feature = "alloc")]
+    /// # #[cfg(feature = "std")]
     /// # fn run() {
     /// fn custom_matcher(buf: &[u8]) -> bool {
     ///     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
@@ -515,6 +531,7 @@ impl Infer {
     }
 
     /// Determines whether data from reader is one of the custom types added.
+    #[cfg(feature = "std")]
     pub fn is_custom_read<R>(&self, r: &mut R) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -530,6 +547,9 @@ impl Infer {
     /// # Examples
     ///
     /// ```rust
+    /// # #[cfg(feature = "alloc")]
+    /// # #[cfg(feature = "std")]
+    /// # fn run() {
     /// fn custom_matcher(buf: &[u8]) -> bool {
     ///     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
     /// }
@@ -541,8 +561,10 @@ impl Infer {
     ///
     /// assert_eq!(kind.mime_type(), "custom/foo");
     /// assert_eq!(kind.extension(), "foo");
+    /// # }
     /// ```
     #[cfg(feature = "alloc")]
+    #[cfg(feature = "std")]
     pub fn add(
         &mut self,
         mime_type: &'static str,
@@ -564,6 +586,7 @@ impl Infer {
             .any(|kind| kind.matcher_type() == matcher_type && kind.matches(buf))
     }
 
+    #[cfg(feature = "std")]
     fn is_type_read<R>(&self, r: &mut R, matcher_type: MatcherType) -> io::Result<bool>
     where
         R: Read + Seek,
@@ -626,6 +649,7 @@ pub fn get(buf: &[u8]) -> Option<Type> {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn get_read<R>(r: &mut R) -> io::Result<Option<Type>>
 where
     R: Read + Seek,
@@ -682,6 +706,7 @@ pub fn is(buf: &[u8], extension: &str) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_read<R>(r: &mut R, extension: &str) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -716,6 +741,7 @@ pub fn is_mime(buf: &[u8], mime_type: &str) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_mime_read<R>(r: &mut R, mime_type: &str) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -772,6 +798,7 @@ pub fn is_app(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_app_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -804,6 +831,7 @@ pub fn is_archive(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_archive_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -839,6 +867,7 @@ pub fn is_audio(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_audio_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -873,6 +902,7 @@ pub fn is_book(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_book_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -907,6 +937,7 @@ pub fn is_document(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_document_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -941,6 +972,7 @@ pub fn is_font(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_font_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -975,6 +1007,7 @@ pub fn is_image(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_image_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -1009,6 +1042,7 @@ pub fn is_video(buf: &[u8]) -> bool {
 ///     Ok(())
 /// }
 /// ```
+#[cfg(feature = "std")]
 pub fn is_video_read<R>(r: &mut R) -> io::Result<bool>
 where
     R: Read + Seek,
@@ -1047,8 +1081,11 @@ pub fn get_type_by_extension(extension: &str) -> Option<Type> {
 #[cfg(test)]
 mod tests {
     #[cfg(feature = "alloc")]
+    #[cfg(feature = "std")]
     use super::Infer;
+    #[cfg(feature = "std")]
     use std::fs::File;
+    #[cfg(feature = "std")]
     use std::io::{self, Cursor, Read};
 
     #[test]
@@ -1073,6 +1110,7 @@ mod tests {
     }
 
     #[cfg(feature = "alloc")]
+    #[cfg(feature = "std")]
     #[test]
     fn test_custom_matcher_ordering() {
         // overrides jpeg matcher
@@ -1112,6 +1150,7 @@ mod tests {
         assert_eq!(kind.extension(), "bar");
     }
 
+    #[cfg(feature = "std")]
     #[test]
     fn test_is_wasm_read() {
         let fr = File::open("testdata/sample.wasm");

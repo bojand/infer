@@ -1,6 +1,7 @@
 use core::convert::TryInto;
-use std::io;
-use std::io::Read;
+
+#[cfg(feature = "std")]
+use std::io::{self, Read};
 
 use super::compare_bytes;
 

@@ -1,5 +1,5 @@
-use std::io;
-use std::io::Read;
+#[cfg(feature = "std")]
+use std::io::{self, Read};
 
 /// Returns whether a buffer is WOFF font data.
 pub fn is_woff(buf: &[u8]) -> bool {

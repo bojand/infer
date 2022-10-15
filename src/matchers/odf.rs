@@ -1,6 +1,7 @@
 use super::compare_bytes;
-use std::io;
-use std::io::Read;
+
+#[cfg(feature = "std")]
+use std::io::{self, Read};
 
 #[derive(Debug, Eq, PartialEq)]
 enum DocType {
