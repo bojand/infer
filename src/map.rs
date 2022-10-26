@@ -338,6 +338,12 @@ matcher_map!(
         "otf",
         matchers::font::is_otf
     ),
+    (
+        MatcherType::Font,
+        "application/font-collection",
+        "ttc",
+        matchers::font::is_ttc
+    ),
     // Document
     (
         MatcherType::Doc,
