@@ -99,6 +99,12 @@ matcher_map!(
         "obj",
         matchers::app::is_coff
     ),
+    (
+        MatcherType::App,
+        "application/x-x509-ca-cert",
+        "pem",
+        matchers::app::is_pem
+    ),
     // Book
     (
         MatcherType::Book,
