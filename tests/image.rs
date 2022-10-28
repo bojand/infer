@@ -25,3 +25,5 @@ test_format!(Image, "image/vnd.microsoft.icon", "ico", ico, "sample.ico");
 test_format!(Image, "image/heif", "heif", heif, "sample.heic");
 
 test_format!(Image, "image/avif", "avif", avif, "sample.avif");
+
+test_format!(Image, "image/svg+xml", "svg", svg, "sample.svg");
