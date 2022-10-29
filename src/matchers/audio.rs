@@ -29,6 +29,23 @@ pub fn is_ogg(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x4F && buf[1] == 0x67 && buf[2] == 0x67 && buf[3] == 0x53
 }
 
+/// Returns whether a buffer is OGG Opus data.
+pub fn is_ogg_opus(buf: &[u8]) -> bool {
+    if !is_ogg(buf) {
+        return false;
+    }
+
+    buf.len() > 35
+        && buf[28] == 0x4F
+        && buf[29] == 0x70
+        && buf[30] == 0x75
+        && buf[31] == 0x73
+        && buf[32] == 0x48
+        && buf[33] == 0x65
+        && buf[34] == 0x61
+        && buf[35] == 0x64
+}
+
 /// Returns whether a buffer is FLAC data.
 pub fn is_flac(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x66 && buf[1] == 0x4C && buf[2] == 0x61 && buf[3] == 0x43
