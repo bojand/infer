@@ -197,6 +197,12 @@ matcher_map!(
         "avif",
         matchers::image::is_avif
     ),
+    (
+        MatcherType::Image,
+        "image/jxl",
+        "jxl",
+        matchers::image::is_jxl
+    ),
     // Video
     (
         MatcherType::Video,
