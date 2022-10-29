@@ -277,6 +277,13 @@ matcher_map!(
         "m4a",
         matchers::audio::is_m4a
     ),
+    // has to come before ogg
+    (
+        MatcherType::Audio,
+        "audio/opus",
+        "opus",
+        matchers::audio::is_ogg_opus
+    ),
     (
         MatcherType::Audio,
         "audio/ogg",
