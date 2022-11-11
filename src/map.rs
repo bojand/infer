@@ -128,7 +128,7 @@ matcher_map!(
         "application/x-x509-ca-cert",
         "pem",
         matchers::app::is_pem,
-        Some(WrapReadMatcher( matchers::app::is_pem_read))
+        Some(WrapReadMatcher(matchers::app::is_pem_read))
     ),
     // Book
     (
