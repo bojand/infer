@@ -118,7 +118,7 @@ super::build_fn_read_api!(
     /// Returns whether data from reader is OGG data.
     (is_ogg_read, is_ogg, 4),
     /// Returns whether data from reader is OGG Opus data.
-    (is_ogg_opus_read, is_ogg_opus, 4),
+    (is_ogg_opus_read, is_ogg_opus, 36),
     /// Returns whether data from reader is FLAC data.
     (is_flac_read, is_flac, 4),
     /// Returns whether data from reader is WAV data.
