@@ -123,6 +123,12 @@ matcher_map!(
         matchers::app::is_coff,
         Some(WrapReadMatcher(matchers::app::is_coff_read))
     ),
+    (
+        MatcherType::App,
+        "application/x-x509-ca-cert",
+        "pem",
+        matchers::app::is_pem
+    ),
     // Book
     (
         MatcherType::Book,
@@ -230,6 +236,12 @@ matcher_map!(
         matchers::image::is_avif,
         None
     ),
+    (
+        MatcherType::Image,
+        "image/jxl",
+        "jxl",
+        matchers::image::is_jxl
+    ),
     // Video
     (
         MatcherType::Video,
@@ -315,6 +327,13 @@ matcher_map!(
         "m4a",
         matchers::audio::is_m4a,
         Some(WrapReadMatcher(matchers::audio::is_m4a_read))
+    ),
+    // has to come before ogg
+    (
+        MatcherType::Audio,
+        "audio/opus",
+        "opus",
+        matchers::audio::is_ogg_opus
     ),
     (
         MatcherType::Audio,

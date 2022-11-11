@@ -129,6 +129,23 @@ pub fn is_coff(buf: &[u8]) -> bool {
     is_coff_x64(buf) || is_coff_i386(buf) || is_coff_ia64(buf)
 }
 
+/// Returns whether a buffer is pem
+pub fn is_pem(buf: &[u8]) -> bool {
+    // https://en.wikipedia.org/wiki/List_of_file_signatures
+    buf.len() > 11
+        && buf[0] == b'-'
+        && buf[1] == b'-'
+        && buf[2] == b'-'
+        && buf[3] == b'-'
+        && buf[4] == b'-'
+        && buf[5] == b'B'
+        && buf[6] == b'E'
+        && buf[7] == b'G'
+        && buf[8] == b'I'
+        && buf[9] == b'N'
+        && buf[10] == b' '
+}
+
 super::build_fn_read_api!(
     /// Returns whether data from a reader is a wasm.
     ///

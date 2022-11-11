@@ -81,6 +81,24 @@ pub fn is_ico(buf: &[u8]) -> bool {
     buf.len() > 3 && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01 && buf[3] == 0x00
 }
 
+/// Returns whether a buffer is JPEG XL (JXL) image data.
+pub fn is_jxl(buf: &[u8]) -> bool {
+    (buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0x0A)
+        || (buf.len() > 12
+            && buf[0] == 0x0
+            && buf[1] == 0x0
+            && buf[2] == 0x0
+            && buf[3] == 0x0C
+            && buf[4] == 0x4A
+            && buf[5] == 0x58
+            && buf[6] == 0x4C
+            && buf[7] == 0x20
+            && buf[8] == 0x0D
+            && buf[9] == 0x0A
+            && buf[10] == 0x87
+            && buf[11] == 0x0A)
+}
+
 /// Returns whether a buffer is HEIF image data.
 pub fn is_heif(buf: &[u8]) -> bool {
     if buf.is_empty() {

@@ -47,6 +47,7 @@ pub fn is_html(buf: &[u8]) -> bool {
 pub fn is_xml(buf: &[u8]) -> bool {
     let val: &[u8] = b"<?xml";
     let buf = trim_start_whitespaces(buf);
+    let buf = trim_start_byte_order_marks(buf);
     starts_with_ignore_ascii_case(buf, val)
 }
 
@@ -59,6 +60,21 @@ fn trim_start_whitespaces(mut buf: &[u8]) -> &[u8] {
         match buf[0] {
             0x09 | 0x0A | 0x0C | 0x0D | 0x20 => buf = &buf[1..],
             _ => break,
+        }
+    }
+    buf
+}
+
+/// Strip BOM at the beginning of the buffer.
+fn trim_start_byte_order_marks(mut buf: &[u8]) -> &[u8] {
+    while !buf.is_empty() {
+        if buf.len() >= 3 {
+            match (buf[0], buf[1], buf[2]) {
+                (0xEF, 0xBB, 0xBF) => buf = &buf[3..], // UTF-8
+                (0xFE, 0xFF, _) => buf = &buf[2..],    // UTF-16 BE
+                (0xFF, 0xFE, _) => buf = &buf[2..],    // UTF-16 BE
+                _ => break,
+            }
         }
     }
     buf
