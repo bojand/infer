@@ -127,7 +127,8 @@ matcher_map!(
         MatcherType::App,
         "application/x-x509-ca-cert",
         "pem",
-        matchers::app::is_pem
+        matchers::app::is_pem,
+        Some(WrapReadMatcher( matchers::app::is_pem_read))
     ),
     // Book
     (
@@ -240,7 +241,8 @@ matcher_map!(
         MatcherType::Image,
         "image/jxl",
         "jxl",
-        matchers::image::is_jxl
+        matchers::image::is_jxl,
+        Some(WrapReadMatcher(matchers::image::is_jxl_read))
     ),
     // Video
     (
@@ -333,7 +335,8 @@ matcher_map!(
         MatcherType::Audio,
         "audio/opus",
         "opus",
-        matchers::audio::is_ogg_opus
+        matchers::audio::is_ogg_opus,
+        Some(WrapReadMatcher(matchers::audio::is_ogg_opus_read))
     ),
     (
         MatcherType::Audio,

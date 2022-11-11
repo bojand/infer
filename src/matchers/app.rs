@@ -129,7 +129,7 @@ pub fn is_coff(buf: &[u8]) -> bool {
     is_coff_x64(buf) || is_coff_i386(buf) || is_coff_ia64(buf)
 }
 
-/// Returns whether a buffer is pem
+/// Returns whether a buffer is PEM.
 pub fn is_pem(buf: &[u8]) -> bool {
     // https://en.wikipedia.org/wiki/List_of_file_signatures
     buf.len() > 11
@@ -206,5 +206,7 @@ super::build_fn_read_api!(
     /// Returns whether data from reader is a Common Object File Format for Itanium architecture.
     (is_coff_ia64_read, is_coff_ia64, 3),
     /// Returns whether data from reader is a Common Object File Format.
-    (is_coff_read, is_coff, 3)
+    (is_coff_read, is_coff, 3),
+    /// Returns whether data from reader is PEM data.
+    (is_pem_read, is_pem, 12)
 );

@@ -223,5 +223,7 @@ super::build_fn_read_api!(
     /// Returns whether data from reader is HEIF image data.
     (is_heif_read, is_heif, 8192),
     /// Returns whether data from reader is AVIF image data.
-    (is_avif_read, is_avif, 8192)
+    (is_avif_read, is_avif, 8192),
+    /// Returns whether data from reader is JPEG XL (JXL) image data.
+    (is_jxl_read, is_jxl, 13)
 );
