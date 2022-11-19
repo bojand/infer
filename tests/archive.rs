@@ -9,3 +9,5 @@ test_format!(
 );
 
 test_format!(Archive, "application/zstd", "zst", zst, "sample.tar.zst");
+
+test_format!(Archive, "image/openraster", "ora", ora, "sample.ora");

@@ -422,6 +422,12 @@ matcher_map!(
     ),
     (
         MatcherType::Archive,
+        "image/openraster",
+        "ora",
+        matchers::archive::is_ora
+    ),
+    (
+        MatcherType::Archive,
         "application/zip",
         "zip",
         matchers::archive::is_zip
