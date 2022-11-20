@@ -120,6 +120,7 @@ assert_eq!(kind.extension(), "foo");
 - **jxr** - `image/vnd.ms-photo`
 - **psd** - `image/vnd.adobe.photoshop`
 - **ico** - `image/vnd.microsoft.icon`
+- **ora** - `image/openraster`
 
 #### Video
 

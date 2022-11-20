@@ -203,6 +203,12 @@ matcher_map!(
         "jxl",
         matchers::image::is_jxl
     ),
+    (
+        MatcherType::Image,
+        "image/openraster",
+        "ora",
+        matchers::image::is_ora
+    ),
     // Video
     (
         MatcherType::Video,
@@ -419,12 +425,6 @@ matcher_map!(
         "application/epub+zip",
         "epub",
         matchers::archive::is_epub
-    ),
-    (
-        MatcherType::Archive,
-        "image/openraster",
-        "ora",
-        matchers::archive::is_ora
     ),
     (
         MatcherType::Archive,
