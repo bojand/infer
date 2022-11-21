@@ -174,6 +174,7 @@ assert_eq!(kind.extension(), "foo");
 - **dcm** - `application/dicom`
 - **zst** - `application/zstd`
 - **msi** - `application/x-ole-storage`
+- **cpio** - `application/x-cpio`
 
 #### Book
 
