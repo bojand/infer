@@ -203,6 +203,12 @@ matcher_map!(
         "jxl",
         matchers::image::is_jxl
     ),
+    (
+        MatcherType::Image,
+        "image/openraster",
+        "ora",
+        matchers::image::is_ora
+    ),
     // Video
     (
         MatcherType::Video,

@@ -27,3 +27,5 @@ test_format!(Image, "image/heif", "heif", heif, "sample.heic");
 test_format!(Image, "image/avif", "avif", avif, "sample.avif");
 
 test_format!(Image, "image/jxl", "jxl", jxl, "spline_on_first_frame.jxl");
+
+test_format!(Image, "image/openraster", "ora", ora, "sample.ora");
