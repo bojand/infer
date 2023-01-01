@@ -570,6 +570,12 @@ matcher_map!(
         "msi",
         matchers::archive::is_msi
     ),
+    (
+        MatcherType::Archive,
+        "application/x-cpio",
+        "cpio",
+        matchers::archive::is_cpio
+    ),
     // Text
     (
         MatcherType::Text,
