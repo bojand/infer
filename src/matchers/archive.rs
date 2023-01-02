@@ -220,6 +220,20 @@ pub fn is_msi(buf: &[u8]) -> bool {
         && buf[7] == 0xE1
 }
 
+/// Returns whether a buffer is a CPIO archive.
+pub fn is_cpio(buf: &[u8]) -> bool {
+    (buf.len() > 1
+        && ((buf[0] == 0xC7 && buf[1] == 0x71) // little endian, old format
+        || (buf[0] == 0x71 && buf[1] == 0xC7))) // big endian, old format
+    || (buf.len() > 6
+        && buf[0] == 0x30
+        && buf[1] == 0x37
+        && buf[2] == 0x30
+        && buf[3] == 0x37
+        && buf[4] == 0x30
+        && buf[5] == 0x31) // newc format
+}
+
 super::build_fn_read_api!(
     /// Returns whether data from reader is an ePub.
     (is_epub_read, is_epub, 58),
@@ -284,6 +298,8 @@ super::build_fn_read_api!(
     (is_dcm_read, is_dcm, 132),
     /// Returns whether data from reader is a Zstd archive.
     (is_zst_read, is_zst, 4),
-    /// Returns whether data from reader is a Zstd archive.
-    (is_msi_read, is_msi, 8)
+    /// Returns whether data from reader is a MSI Windows Installer archive.
+    (is_msi_read, is_msi, 8),
+    /// Returns whether data from reader is a CPIO archive.
+    (is_cpio_read, is_cpio, 7)
 );

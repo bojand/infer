@@ -133,6 +133,7 @@ assert_eq!(kind.extension(), "foo");
 - **jxr** - `image/vnd.ms-photo`
 - **psd** - `image/vnd.adobe.photoshop`
 - **ico** - `image/vnd.microsoft.icon`
+- **ora** - `image/openraster`
 
 #### Video
 
@@ -187,6 +188,7 @@ assert_eq!(kind.extension(), "foo");
 - **dcm** - `application/dicom`
 - **zst** - `application/zstd`
 - **msi** - `application/x-ole-storage`
+- **cpio** - `application/x-cpio`
 
 #### Book
 

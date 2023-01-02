@@ -38,14 +38,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Generate release notes
         run: |
-          # Temporary fix for https://github.com/actions/setup-go/issues/14
           export PATH=$PATH:$(go env GOPATH)/bin
-          go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+          go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
           git-chglog -c .chglog/config.yml $(git describe --tags) > RELEASE.md
       - name: Create GitHub release ${{ matrix.target }}
         uses: softprops/action-gh-release@v1

@@ -244,6 +244,13 @@ matcher_map!(
         matchers::image::is_jxl,
         Some(WrapReadMatcher(matchers::image::is_jxl_read))
     ),
+    (
+        MatcherType::Image,
+        "image/openraster",
+        "ora",
+        matchers::image::is_ora,
+        Some(WrapReadMatcher(matchers::image::is_ora_read))
+    ),
     // Video
     (
         MatcherType::Video,
@@ -663,6 +670,13 @@ matcher_map!(
         "msi",
         matchers::archive::is_msi,
         Some(WrapReadMatcher(matchers::archive::is_msi_read))
+    ),
+    (
+        MatcherType::Archive,
+        "application/x-cpio",
+        "cpio",
+        matchers::archive::is_cpio,
+        Some(WrapReadMatcher(matchers::archive::is_cpio_read))
     ),
     // Text
     (
