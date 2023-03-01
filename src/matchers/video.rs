@@ -48,14 +48,8 @@ pub fn is_webm(buf: &[u8]) -> bool {
 /// Returns whether a buffer is Quicktime MOV video data.
 pub fn is_mov(buf: &[u8]) -> bool {
     buf.len() > 15
-        && ((buf[0] == 0x0
-            && buf[1] == 0x0
-            && buf[2] == 0x0
-            && buf[3] == 0x14
-            && buf[4] == 0x66
-            && buf[5] == 0x74
-            && buf[6] == 0x79
-            && buf[7] == 0x70)
+        && (((buf[4] == b'f' && buf[5] == b't' && buf[6] == b'y' && buf[7] == b'p')
+            && (buf[8] == b'q' && buf[9] == b't' && buf[10] == b' ' && buf[11] == b' '))
             || (buf[4] == 0x6d && buf[5] == 0x6f && buf[6] == 0x6f && buf[7] == 0x76)
             || (buf[4] == 0x6d && buf[5] == 0x64 && buf[6] == 0x61 && buf[7] == 0x74)
             || (buf[12] == 0x6d && buf[13] == 0x64 && buf[14] == 0x61 && buf[15] == 0x74))
