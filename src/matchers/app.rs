@@ -44,13 +44,23 @@ pub fn is_elf(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is compiled Java bytecode.
 pub fn is_java(buf: &[u8]) -> bool {
-    buf.len() >= 8
-        && buf[0] == 0x43
-        && buf[1] == 0x41
-        && buf[2] == 0x76
-        && buf[3] == 0x45
-        && ((buf[4] == 0x42 && buf[5] == 0x01 && buf[6] == 0x42 && buf[7] == 0x45)
-            || (buf[4] == 0x44 && buf[5] == 0x30 && buf[6] == 0x30 && buf[7] == 0x44))
+    if buf.len() < 8 || [0xca, 0xfe, 0xba, 0xbe] != buf[0..4] {
+        return false;
+    }
+
+    //Checking the next 4 bytes are greater than or equal to 45 to distinguish from Mach-O binaries
+    //Mach-O "Fat" binaries also use 0xCAFEBABE as magic bytes to start the file
+    //Java are always Big Endian, after the magic bytes there are 2 bytes for the class file's
+    //minor version and then 2 bytes for the major version
+    //https://docs.oracle.com/javase/specs/jvms/se20/html/jvms-4.html
+    let minor_major_bytes = [buf[4], buf[5], buf[6], buf[7]];
+    if u32::from_be_bytes(minor_major_bytes) < 45 {
+        //Java class files start at a major version of 45 and a minor of 0
+        //So a value less than this shouldn't be a Java class file
+        return false;
+    }
+    //For due dillegence confirm that the major bytes are greater than or equal to 45
+    u16::from_be_bytes([buf[6], buf[7]]) >= 45
 }
 
 /// Returns whether a buffer is LLVM Bitcode.
@@ -70,7 +80,12 @@ pub fn is_mach(buf: &[u8]) -> bool {
     match buf[0..4] {
         [width, 0xfa, 0xed, 0xfe] if width == 0xcf || width == 0xce => true,
         [0xfe, 0xed, 0xfa, width] if width == 0xcf || width == 0xce => true,
-        [0xca, 0xfe, 0xba, 0xbe] => true,
+        [0xca, 0xfe, 0xba, 0xbe] if buf.len() >= 8 => {
+            //Checking the next 4 bytes are less than 45 to distinguish from Java class files
+            //which also use 0xCAFEBABE as magic bytes
+            //Fat Mach-O binaries are always Big Endian
+            u32::from_be_bytes([buf[4], buf[5], buf[6], buf[7]]) < 45
+        },
         _ => false,
     }
 }
