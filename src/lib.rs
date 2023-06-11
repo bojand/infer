@@ -637,12 +637,12 @@ mod tests {
     fn test_custom_matcher_ordering() {
         // overrides jpeg matcher
         fn foo_matcher(buf: &[u8]) -> bool {
-            buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF
+            buf.starts_with(&[0xFF, 0xD8, 0xFF])
         }
 
         // overrides png matcher
         fn bar_matcher(buf: &[u8]) -> bool {
-            buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47
+            buf.starts_with(&[0x89, 0x50, 0x4E, 0x47])
         }
 
         let mut info = Infer::new();
