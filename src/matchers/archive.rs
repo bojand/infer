@@ -218,16 +218,17 @@ pub fn is_zst(buf: &[u8]) -> bool {
     }
 
     let magic = u32::from_le_bytes(buf[0..4].try_into().unwrap()) as usize;
-    if magic & ZSTD_SKIP_MASK == ZSTD_SKIP_START {
-        let data_len = u32::from_le_bytes(buf[4..8].try_into().unwrap()) as usize;
-        if buf.len() < 8 + data_len {
-            return false;
-        }
-        let next_frame = &buf[8 + data_len..];
-        return is_zst(next_frame);
+    if magic & ZSTD_SKIP_MASK != ZSTD_SKIP_START {
+        return false;
     }
 
-    false
+    let data_len = u32::from_le_bytes(buf[4..8].try_into().unwrap()) as usize;
+    if buf.len() < 8 + data_len {
+        return false;
+    }
+
+    let next_frame = &buf[8 + data_len..];
+    is_zst(next_frame)
 }
 
 /// Returns whether a buffer is a MSI Windows Installer archive.
