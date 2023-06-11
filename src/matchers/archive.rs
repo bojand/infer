@@ -1,4 +1,4 @@
-use core::convert::TryInto;
+use std::convert::{TryFrom, TryInto};
 
 /// Returns whether a buffer is an ePub.
 pub fn is_epub(buf: &[u8]) -> bool {
@@ -217,12 +217,20 @@ pub fn is_zst(buf: &[u8]) -> bool {
         return false;
     }
 
-    let magic = u32::from_le_bytes(buf[0..4].try_into().unwrap()) as usize;
+    let magic = u32::from_le_bytes(buf[0..4].try_into().unwrap());
+    let Ok(magic) = usize::try_from(magic) else {
+        return false;
+    };
+
     if magic & ZSTD_SKIP_MASK != ZSTD_SKIP_START {
         return false;
     }
 
-    let data_len = u32::from_le_bytes(buf[4..8].try_into().unwrap()) as usize;
+    let data_len = u32::from_le_bytes(buf[4..8].try_into().unwrap());
+    let Ok(data_len) = usize::try_from(data_len) else {
+        return false;
+    };
+
     if buf.len() < 8 + data_len {
         return false;
     }
