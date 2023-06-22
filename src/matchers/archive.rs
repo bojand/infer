@@ -1,4 +1,4 @@
-use std::convert::{TryFrom, TryInto};
+use core::convert::{TryFrom, TryInto};
 
 /// Returns whether a buffer is an ePub.
 pub fn is_epub(buf: &[u8]) -> bool {
