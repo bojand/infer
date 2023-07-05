@@ -85,7 +85,7 @@ pub fn is_mach(buf: &[u8]) -> bool {
             //which also use 0xCAFEBABE as magic bytes
             //Fat Mach-O binaries are always Big Endian
             u32::from_be_bytes([buf[4], buf[5], buf[6], buf[7]]) < 45
-        },
+        }
         _ => false,
     }
 }

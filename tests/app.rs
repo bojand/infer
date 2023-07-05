@@ -42,13 +42,7 @@ test_format!(
     "sample_mach_fat"
 );
 
-test_format!(
-    App,
-    "application/java",
-    "class",
-    java,
-    "sample.class"
-);
+test_format!(App, "application/java", "class", java, "sample.class");
 
 test_format!(App, "application/wasm", "wasm", wasm, "sample.wasm");
 
