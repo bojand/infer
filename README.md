@@ -5,11 +5,11 @@
 [![documentation](https://docs.rs/infer/badge.svg)](https://docs.rs/infer)
 
 Small crate to infer file and MIME type by checking the
-[magic number](https://en.wikipedia.org/wiki/Magic_number_(programming)) signature. 
+[magic number](https://en.wikipedia.org/wiki/Magic_number_(programming)) signature.
 
-Adaptation of [filetype](https://github.com/h2non/filetype) Go package ported to Rust. 
+Adaptation of [filetype](https://github.com/h2non/filetype) Go package ported to Rust.
 
-Does not require magic file database (i.e. `/etc/magic`). 
+Does not require magic file database (i.e. `/etc/magic`).
 
 ## Features
 
@@ -88,7 +88,7 @@ assert!(infer::is_image(&buf));
 ```
 
 ### Adds a custom file type matcher
-    
+
 ```rust
 fn custom_matcher(buf: &[u8]) -> bool {
     return buf.len() >= 3 && buf[0] == 0x10 && buf[1] == 0x11 && buf[2] == 0x12;
@@ -121,6 +121,7 @@ assert_eq!(kind.extension(), "foo");
 - **psd** - `image/vnd.adobe.photoshop`
 - **ico** - `image/vnd.microsoft.icon`
 - **ora** - `image/openraster`
+- **djvu** - `image/vnd.djvu`
 
 #### Video
 
