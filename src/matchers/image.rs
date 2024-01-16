@@ -194,6 +194,22 @@ pub fn is_ora(buf: &[u8]) -> bool {
         && buf[53] == 0x72
 }
 
+/// Returns whether a buffer is DjVu image data.
+pub fn is_djvu(buf: &[u8]) -> bool {
+    buf.len() > 14
+        && buf[0] == 0x41
+        && buf[1] == 0x54
+        && buf[2] == 0x26
+        && buf[3] == 0x54
+        && buf[4] == 0x46
+        && buf[5] == 0x4F
+        && buf[6] == 0x52
+        && buf[7] == 0x4D
+        && buf[12] == 0x44
+        && buf[13] == 0x4A
+        && buf[14] == 0x56
+}
+
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
 fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
     if buf.len() < 16 {

@@ -29,3 +29,7 @@ test_format!(Image, "image/avif", "avif", avif, "sample.avif");
 test_format!(Image, "image/jxl", "jxl", jxl, "spline_on_first_frame.jxl");
 
 test_format!(Image, "image/openraster", "ora", ora, "sample.ora");
+
+test_format!(Image, "image/vnd.djvu", "djvu", djvu1, "sample_single.djvu");
+
+test_format!(Image, "image/vnd.djvu", "djvu", djvu2, "sample_multi.djvu");
