@@ -209,6 +209,12 @@ matcher_map!(
         "ora",
         matchers::image::is_ora
     ),
+    (
+        MatcherType::Image,
+        "image/vnd.djvu",
+        "djvu",
+        matchers::image::is_djvu
+    ),
     // Video
     (
         MatcherType::Video,
