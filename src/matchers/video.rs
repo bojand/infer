@@ -12,37 +12,22 @@ pub fn is_m4v(buf: &[u8]) -> bool {
 
 /// Returns whether a buffer is MKV video data.
 pub fn is_mkv(buf: &[u8]) -> bool {
-    (buf.len() > 15
-        && buf[0] == 0x1A
+    buf.len() > 256
+        && buf[0] == 0x1a
         && buf[1] == 0x45
-        && buf[2] == 0xDF
-        && buf[3] == 0xA3
-        && buf[4] == 0x93
-        && buf[5] == 0x42
-        && buf[6] == 0x82
-        && buf[7] == 0x88
-        && buf[8] == 0x6D
-        && buf[9] == 0x61
-        && buf[10] == 0x74
-        && buf[11] == 0x72
-        && buf[12] == 0x6F
-        && buf[13] == 0x73
-        && buf[14] == 0x6B
-        && buf[15] == 0x61)
-        || (buf.len() > 38
-            && buf[31] == 0x6D
-            && buf[32] == 0x61
-            && buf[33] == 0x74
-            && buf[34] == 0x72
-            && buf[35] == 0x6f
-            && buf[36] == 0x73
-            && buf[37] == 0x6B
-            && buf[38] == 0x61)
+        && buf[2] == 0xdf
+        && buf[3] == 0xa3
+        && crate::match_bytes(&buf[..256], b"\x42\x82\x88matroska")
 }
 
 /// Returns whether a buffer is WEBM video data.
 pub fn is_webm(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x1A && buf[1] == 0x45 && buf[2] == 0xDF && buf[3] == 0xA3
+    buf.len() > 256
+        && buf[0] == 0x1a
+        && buf[1] == 0x45
+        && buf[2] == 0xdf
+        && buf[3] == 0xa3
+        && crate::match_bytes(&buf[..256], b"\x42\x82\x84webm")
 }
 
 /// Returns whether a buffer is Quicktime MOV video data.
