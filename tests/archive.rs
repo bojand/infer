@@ -2,6 +2,13 @@ mod common;
 
 test_format!(
     Archive,
+    "application/vnd.bzip3",
+    "bz3",
+    bz3,
+    "sample.tar.bz3"
+);
+test_format!(
+    Archive,
     "application/vnd.sqlite3",
     "sqlite",
     sqlite,

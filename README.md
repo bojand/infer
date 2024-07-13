@@ -157,6 +157,7 @@ assert_eq!(kind.extension(), "foo");
 - **rar** - `application/vnd.rar`
 - **gz** - `application/gzip`
 - **bz2** - `application/x-bzip2`
+- **bz3** - `application/vnd.bzip3`
 - **7z** - `application/x-7z-compressed`
 - **xz** - `application/x-xz`
 - **pdf** - `application/pdf`

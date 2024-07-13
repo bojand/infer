@@ -52,9 +52,19 @@ pub fn is_gz(buf: &[u8]) -> bool {
     buf.len() > 2 && buf[0] == 0x1F && buf[1] == 0x8B && buf[2] == 0x8
 }
 
-/// Returns whether a buffer is a bzip archive.
+/// Returns whether a buffer is a bzip2 archive.
 pub fn is_bz2(buf: &[u8]) -> bool {
     buf.len() > 2 && buf[0] == 0x42 && buf[1] == 0x5A && buf[2] == 0x68
+}
+
+/// Returns whether a buffer is a bzip3 archive.
+pub fn is_bz3(buf: &[u8]) -> bool {
+    buf.len() > 4
+        && buf[0] == b'B'
+        && buf[1] == b'Z'
+        && buf[2] == b'3'
+        && buf[3] == b'v'
+        && buf[4] == b'1'
 }
 
 /// Returns whether a buffer is a 7z archive.
