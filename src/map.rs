@@ -578,6 +578,12 @@ matcher_map!(
     ),
     (
         MatcherType::Archive,
+        "application/x-lz4",
+        "lz4",
+        matchers::archive::is_lz4
+    ),
+    (
+        MatcherType::Archive,
         "application/x-ole-storage",
         "msi",
         matchers::archive::is_msi

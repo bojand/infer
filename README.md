@@ -176,6 +176,7 @@ assert_eq!(kind.extension(), "foo");
 - **rpm** - `application/x-rpm`
 - **dcm** - `application/dicom`
 - **zst** - `application/zstd`
+- **lz4** - `application/x-lz4`
 - **msi** - `application/x-ole-storage`
 - **cpio** - `application/x-cpio`
 

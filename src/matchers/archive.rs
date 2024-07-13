@@ -249,6 +249,41 @@ pub fn is_zst(buf: &[u8]) -> bool {
     is_zst(next_frame)
 }
 
+/// Returns whether a buffer is a LZ4 archive.
+// LZ4 compressed data is made of one or more frames.
+// There are two frame formats defined by LZ4: LZ4 Frame format and Skippable frames.
+// See more details from https://github.com/lz4/lz4/blob/v1.9.4/doc/lz4_Frame_format.md
+pub fn is_lz4(buf: &[u8]) -> bool {
+    if buf.len() > 3 && buf[0] == 0x04 && buf[1] == 0x22 && buf[2] == 0x4D && buf[3] == 0x18 {
+        return true;
+    }
+
+    if buf.len() < 8 {
+        return false;
+    }
+
+    let magic = u32::from_le_bytes(buf[0..4].try_into().unwrap());
+    let Ok(magic) = usize::try_from(magic) else {
+        return false;
+    };
+
+    if magic & ZSTD_SKIP_MASK != ZSTD_SKIP_START {
+        return false;
+    }
+
+    let data_len = u32::from_le_bytes(buf[4..8].try_into().unwrap());
+    let Ok(data_len) = usize::try_from(data_len) else {
+        return false;
+    };
+
+    if buf.len() < 8 + data_len {
+        return false;
+    }
+
+    let next_frame = &buf[8 + data_len..];
+    is_lz4(next_frame)
+}
+
 /// Returns whether a buffer is a MSI Windows Installer archive.
 pub fn is_msi(buf: &[u8]) -> bool {
     buf.len() > 7

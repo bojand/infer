@@ -16,6 +16,7 @@ test_format!(
 );
 
 test_format!(Archive, "application/zstd", "zst", zst, "sample.tar.zst");
+test_format!(Archive, "application/x-lz4", "lz4", lz4, "sample.tar.lz4");
 test_format!(Archive, "application/x-cpio", "cpio", cpio, "sample.cpio");
 test_format!(
     Archive,
