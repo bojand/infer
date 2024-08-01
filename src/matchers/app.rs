@@ -157,3 +157,9 @@ pub fn is_pem(buf: &[u8]) -> bool {
         && buf[9] == b'N'
         && buf[10] == b' '
 }
+
+/// Returns whether a buffer is a QCOW2 disk.
+pub fn is_qcow2(buf: &[u8]) -> bool {
+    // https://github.com/qemu/qemu/blob/master/docs/interop/qcow2.txt
+    buf.len() > 4 && buf[0] == b'Q' && buf[1] == b'F' && buf[2] == b'I' && buf[3] == 0xFB
+}

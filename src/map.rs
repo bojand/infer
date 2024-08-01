@@ -105,6 +105,12 @@ matcher_map!(
         "pem",
         matchers::app::is_pem
     ),
+    (
+        MatcherType::App,
+        "application/x-qemu-disk",
+        "qcow2",
+        matchers::app::is_qcow2
+    ),
     // Book
     (
         MatcherType::Book,
