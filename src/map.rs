@@ -444,7 +444,7 @@ matcher_map!(
         "tar",
         matchers::archive::is_tar
     ),
-     (
+    (
         MatcherType::Archive,
         "application/x-par2",
         "par2",
