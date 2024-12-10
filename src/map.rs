@@ -444,6 +444,12 @@ matcher_map!(
         "tar",
         matchers::archive::is_tar
     ),
+     (
+        MatcherType::Archive,
+        "application/x-par2",
+        "par2",
+        matchers::archive::is_par2
+    ),
     (
         MatcherType::Archive,
         "application/vnd.rar",

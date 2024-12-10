@@ -177,6 +177,7 @@ assert_eq!(kind.extension(), "foo");
 - **zst** - `application/zstd`
 - **msi** - `application/x-ole-storage`
 - **cpio** - `application/x-cpio`
+- **par2** - `application/x-par2`
 
 #### Book
 

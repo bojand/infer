@@ -17,3 +17,4 @@ test_format!(
     zst_skip,
     "sample.skippable.zst"
 );
+test_format!(Archive, "application/x-par2", "par2", par2, "sample.par2");
