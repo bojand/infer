@@ -84,10 +84,16 @@ fn msooxml(buf: &[u8]) -> Option<DocType> {
     // file we have.  Correct the mimetype with the registered ones:
     // http://technet.microsoft.com/en-us/library/cc179224.aspx
     start_offset += idx + 4 + 26;
-    check_msooml(buf, start_offset)?;
 
     // OpenOffice/Libreoffice orders ZIP entry differently, so check the 4th file
     start_offset += 26;
+    let idx = search(buf, start_offset, 6000);
+    match idx {
+        Some(idx) => start_offset += idx + 4 + 26,
+        None => return Some(DocType::OOXML),
+    };
+
+    // Check the 5th file, for Numbers and Apache POI sources
     let idx = search(buf, start_offset, 6000);
     match idx {
         Some(idx) => start_offset += idx + 4 + 26,
