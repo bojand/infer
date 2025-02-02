@@ -35,6 +35,18 @@ pub fn is_tar(buf: &[u8]) -> bool {
         && buf[261] == 0x72
 }
 
+pub fn is_par2(buf: &[u8]) -> bool {
+    buf.len() > 8
+        && buf[0] == 0x50
+        && buf[1] == 0x41
+        && buf[2] == 0x52
+        && buf[3] == 0x32
+        && buf[4] == 0x00
+        && buf[5] == 0x50
+        && buf[6] == 0x4B
+        && buf[7] == 0x54
+}
+
 /// Returns whether a buffer is a RAR archive.
 pub fn is_rar(buf: &[u8]) -> bool {
     buf.len() > 6
