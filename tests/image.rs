@@ -24,6 +24,8 @@ test_format!(Image, "image/vnd.microsoft.icon", "ico", ico, "sample.ico");
 
 test_format!(Image, "image/heif", "heif", heif, "sample.heic");
 
+test_format!(Image, "image/heif", "heif", heif2, "sample2.heic");
+
 test_format!(Image, "image/avif", "avif", avif, "sample.avif");
 
 test_format!(Image, "image/jxl", "jxl", jxl, "spline_on_first_frame.jxl");

@@ -107,7 +107,7 @@ pub fn is_heif(buf: &[u8]) -> bool {
     }
 
     if let Some((major, _minor, compatible)) = get_ftyp(buf) {
-        if major == b"heic" {
+        if major == b"heic" || major == b"heix" {
             return true;
         }
 
