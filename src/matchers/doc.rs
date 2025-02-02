@@ -131,11 +131,11 @@ fn ole2(buf: &[u8]) -> Option<DocType> {
 }
 
 fn check_msooml(buf: &[u8], offset: usize) -> Option<DocType> {
-    if compare_bytes(buf, &[b'w', b'o', b'r', b'd', b'/'], offset) {
+    if compare_bytes(buf, b"word/", offset) {
         Some(DocType::DOCX)
-    } else if compare_bytes(buf, &[b'p', b'p', b't', b'/'], offset) {
+    } else if compare_bytes(buf, b"ppt/", offset) {
         Some(DocType::PPTX)
-    } else if compare_bytes(buf, &[b'x', b'l', b'/'], offset) {
+    } else if compare_bytes(buf, b"xl/", offset) {
         Some(DocType::XLSX)
     } else {
         None
