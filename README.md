@@ -218,6 +218,7 @@ assert_eq!(kind.extension(), "foo");
 - **dey** - `application/vnd.android.dey`
 - **der** - `application/x-x509-ca-cert`
 - **obj** - `application/x-executable`
+- **qcow2** - `application/x-qemu-disk`
 
 ## Known Issues
 
