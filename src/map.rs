@@ -464,6 +464,12 @@ matcher_map!(
     ),
     (
         MatcherType::Archive,
+        "application/vnd.bzip3",
+        "bz3",
+        matchers::archive::is_bz3
+    ),
+    (
+        MatcherType::Archive,
         "application/x-7z-compressed",
         "7z",
         matchers::archive::is_7z
@@ -569,6 +575,12 @@ matcher_map!(
         "application/zstd",
         "zst",
         matchers::archive::is_zst
+    ),
+    (
+        MatcherType::Archive,
+        "application/x-lz4",
+        "lz4",
+        matchers::archive::is_lz4
     ),
     (
         MatcherType::Archive,
