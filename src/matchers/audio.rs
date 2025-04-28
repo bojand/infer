@@ -8,7 +8,10 @@ pub fn is_mp3(buf: &[u8]) -> bool {
     buf.len() > 2
         && ((buf[0] == 0x49 && buf[1] == 0x44 && buf[2] == 0x33) // ID3v2
 			// Final bit (has crc32) may be or may not be set.
-			|| (buf[0] == 0xFF && buf[1] == 0xFB))
+	    		// ID3V1 Support
+			|| (buf[0] == 0xFF && buf[1] == 0xFB)
+	   		|| (buf[0] == 0xFF && buf[1] == 0xF3)
+	   		|| (buf[0] == 0xFF && buf[1] == 0xF2))
 }
 
 /// Returns whether a buffer is M4A data.
