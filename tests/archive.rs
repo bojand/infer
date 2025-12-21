@@ -26,3 +26,6 @@ test_format!(
     "sample.skippable.zst"
 );
 test_format!(Archive, "application/x-par2", "par2", par2, "sample.par2");
+test_format!(Archive, "application/x-stdf", "stdf", stdf_le, "sample_le.stdf");
+test_format!(Archive, "application/x-stdf", "stdf", stdf_be, "sample_be.stdf");
+test_format!(Archive, "application/x-atdf", "atdf", atdf, "sample.atdf");

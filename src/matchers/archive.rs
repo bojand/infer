@@ -322,3 +322,17 @@ pub fn is_cpio(buf: &[u8]) -> bool {
         && buf[4] == 0x30
         && buf[5] == 0x31) // newc format
 }
+
+/// Returns whether a buffer is an STDF file.
+/// STDF = Standard Test Data Format (binary)
+pub fn is_stdf(buf: &[u8]) -> bool {
+    buf.len() > 3
+        && ((buf[0] == 0x00 && buf[1] == 0x02 && buf[2] == 0x00 && buf[3] == 0x0A) // Little endian
+            || (buf[0] == 0x02 && buf[1] == 0x00 && buf[2] == 0x00 && buf[3] == 0x0A)) // Big endian
+}
+
+/// Returns whether a buffer is an ATDF file.
+/// ATDF = Advanced Test Data Format (text)
+pub fn is_atdf(buf: &[u8]) -> bool {
+    buf.len() > 4 && buf[..5] == *b"FAR:A"
+}

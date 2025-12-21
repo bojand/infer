@@ -180,6 +180,8 @@ assert_eq!(kind.extension(), "foo");
 - **msi** - `application/x-ole-storage`
 - **cpio** - `application/x-cpio`
 - **par2** - `application/x-par2`
+- **stdf** - `application/x-stdf`
+- **atdf** - `application/x-atdf`
 
 #### Book
 
