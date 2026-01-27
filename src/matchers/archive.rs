@@ -103,7 +103,19 @@ pub fn is_7z(buf: &[u8]) -> bool {
 /// Returns whether a buffer is a PDF.
 #[must_use]
 pub fn is_pdf(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x25 && buf[1] == 0x50 && buf[2] == 0x44 && buf[3] == 0x46
+    // Per PDF Reference 1.4 section H.3.4.1, Acrobat viewers require only
+    // that the header appear somewhere within the first 1024 bytes of the file.
+    const PDF_MAGIC: &[u8] = b"%PDF";
+    const SEARCH_LIMIT: usize = 1024;
+
+    let search_len = buf.len().min(SEARCH_LIMIT);
+    if search_len < 4 {
+        return false;
+    }
+
+    buf[..search_len]
+        .windows(4)
+        .any(|window| window == PDF_MAGIC)
 }
 
 /// Returns whether a buffer is a SWF.
