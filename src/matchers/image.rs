@@ -227,6 +227,11 @@ pub fn is_djvu(buf: &[u8]) -> bool {
         && buf[14] == 0x56
 }
 
+/// Returns whether a buffer is SVG image data.
+pub fn is_svg(buf: &[u8]) -> bool {
+    buf.len() >= 4 && &buf[..4] == b"<svg"
+}
+
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
 fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
     if buf.len() < 16 {
