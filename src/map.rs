@@ -221,6 +221,12 @@ matcher_map!(
         "djvu",
         matchers::image::is_djvu
     ),
+    (
+        MatcherType::Image,
+        "image/vnd.dwg",
+        "dwg",
+        matchers::image::is_dwg
+    ),
     // Video
     (
         MatcherType::Video,

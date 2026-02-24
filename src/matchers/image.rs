@@ -227,6 +227,42 @@ pub fn is_djvu(buf: &[u8]) -> bool {
         && buf[14] == 0x56
 }
 
+/// Returns whether a buffer is an AutoCAD Drawing (DWG).
+#[must_use]
+pub fn is_dwg(buf: &[u8]) -> bool {
+    if buf.len() < 6 {
+        return false;
+    }
+
+    matches!(
+        &buf[..6],
+        b"MC0.0\0"
+            | b"AC1.2\0"
+            | b"AC1.3\0"
+            | b"AC1.40"
+            | b"AC1.50"
+            | b"AC2.10"
+            | b"AC2.21"
+            | b"AC2.22"
+            | b"AC1001"
+            | b"AC1002"
+            | b"AC1003"
+            | b"AC1004"
+            | b"AC1006"
+            | b"AC1009"
+            | b"AC1012"
+            | b"AC1013"
+            | b"AC1014"
+            | b"AC1015"
+            | b"AC1018"
+            | b"AC1021"
+            | b"AC1024"
+            | b"AC1027"
+            | b"AC1032"
+            | b"AC1035"
+    )
+}
+
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
 fn get_ftyp(buf: &[u8]) -> Option<(&[u8], &[u8], impl Iterator<Item = &[u8]>)> {
     if buf.len() < 16 {
