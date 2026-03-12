@@ -227,6 +227,12 @@ matcher_map!(
         "dwg",
         matchers::image::is_dwg
     ),
+    (
+        MatcherType::Image,
+        "image/svg+xml",
+        "svg",
+        matchers::image::is_svg
+    ),
     // Video
     (
         MatcherType::Video,

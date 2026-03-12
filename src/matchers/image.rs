@@ -227,6 +227,25 @@ pub fn is_djvu(buf: &[u8]) -> bool {
         && buf[14] == 0x56
 }
 
+/// Returns whether a buffer is SVG image data.
+#[must_use]
+pub fn is_svg(buf: &[u8]) -> bool {
+    if buf.starts_with(b"<svg") {
+        return true;
+    }
+
+    // Avoid conflicts with other XML types while detecting SVGs.
+    if buf.starts_with(b"<?xml") {
+        return buf
+            .get(..256)
+            .unwrap_or(buf)
+            .windows(4)
+            .any(|w| w == b"<svg");
+    }
+
+    false
+}
+
 /// Returns whether a buffer is an AutoCAD Drawing (DWG).
 #[must_use]
 pub fn is_dwg(buf: &[u8]) -> bool {

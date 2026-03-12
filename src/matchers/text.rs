@@ -47,7 +47,7 @@ pub fn is_xml(buf: &[u8]) -> bool {
     let val: &[u8] = b"<?xml";
     let buf = trim_start_whitespaces(buf);
     let buf = trim_start_byte_order_marks(buf);
-    starts_with_ignore_ascii_case(buf, val)
+    starts_with_ignore_ascii_case(buf, val) && !super::image::is_svg(buf) // try avoid detecting XML-declared SVGs
 }
 
 /// Strip whitespaces at the beginning of the buffer.
@@ -88,7 +88,7 @@ pub fn is_shellscript(buf: &[u8]) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{is_html, is_shellscript, trim_start_whitespaces};
+    use super::{is_html, is_shellscript, is_xml, trim_start_whitespaces};
 
     #[test]
     fn trim_whitespaces() {
@@ -113,5 +113,13 @@ mod tests {
     #[test]
     fn shellscript() {
         assert!(!is_shellscript(b"#!"));
+    }
+
+    #[test]
+    fn xml_excludes_svg() {
+        assert!(!is_xml(
+            b"<?xml version=\"1.0\"?>\n<svg xmlns=\"http://www.w3.org/2000/svg\">"
+        ));
+        assert!(is_xml(b"<?xml version=\"1.0\"?>\n<note/>"));
     }
 }
