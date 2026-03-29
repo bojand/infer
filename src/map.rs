@@ -93,6 +93,15 @@ matcher_map!(
         "der",
         matchers::app::is_der
     ),
+    // STDF (Archive type) must be placed here, before COFF matcher.
+    // STDF little endian starts with 0x00 0x02 which matches COFF IA64 (0x00 0x02).
+    // Since STDF checks 4 bytes (more specific) vs COFF's 2 bytes, STDF must be checked first.
+    (
+        MatcherType::Archive,
+        "application/x-stdf",
+        "stdf",
+        matchers::archive::is_stdf
+    ),
     (
         MatcherType::App,
         "application/x-executable",
@@ -611,6 +620,12 @@ matcher_map!(
         "application/x-cpio",
         "cpio",
         matchers::archive::is_cpio
+    ),
+    (
+        MatcherType::Archive,
+        "application/x-atdf",
+        "atdf",
+        matchers::archive::is_atdf
     ),
     // Text
     (
