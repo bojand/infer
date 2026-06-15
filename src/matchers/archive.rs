@@ -275,34 +275,42 @@ const ZSTD_SKIP_MASK: usize = 0xFFFF_FFF0;
 /// by the preceding check of `buf.len()` < 8
 #[must_use]
 pub fn is_zst(buf: &[u8]) -> bool {
-    if buf.len() > 3 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD {
-        return true;
+    let mut frame = buf;
+
+    loop {
+        if frame.len() > 3
+            && frame[0] == 0x28
+            && frame[1] == 0xB5
+            && frame[2] == 0x2F
+            && frame[3] == 0xFD
+        {
+            return true;
+        }
+
+        if frame.len() < 8 {
+            return false;
+        }
+
+        let magic = u32::from_le_bytes(frame[0..4].try_into().unwrap());
+        let Ok(magic) = usize::try_from(magic) else {
+            return false;
+        };
+
+        if magic & ZSTD_SKIP_MASK != ZSTD_SKIP_START {
+            return false;
+        }
+
+        let data_len = u32::from_le_bytes(frame[4..8].try_into().unwrap());
+        let Ok(data_len) = usize::try_from(data_len) else {
+            return false;
+        };
+
+        if frame.len() < 8 + data_len {
+            return false;
+        }
+
+        frame = &frame[8 + data_len..];
     }
-
-    if buf.len() < 8 {
-        return false;
-    }
-
-    let magic = u32::from_le_bytes(buf[0..4].try_into().unwrap());
-    let Ok(magic) = usize::try_from(magic) else {
-        return false;
-    };
-
-    if magic & ZSTD_SKIP_MASK != ZSTD_SKIP_START {
-        return false;
-    }
-
-    let data_len = u32::from_le_bytes(buf[4..8].try_into().unwrap());
-    let Ok(data_len) = usize::try_from(data_len) else {
-        return false;
-    };
-
-    if buf.len() < 8 + data_len {
-        return false;
-    }
-
-    let next_frame = &buf[8 + data_len..];
-    is_zst(next_frame)
 }
 
 /// Returns whether a buffer is a LZ4 archive.
