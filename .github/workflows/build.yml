@@ -9,6 +9,8 @@ on:
     - 'src/**'
     - 'tests/**'
     - 'testdata/**'
+    - 'examples/**'
+    - '.github/workflows/build.yml'
   pull_request:
     branches:
     - master
@@ -17,16 +19,18 @@ on:
     - 'src/**'
     - 'tests/**'
     - 'testdata/**'
+    - 'examples/**'
+    - '.github/workflows/build.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Install rustfmt
-      run: rustup component add rustfmt
-    - name: Install clippy
-      run: rustup component add clippy
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt, clippy
     - name: Check format
       run: cargo fmt --all -- --check
     - name: Lint (all features)
