@@ -23,6 +23,19 @@ on:
     - '.github/workflows/build.yml'
 
 jobs:
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - name: Install Rust (MSRV)
+      uses: dtolnay/rust-toolchain@1.74
+    - name: Check MSRV (default)
+      run: cargo check
+    - name: Check MSRV (no_std)
+      run: cargo check --no-default-features --features alloc
+    - name: Check MSRV (no_alloc)
+      run: cargo check --no-default-features
+
   build:
     runs-on: ubuntu-latest
     steps:
