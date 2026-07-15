@@ -23,4 +23,4 @@ path = "examples/file.rs"
 required-features = ["std"]
 
 [dependencies]
-cfb = { version = "0.12", optional = true }
+cfb = { version = "0.14", optional = true }
