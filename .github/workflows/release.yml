@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v7
       - name: Install rustfmt
         run: rustup component add rustfmt
       - name: Install clippy
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Generate release notes
@@ -47,7 +47,7 @@ jobs:
           go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
           git-chglog -c .chglog/config.yml $(git describe --tags) > RELEASE.md
       - name: Create GitHub release ${{ matrix.target }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           body_path: RELEASE.md
         env:
@@ -59,13 +59,9 @@ jobs:
     needs: github_build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout  
-        uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
+      - name: Checkout
+        uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
       - run: cargo login $CRATES_IO_TOKEN
       - run: cargo publish
     env:
