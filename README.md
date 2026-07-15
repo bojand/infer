@@ -26,7 +26,7 @@ Add it to your `Cargo.toml` like so:
 
 ```toml
 [dependencies]
-infer = "0.3"
+infer = "0.22"
 ```
 
 If you are not using the custom matcher or the file type from file path functionality you
