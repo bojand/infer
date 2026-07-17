@@ -37,3 +37,7 @@ test_format!(Image, "image/vnd.djvu", "djvu", djvu1, "sample_single.djvu");
 test_format!(Image, "image/vnd.djvu", "djvu", djvu2, "sample_multi.djvu");
 
 test_format!(Image, "image/vnd.dwg", "dwg", dwg, "sample.dwg");
+
+test_format!(Image, "image/svg+xml", "svg", svg, "sample.svg");
+
+test_format!(Image, "image/svg+xml", "svg", svg2, "sample2.svg");
