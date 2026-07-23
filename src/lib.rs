@@ -490,6 +490,12 @@ pub fn get_from_path<P: AsRef<Path>>(path: P) -> io::Result<Option<Type>> {
     INFER.get_from_path(path)
 }
 
+/// Return the file type of given mimetype
+#[must_use]
+pub fn get_from_mime(mime_type: &str) -> Option<Type> {
+    INFER.iter_matchers().find(|kind| kind.mime_type() == mime_type).copied()
+}
+
 /// Determines whether a buffer is of given extension.
 ///
 /// # Examples
