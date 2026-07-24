@@ -111,6 +111,12 @@ matcher_map!(
         "qcow2",
         matchers::app::is_qcow2
     ),
+    (
+        MatcherType::App,
+        "application/x-vnd.haiku-package",
+        "hpkg",
+        matchers::app::is_hpkg
+    ),
     // Book
     (
         MatcherType::Book,

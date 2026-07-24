@@ -179,3 +179,12 @@ pub fn is_qcow2(buf: &[u8]) -> bool {
     // https://github.com/qemu/qemu/blob/master/docs/interop/qcow2.txt
     buf.len() > 4 && buf[0] == b'Q' && buf[1] == b'F' && buf[2] == b'I' && buf[3] == 0xFB
 }
+
+/// Returns whether a buffer is a Haiku software package
+pub fn is_hpkg(buf: &[u8]) -> bool {
+    buf.len() > 4
+        && buf[0] == b'h'
+        && buf[1] == b'p'
+        && buf[2] == b'k'
+        && buf[3] == b'g'
+}

@@ -57,3 +57,11 @@ test_format!(
     qcow2,
     "sample.qcow2"
 );
+
+test_format!(
+    App,
+    "application/x-vnd.haiku-package",
+    "hpkg",
+    hpkg,
+    "sample.hpkg"
+);
