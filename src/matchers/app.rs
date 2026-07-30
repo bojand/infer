@@ -21,7 +21,26 @@ pub fn is_wasm(buf: &[u8]) -> bool {
         && buf[7] == 0x00
 }
 
-/// Returns whether a buffer is an EXE. DLL and EXE have the same magic number, so returns true also for a DLL.
+/// Returns whether a buffer is a PE.
+#[must_use]
+pub fn is_pe(buf: &[u8]) -> bool {
+    // A PE file must starts with the 'MZ' magic number
+    // and be big enough to include the e_lfanew field
+    if buf.len() < 64 || buf[0] != 0x4D || buf[1] != 0x5A {
+        return false;
+    };
+
+    let pe_signature_offset: usize =
+        u32::from_le_bytes([buf[0x3C], buf[0x3D], buf[0x3E], buf[0x3F]]) as usize;
+
+    // Check the PE signature
+    buf[pe_signature_offset] == 0x50
+        && buf[pe_signature_offset + 1] == 0x45
+        && buf[pe_signature_offset + 2] == 0x00
+        && buf[pe_signature_offset + 3] == 0x00
+}
+
+/// Returns whether a buffer is an EXE.
 ///
 /// # Example
 ///
@@ -31,13 +50,70 @@ pub fn is_wasm(buf: &[u8]) -> bool {
 /// ```
 #[must_use]
 pub fn is_exe(buf: &[u8]) -> bool {
-    buf.len() > 1 && buf[0] == 0x4D && buf[1] == 0x5A
+    // An EXE must also be a PE
+    if !is_pe(buf) {
+        return false;
+    }
+
+    // The length check has already done in the function 'is_pe()'
+    let pe_signature_offset: usize =
+        u32::from_le_bytes([buf[0x3C], buf[0x3D], buf[0x3E], buf[0x3F]]) as usize;
+
+    // The position of the characteristics field
+    let characteristics_field_offset: usize = pe_signature_offset + 22;
+
+    // The characteristics field lies at 'pe_signature_offset + 22',
+    // its length is 2 (bytes)
+    if characteristics_field_offset + 2 > buf.len() {
+        return false;
+    };
+
+    // Read the characteristics field
+    let characteristics: u16 = u16::from_le_bytes([
+        buf[characteristics_field_offset],
+        buf[characteristics_field_offset + 1],
+    ]);
+
+    // Check the characteristics field
+    (characteristics & 0x2000) == 0
 }
 
-/// Returns whether a buffer is a DLL. DLL and EXE have the same magic number, so returns true also for an EXE.
+/// Returns whether a buffer is a DLL.
+///
+/// # Example
+///
+/// ```rust
+/// use std::fs;
+/// assert!(infer::app::is_dll(&fs::read("testdata/sample.dll").unwrap()));
+/// ```
 #[must_use]
 pub fn is_dll(buf: &[u8]) -> bool {
-    is_exe(buf)
+    // A DLL must also be a PE
+    if !is_pe(buf) {
+        return false;
+    }
+
+    // The length check has already done in the function 'is_pe()'
+    let pe_signature_offset: usize =
+        u32::from_le_bytes([buf[0x3C], buf[0x3D], buf[0x3E], buf[0x3F]]) as usize;
+
+    // The position of the characteristics field
+    let characteristics_field_offset: usize = pe_signature_offset + 22;
+
+    // The characteristics field lies at 'pe_signature_offset + 22',
+    // its length is 2 (bytes)
+    if characteristics_field_offset + 2 > buf.len() {
+        return false;
+    };
+
+    // Read the characteristics field
+    let characteristics: u16 = u16::from_le_bytes([
+        buf[characteristics_field_offset],
+        buf[characteristics_field_offset + 1],
+    ]);
+
+    // Check the characteristics field
+    (characteristics & 0x2000) != 0
 }
 
 /// Returns whether a buffer is an ELF.

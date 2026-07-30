@@ -12,6 +12,14 @@ test_format!(
 
 test_format!(
     App,
+    "application/vnd.microsoft.portable-executable",
+    "dll",
+    dll,
+    "sample.dll"
+);
+
+test_format!(
+    App,
     "application/x-mach-binary",
     "mach",
     mach_x86,
