@@ -14,23 +14,13 @@ pub fn is_m4v(buf: &[u8]) -> bool {
 /// Returns whether a buffer is MKV video data.
 #[must_use]
 pub fn is_mkv(buf: &[u8]) -> bool {
-    buf.len() > 256
-        && buf[0] == 0x1a
-        && buf[1] == 0x45
-        && buf[2] == 0xdf
-        && buf[3] == 0xa3
-        && crate::match_bytes(&buf[..256], b"\x42\x82\x88matroska")
+    ebml_doctype(buf) == Some(b"matroska")
 }
 
 /// Returns whether a buffer is WEBM video data.
 #[must_use]
 pub fn is_webm(buf: &[u8]) -> bool {
-    buf.len() > 256
-        && buf[0] == 0x1a
-        && buf[1] == 0x45
-        && buf[2] == 0xdf
-        && buf[3] == 0xa3
-        && crate::match_bytes(&buf[..256], b"\x42\x82\x84webm")
+    ebml_doctype(buf) == Some(b"webm")
 }
 
 /// Returns whether a buffer is Quicktime MOV video data.
@@ -123,4 +113,49 @@ pub fn is_mp4(buf: &[u8]) -> bool {
             || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'X' && buf[11] == b'S')
             || (buf[8] == b'F' && buf[9] == b'4' && buf[10] == b'V' && buf[11] == b' ')
             || (buf[8] == b'F' && buf[9] == b'4' && buf[10] == b'P' && buf[11] == b' '))
+}
+
+/// Reads an EBML variable-length integer, returning (value, bytes consumed).
+fn read_vint(buf: &[u8]) -> Option<(u64, usize)> {
+    let first = *buf.first()?;
+    if first == 0 {
+        return None; // Widths beyond 8 bytes unsupported
+    }
+    let width = first.leading_zeros() as usize + 1;
+    let value = buf
+        .get(1..width)?
+        .iter()
+        .fold(u64::from(first) & (0xFF >> width), |acc, &b| {
+            acc << 8 | u64::from(b)
+        });
+    Some((value, width))
+}
+
+/// Walks the EBML header's child elements and returns the DocType value,
+/// with trailing zero-padding stripped.
+fn ebml_doctype(buf: &[u8]) -> Option<&[u8]> {
+    let rest = buf.strip_prefix(b"\x1a\x45\xdf\xa3")?; // EBML header element ID
+    let (header_len, consumed) = read_vint(rest)?;
+    let header_len = usize::try_from(header_len).ok()?;
+    let mut header = rest.get(consumed..consumed.checked_add(header_len)?)?;
+
+    while let Some(first_byte) = header.first() {
+        let id_width = first_byte.leading_zeros() as usize + 1;
+        if id_width > header.len() {
+            return None;
+        }
+        let (id, rest) = header.split_at(id_width);
+
+        let (len, consumed) = read_vint(rest)?;
+        let len = usize::try_from(len).ok()?;
+        let end = consumed.checked_add(len)?;
+        let payload = rest.get(consumed..end)?;
+
+        if id == [0x42, 0x82] {
+            let pad = payload.iter().rev().take_while(|&&b| b == 0).count();
+            return Some(&payload[..payload.len() - pad]);
+        }
+        header = &rest[end..];
+    }
+    None
 }

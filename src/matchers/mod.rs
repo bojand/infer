@@ -26,9 +26,3 @@ pub(crate) fn compare_bytes(slice: &[u8], sub_slice: &[u8], start_offset: usize)
 
     true
 }
-
-pub(crate) fn match_bytes(slice: &[u8], sub_slice: &[u8]) -> bool {
-    slice
-        .windows(sub_slice.len())
-        .any(|window| window == sub_slice)
-}
