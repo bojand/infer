@@ -66,10 +66,10 @@ fn trim_start_whitespaces(mut buf: &[u8]) -> &[u8] {
 
 /// Strip BOM at the beginning of the buffer.
 fn trim_start_byte_order_marks(mut buf: &[u8]) -> &[u8] {
-    while buf.len() >= 3 {
-        match (buf[0], buf[1], buf[2]) {
-            (0xEF, 0xBB, 0xBF) => buf = &buf[3..],                // UTF-8
-            (0xFE, 0xFF, _) | (0xFF, 0xFE, _) => buf = &buf[2..], // UTF-16 BE
+    while let Some(&chunk) = buf.first_chunk::<3>() {
+        match chunk {
+            [0xEF, 0xBB, 0xBF] => buf = &buf[3..],                // UTF-8
+            [0xFE, 0xFF, _] | [0xFF, 0xFE, _] => buf = &buf[2..], // UTF-16 BE
             _ => break,
         }
     }
@@ -83,7 +83,7 @@ fn starts_with_ignore_ascii_case(buf: &[u8], needle: &[u8]) -> bool {
 /// Returns whether a buffer is a shell script.
 #[must_use]
 pub fn is_shellscript(buf: &[u8]) -> bool {
-    buf.len() > 2 && &buf[..2] == b"#!"
+    buf.starts_with(b"#!") && buf.len() > 2
 }
 
 #[cfg(test)]

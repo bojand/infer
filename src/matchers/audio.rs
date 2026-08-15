@@ -1,121 +1,75 @@
 /// Returns whether a buffer is MIDI data.
 #[must_use]
 pub fn is_midi(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x4D && buf[1] == 0x54 && buf[2] == 0x68 && buf[3] == 0x64
+    buf.starts_with(b"MThd")
 }
 
 /// Returns whether a buffer is MP3 data.
 #[must_use]
 pub fn is_mp3(buf: &[u8]) -> bool {
-    buf.len() > 2
-        && ((buf[0] == 0x49 && buf[1] == 0x44 && buf[2] == 0x33) // ID3v2
-			// Final bit (has crc32) may be or may not be set.
-	    		// ID3V1 Support
-			|| (buf[0] == 0xFF && buf[1] == 0xFB)
-	   		|| (buf[0] == 0xFF && buf[1] == 0xF3)
-	   		|| (buf[0] == 0xFF && buf[1] == 0xF2))
+    buf.starts_with(b"ID3") // ID3v2
+        // ID3V1 Support. Final bit (has crc32) may be or may not be set.
+        || matches!(buf.first_chunk::<2>(), Some([0xff, 0xfb | 0xf3 | 0xf2]))
 }
 
 /// Returns whether a buffer is M4A data.
 #[must_use]
 pub fn is_m4a(buf: &[u8]) -> bool {
-    buf.len() > 10
-        && ((buf[4] == 0x66
-            && buf[5] == 0x74
-            && buf[6] == 0x79
-            && buf[7] == 0x70
-            && buf[8] == 0x4D
-            && buf[9] == 0x34
-            && buf[10] == 0x41)
-            || (buf[0] == 0x4D && buf[1] == 0x34 && buf[2] == 0x41 && buf[3] == 0x20))
+    buf.get(4..11) == Some(b"ftypM4A") || buf.starts_with(b"M4A ")
 }
 
 /// Returns whether a buffer is OGG data.
 #[must_use]
 pub fn is_ogg(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x4F && buf[1] == 0x67 && buf[2] == 0x67 && buf[3] == 0x53
+    buf.starts_with(b"OggS")
 }
 
 /// Returns whether a buffer is OGG Opus data.
 #[must_use]
 pub fn is_ogg_opus(buf: &[u8]) -> bool {
-    if !is_ogg(buf) {
-        return false;
-    }
-
-    buf.len() > 35
-        && buf[28] == 0x4F
-        && buf[29] == 0x70
-        && buf[30] == 0x75
-        && buf[31] == 0x73
-        && buf[32] == 0x48
-        && buf[33] == 0x65
-        && buf[34] == 0x61
-        && buf[35] == 0x64
+    is_ogg(buf) && buf.get(28..36) == Some(b"OpusHead")
 }
 
 /// Returns whether a buffer is FLAC data.
 #[must_use]
 pub fn is_flac(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x66 && buf[1] == 0x4C && buf[2] == 0x61 && buf[3] == 0x43
+    buf.starts_with(b"fLaC")
 }
 
 /// Returns whether a buffer is WAV data.
 #[must_use]
 pub fn is_wav(buf: &[u8]) -> bool {
-    buf.len() > 11
-        && buf[0] == 0x52
-        && buf[1] == 0x49
-        && buf[2] == 0x46
-        && buf[3] == 0x46
-        && buf[8] == 0x57
-        && buf[9] == 0x41
-        && buf[10] == 0x56
-        && buf[11] == 0x45
+    buf.starts_with(b"RIFF") && buf.get(8..12) == Some(b"WAVE")
 }
 
 /// Returns whether a buffer is AMR data.
 #[must_use]
 pub fn is_amr(buf: &[u8]) -> bool {
-    buf.len() > 11
-        && buf[0] == 0x23
-        && buf[1] == 0x21
-        && buf[2] == 0x41
-        && buf[3] == 0x4D
-        && buf[4] == 0x52
-        && buf[5] == 0x0A
+    buf.starts_with(b"#!AMR\n")
 }
 
 /// Returns whether a buffer is AAC data.
 #[must_use]
 pub fn is_aac(buf: &[u8]) -> bool {
-    buf.len() > 1 && buf[0] == 0xFF && (buf[1] == 0xF1 || buf[1] == 0xF9)
+    matches!(buf.first_chunk::<2>(), Some([0xff, 0xf1 | 0xf9]))
 }
 
 /// Returns whether a buffer is AIFF data.
 #[must_use]
 pub fn is_aiff(buf: &[u8]) -> bool {
-    buf.len() > 11
-        && buf[0] == 0x46
-        && buf[1] == 0x4F
-        && buf[2] == 0x52
-        && buf[3] == 0x4D
-        && buf[8] == 0x41
-        && buf[9] == 0x49
-        && buf[10] == 0x46
-        && buf[11] == 0x46
+    buf.starts_with(b"FORM") && buf.get(8..12) == Some(b"AIFF")
 }
 
 /// Returns whether a buffer is DSF data.
 #[must_use]
 pub fn is_dsf(buf: &[u8]) -> bool {
     // ref: https://dsd-guide.com/sites/default/files/white-papers/DSFFileFormatSpec_E.pdf
-    buf.len() > 4 && buf[0] == b'D' && buf[1] == b'S' && buf[2] == b'D' && buf[3] == b' '
+    buf.starts_with(b"DSD ")
 }
 
 /// Returns whether a buffer is APE (Monkey's Audio) data.
 #[must_use]
 pub fn is_ape(buf: &[u8]) -> bool {
     // ref: https://github.com/fernandotcl/monkeys-audio/blob/master/src/MACLib/APEHeader.h
-    buf.len() > 4 && buf[0] == b'M' && buf[1] == b'A' && buf[2] == b'C' && buf[3] == b' '
+    buf.starts_with(b"MAC ")
 }

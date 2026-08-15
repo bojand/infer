@@ -1,126 +1,99 @@
 /// Returns whether a buffer is M4V video data.
 #[must_use]
 pub fn is_m4v(buf: &[u8]) -> bool {
-    buf.len() > 10
-        && buf[4] == 0x66
-        && buf[5] == 0x74
-        && buf[6] == 0x79
-        && buf[7] == 0x70
-        && buf[8] == 0x4D
-        && buf[9] == 0x34
-        && buf[10] == 0x56
+    buf.get(4..11) == Some(b"ftypM4V")
 }
 
 /// Returns whether a buffer is MKV video data.
 #[must_use]
 pub fn is_mkv(buf: &[u8]) -> bool {
-    buf.len() > 256
-        && buf[0] == 0x1a
-        && buf[1] == 0x45
-        && buf[2] == 0xdf
-        && buf[3] == 0xa3
-        && crate::match_bytes(&buf[..256], b"\x42\x82\x88matroska")
+    is_ebml_doctype(buf, b"\x42\x82\x88matroska")
 }
 
 /// Returns whether a buffer is WEBM video data.
 #[must_use]
 pub fn is_webm(buf: &[u8]) -> bool {
-    buf.len() > 256
-        && buf[0] == 0x1a
-        && buf[1] == 0x45
-        && buf[2] == 0xdf
-        && buf[3] == 0xa3
-        && crate::match_bytes(&buf[..256], b"\x42\x82\x84webm")
+    is_ebml_doctype(buf, b"\x42\x82\x84webm")
 }
 
 /// Returns whether a buffer is Quicktime MOV video data.
 #[must_use]
 pub fn is_mov(buf: &[u8]) -> bool {
-    buf.len() > 15
-        && (((buf[4] == b'f' && buf[5] == b't' && buf[6] == b'y' && buf[7] == b'p')
-            && (buf[8] == b'q' && buf[9] == b't' && buf[10] == b' ' && buf[11] == b' '))
-            || (buf[4] == 0x6d && buf[5] == 0x6f && buf[6] == 0x6f && buf[7] == 0x76)
-            || (buf[4] == 0x6d && buf[5] == 0x64 && buf[6] == 0x61 && buf[7] == 0x74)
-            || (buf[12] == 0x6d && buf[13] == 0x64 && buf[14] == 0x61 && buf[15] == 0x74))
+    matches!(buf.get(4..12), Some(b"ftypqt  "))
+        || matches!(buf.get(4..8), Some(b"moov" | b"mdat"))
+        || buf.get(12..16) == Some(b"mdat")
 }
 
 /// Returns whether a buffer is AVI video data.
 #[must_use]
 pub fn is_avi(buf: &[u8]) -> bool {
-    buf.len() > 10
-        && buf[0] == 0x52
-        && buf[1] == 0x49
-        && buf[2] == 0x46
-        && buf[3] == 0x46
-        && buf[8] == 0x41
-        && buf[9] == 0x56
-        && buf[10] == 0x49
+    buf.starts_with(b"RIFF") && buf.get(8..11) == Some(b"AVI")
 }
 
 /// Returns whether a buffer is WMV video data.
 #[must_use]
 pub fn is_wmv(buf: &[u8]) -> bool {
-    buf.len() > 9
-        && buf[0] == 0x30
-        && buf[1] == 0x26
-        && buf[2] == 0xB2
-        && buf[3] == 0x75
-        && buf[4] == 0x8E
-        && buf[5] == 0x66
-        && buf[6] == 0xCF
-        && buf[7] == 0x11
-        && buf[8] == 0xA6
-        && buf[9] == 0xD9
+    buf.starts_with(b"\x30\x26\xb2\x75\x8e\x66\xcf\x11\xa6\xd9")
 }
 
 /// Returns whether a buffer is MPEG video data.
 #[must_use]
 pub fn is_mpeg(buf: &[u8]) -> bool {
-    buf.len() > 3
-        && buf[0] == 0x0
-        && buf[1] == 0x0
-        && buf[2] == 0x1
-        && buf[3] >= 0xb0
-        && buf[3] <= 0xbf
+    matches!(
+        buf.first_chunk::<4>(),
+        Some([0x00, 0x00, 0x01, 0xb0..=0xbf])
+    )
 }
 
 /// Returns whether a buffer is FLV video data.
 #[must_use]
 pub fn is_flv(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x46 && buf[1] == 0x4C && buf[2] == 0x56 && buf[3] == 0x01
+    buf.starts_with(b"FLV\x01")
 }
 
 /// Returns whether a buffer is MP4 video data.
 #[must_use]
 pub fn is_mp4(buf: &[u8]) -> bool {
-    buf.len() > 11
-        && (buf[4] == b'f' && buf[5] == b't' && buf[6] == b'y' && buf[7] == b'p')
-        && ((buf[8] == b'a' && buf[9] == b'v' && buf[10] == b'c' && buf[11] == b'1')
-            || (buf[8] == b'd' && buf[9] == b'a' && buf[10] == b's' && buf[11] == b'h')
-            || (buf[8] == b'i' && buf[9] == b's' && buf[10] == b'o' && buf[11] == b'2')
-            || (buf[8] == b'i' && buf[9] == b's' && buf[10] == b'o' && buf[11] == b'3')
-            || (buf[8] == b'i' && buf[9] == b's' && buf[10] == b'o' && buf[11] == b'4')
-            || (buf[8] == b'i' && buf[9] == b's' && buf[10] == b'o' && buf[11] == b'5')
-            || (buf[8] == b'i' && buf[9] == b's' && buf[10] == b'o' && buf[11] == b'6')
-            || (buf[8] == b'i' && buf[9] == b's' && buf[10] == b'o' && buf[11] == b'm')
-            || (buf[8] == b'm' && buf[9] == b'm' && buf[10] == b'p' && buf[11] == b'4')
-            || (buf[8] == b'm' && buf[9] == b'p' && buf[10] == b'4' && buf[11] == b'1')
-            || (buf[8] == b'm' && buf[9] == b'p' && buf[10] == b'4' && buf[11] == b'2')
-            || (buf[8] == b'm' && buf[9] == b'p' && buf[10] == b'4' && buf[11] == b'v')
-            || (buf[8] == b'm' && buf[9] == b'p' && buf[10] == b'7' && buf[11] == b'1')
-            || (buf[8] == b'M' && buf[9] == b'S' && buf[10] == b'N' && buf[11] == b'V')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'A' && buf[11] == b'S')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'S' && buf[11] == b'C')
-            || (buf[8] == b'N' && buf[9] == b'S' && buf[10] == b'D' && buf[11] == b'C')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'S' && buf[11] == b'H')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'S' && buf[11] == b'M')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'S' && buf[11] == b'P')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'S' && buf[11] == b'S')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'X' && buf[11] == b'C')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'X' && buf[11] == b'H')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'X' && buf[11] == b'M')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'X' && buf[11] == b'P')
-            || (buf[8] == b'N' && buf[9] == b'D' && buf[10] == b'X' && buf[11] == b'S')
-            || (buf[8] == b'F' && buf[9] == b'4' && buf[10] == b'V' && buf[11] == b' ')
-            || (buf[8] == b'F' && buf[9] == b'4' && buf[10] == b'P' && buf[11] == b' '))
+    matches!(buf.get(4..8), Some(b"ftyp"))
+        && matches!(
+            buf.get(8..12),
+            Some(
+                b"avc1"
+                    | b"dash"
+                    | b"iso2"
+                    | b"iso3"
+                    | b"iso4"
+                    | b"iso5"
+                    | b"iso6"
+                    | b"isom"
+                    | b"mmp4"
+                    | b"mp41"
+                    | b"mp42"
+                    | b"mp4v"
+                    | b"mp71"
+                    | b"MSNV"
+                    | b"NDAS"
+                    | b"NDSC"
+                    | b"NSDC"
+                    | b"NDSH"
+                    | b"NDSM"
+                    | b"NDSP"
+                    | b"NDSS"
+                    | b"NDXC"
+                    | b"NDXH"
+                    | b"NDXM"
+                    | b"NDXP"
+                    | b"NDXS"
+                    | b"F4V "
+                    | b"F4P "
+            )
+        )
+}
+
+fn is_ebml_doctype(buf: &[u8], doctype: &[u8]) -> bool {
+    const EBML_MAGIC: &[u8; 4] = b"\x1a\x45\xdf\xa3";
+    const EBML_SEARCH_LIMIT: usize = 256;
+
+    buf.starts_with(EBML_MAGIC)
+        && crate::match_bytes(&buf[..buf.len().min(EBML_SEARCH_LIMIT)], doctype)
 }

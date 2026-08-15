@@ -3,118 +3,78 @@ use core::convert::TryInto;
 /// Returns whether a buffer is JPEG image data.
 #[must_use]
 pub fn is_jpeg(buf: &[u8]) -> bool {
-    buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF
+    buf.starts_with(b"\xff\xd8\xff")
 }
 
 /// Returns whether a buffer is jpg2 image data.
 #[must_use]
 pub fn is_jpeg2000(buf: &[u8]) -> bool {
-    buf.len() > 12
-        && buf[0] == 0x0
-        && buf[1] == 0x0
-        && buf[2] == 0x0
-        && buf[3] == 0xC
-        && buf[4] == 0x6A
-        && buf[5] == 0x50
-        && buf[6] == 0x20
-        && buf[7] == 0x20
-        && buf[8] == 0xD
-        && buf[9] == 0xA
-        && buf[10] == 0x87
-        && buf[11] == 0xA
-        && buf[12] == 0x0
+    buf.starts_with(b"\x00\x00\x00\x0cjP  \x0d\x0a\x87\x0a\x00")
 }
 
 /// Returns whether a buffer is PNG image data.
 #[must_use]
 pub fn is_png(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x89 && buf[1] == 0x50 && buf[2] == 0x4E && buf[3] == 0x47
+    buf.starts_with(b"\x89PNG")
 }
 
 /// Returns whether a buffer is GIF image data.
 #[must_use]
 pub fn is_gif(buf: &[u8]) -> bool {
-    buf.len() > 2 && buf[0] == 0x47 && buf[1] == 0x49 && buf[2] == 0x46
+    buf.starts_with(b"GIF")
 }
 
 /// Returns whether a buffer is WEBP image data.
 #[must_use]
 pub fn is_webp(buf: &[u8]) -> bool {
-    buf.len() > 11 && buf[8] == 0x57 && buf[9] == 0x45 && buf[10] == 0x42 && buf[11] == 0x50
+    buf.starts_with(b"RIFF") && buf.get(8..12) == Some(b"WEBP")
 }
 
 /// Returns whether a buffer is Canon CR2 image data.
 #[must_use]
 pub fn is_cr2(buf: &[u8]) -> bool {
-    buf.len() > 10
-        && ((buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0x2A && buf[3] == 0x0)
-            || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
-        && buf[8] == 0x43
-        && buf[9] == 0x52
-        && buf[10] == 0x02 // CR2 major version
+    is_tiff_header(buf) && buf.get(8..11) == Some(b"CR\x02") // CR2 major version
 }
 
 /// Returns whether a buffer is TIFF image data.
 #[must_use]
 pub fn is_tiff(buf: &[u8]) -> bool {
-    buf.len() > 9
-        && ((buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0x2A && buf[3] == 0x0)
-            || (buf[0] == 0x4D && buf[1] == 0x4D && buf[2] == 0x0 && buf[3] == 0x2A))
-        && buf[8] != 0x43
-        && buf[9] != 0x52
-        && !is_cr2(buf) // To avoid conflicts differentiate Tiff from CR2
+    is_tiff_header(buf) && !is_cr2(buf) // To avoid conflicts differentiate Tiff from CR2
 }
 
 /// Returns whether a buffer is BMP image data.
 #[must_use]
 pub fn is_bmp(buf: &[u8]) -> bool {
-    buf.len() > 1 && buf[0] == 0x42 && buf[1] == 0x4D
+    buf.starts_with(b"BM")
 }
 
 /// Returns whether a buffer is jxr image data.
 #[must_use]
 pub fn is_jxr(buf: &[u8]) -> bool {
-    buf.len() > 2 && buf[0] == 0x49 && buf[1] == 0x49 && buf[2] == 0xBC
+    buf.starts_with(b"II\xbc")
 }
 
 /// Returns whether a buffer is Photoshop PSD image data.
 #[must_use]
 pub fn is_psd(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x38 && buf[1] == 0x42 && buf[2] == 0x50 && buf[3] == 0x53
+    buf.starts_with(b"8BPS")
 }
 
 /// Returns whether a buffer is ICO icon image data.
 #[must_use]
 pub fn is_ico(buf: &[u8]) -> bool {
-    buf.len() > 3 && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01 && buf[3] == 0x00
+    buf.starts_with(b"\x00\x00\x01\x00")
 }
 
 /// Returns whether a buffer is JPEG XL (JXL) image data.
 #[must_use]
 pub fn is_jxl(buf: &[u8]) -> bool {
-    (buf.len() > 2 && buf[0] == 0xFF && buf[1] == 0x0A)
-        || (buf.len() > 12
-            && buf[0] == 0x0
-            && buf[1] == 0x0
-            && buf[2] == 0x0
-            && buf[3] == 0x0C
-            && buf[4] == 0x4A
-            && buf[5] == 0x58
-            && buf[6] == 0x4C
-            && buf[7] == 0x20
-            && buf[8] == 0x0D
-            && buf[9] == 0x0A
-            && buf[10] == 0x87
-            && buf[11] == 0x0A)
+    buf.starts_with(b"\xff\x0a") || buf.starts_with(b"\x00\x00\x00\x0cJXL \x0d\x0a\x87\x0a")
 }
 
 /// Returns whether a buffer is HEIF image data.
 #[must_use]
 pub fn is_heif(buf: &[u8]) -> bool {
-    if buf.is_empty() {
-        return false;
-    }
-
     if !is_isobmff(buf) {
         return false;
     }
@@ -124,12 +84,8 @@ pub fn is_heif(buf: &[u8]) -> bool {
             return true;
         }
 
-        if major == b"mif1" || major == b"msf1" {
-            for b in compatible {
-                if b == b"heic" {
-                    return true;
-                }
-            }
+        if major == b"mif1" || major == b"msf1" && compatible.into_iter().any(|b| b == b"heic") {
+            return true;
         }
     }
 
@@ -139,10 +95,6 @@ pub fn is_heif(buf: &[u8]) -> bool {
 /// Returns whether a buffer is AVIF image data.
 #[must_use]
 pub fn is_avif(buf: &[u8]) -> bool {
-    if buf.is_empty() {
-        return false;
-    }
-
     if !is_isobmff(buf) {
         return false;
     }
@@ -152,10 +104,11 @@ pub fn is_avif(buf: &[u8]) -> bool {
             return true;
         }
 
-        for b in compatible {
-            if b == b"avif" || b == b"avis" {
-                return true;
-            }
+        if compatible
+            .into_iter()
+            .any(|b| matches!(b, b"avif" | b"avis"))
+        {
+            return true;
         }
     }
 
@@ -179,63 +132,24 @@ fn is_isobmff(buf: &[u8]) -> bool {
 /// Returns whether a buffer is `ORA` image data.
 #[must_use]
 pub fn is_ora(buf: &[u8]) -> bool {
-    buf.len() > 57
-        && buf[0] == 0x50
-        && buf[1] == 0x4B
-        && buf[2] == 0x3
-        && buf[3] == 0x4
-        && buf[30] == 0x6D
-        && buf[31] == 0x69
-        && buf[32] == 0x6D
-        && buf[33] == 0x65
-        && buf[34] == 0x74
-        && buf[35] == 0x79
-        && buf[36] == 0x70
-        && buf[37] == 0x65
-        && buf[38] == 0x69
-        && buf[39] == 0x6D
-        && buf[40] == 0x61
-        && buf[41] == 0x67
-        && buf[42] == 0x65
-        && buf[43] == 0x2F
-        && buf[44] == 0x6F
-        && buf[45] == 0x70
-        && buf[46] == 0x65
-        && buf[47] == 0x6E
-        && buf[48] == 0x72
-        && buf[49] == 0x61
-        && buf[50] == 0x73
-        && buf[51] == 0x74
-        && buf[52] == 0x65
-        && buf[53] == 0x72
+    buf.starts_with(b"PK\x03\x04") && buf.get(30..54) == Some(b"mimetypeimage/openraster")
 }
 
 /// Returns whether a buffer is `DjVu` image data.
 #[must_use]
 pub fn is_djvu(buf: &[u8]) -> bool {
-    buf.len() > 14
-        && buf[0] == 0x41
-        && buf[1] == 0x54
-        && buf[2] == 0x26
-        && buf[3] == 0x54
-        && buf[4] == 0x46
-        && buf[5] == 0x4F
-        && buf[6] == 0x52
-        && buf[7] == 0x4D
-        && buf[12] == 0x44
-        && buf[13] == 0x4A
-        && buf[14] == 0x56
+    buf.starts_with(b"AT&TFORM") && buf.get(12..15) == Some(b"DJV")
 }
 
 /// Returns whether a buffer is an AutoCAD Drawing (DWG).
 #[must_use]
 pub fn is_dwg(buf: &[u8]) -> bool {
-    if buf.len() < 6 {
+    let Some(magic) = buf.first_chunk::<6>() else {
         return false;
-    }
+    };
 
     matches!(
-        &buf[..6],
+        magic,
         b"MC0.0\0"
             | b"AC1.2\0"
             | b"AC1.3\0"
@@ -261,6 +175,12 @@ pub fn is_dwg(buf: &[u8]) -> bool {
             | b"AC1032"
             | b"AC1035"
     )
+}
+
+fn is_tiff_header(buf: &[u8]) -> bool {
+    const TIFF_LE: &[u8; 4] = b"II\x2a\x00";
+    const TIFF_BE: &[u8; 4] = b"MM\x00\x2a";
+    matches!(buf.first_chunk::<4>(), Some(TIFF_LE | TIFF_BE))
 }
 
 // GetFtyp returns the major brand, minor version and compatible brands of the ISO-BMFF data
