@@ -71,7 +71,7 @@ pub fn is_java(buf: &[u8]) -> bool {
 /// Returns whether a buffer is LLVM Bitcode.
 #[must_use]
 pub fn is_llvm(buf: &[u8]) -> bool {
-    buf.len() >= 2 && buf[0] == 0x42 && buf[1] == 0x43
+    buf.len() > 3 && buf[0] == 0x42 && buf[1] == 0x43 && buf[2] == 0xC0 && buf[3] == 0xDE
 }
 
 /// Returns whether a buffer is a Mach-O binary.
