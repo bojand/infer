@@ -105,16 +105,17 @@ pub fn is_7z(buf: &[u8]) -> bool {
 pub fn is_pdf(buf: &[u8]) -> bool {
     // Per PDF Reference 1.4 section H.3.4.1, Acrobat viewers require only
     // that the header appear somewhere within the first 1024 bytes of the file.
-    const PDF_MAGIC: &[u8] = b"%PDF";
+    // The header is `%PDF-` followed by the version, e.g. `%PDF-1.4`.
+    const PDF_MAGIC: &[u8] = b"%PDF-";
     const SEARCH_LIMIT: usize = 1024;
 
     let search_len = buf.len().min(SEARCH_LIMIT);
-    if search_len < 4 {
+    if search_len < PDF_MAGIC.len() {
         return false;
     }
 
     buf[..search_len]
-        .windows(4)
+        .windows(PDF_MAGIC.len())
         .any(|window| window == PDF_MAGIC)
 }
 
