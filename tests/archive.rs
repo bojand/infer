@@ -62,3 +62,16 @@ fn lz4_skippable_frames_before_real_frame_match() {
 
     assert!(infer::archive::is_lz4(&input));
 }
+
+#[test]
+fn pdf_header_after_leading_bytes_matches() {
+    assert!(infer::archive::is_pdf(b"\xEF\xBB\xBF%PDF-1.4\n"));
+}
+
+#[test]
+fn pdf_marker_without_version_does_not_match() {
+    // A Windows batch file using a variable named PDF (#133).
+    let input = b"@echo off\r\nset PDF=output.pdf\r\ndel %PDF%\r\n";
+
+    assert!(!infer::archive::is_pdf(input));
+}
