@@ -57,3 +57,22 @@ test_format!(
     qcow2,
     "sample.qcow2"
 );
+
+#[test]
+fn llvm_needs_full_magic() {
+    assert!(infer::app::is_llvm(&[0x42, 0x43, 0xC0, 0xDE, 0x35, 0x14]));
+
+    // Text that starts with "BC"
+    let text = b"BC,code\n1,2\n";
+    assert!(!infer::app::is_llvm(text));
+    assert_eq!(infer::get(text), None);
+
+    // A tar archive whose first member is named "BC.txt"
+    let mut tar = [0u8; 512];
+    tar[..6].copy_from_slice(b"BC.txt");
+    tar[257..263].copy_from_slice(b"ustar\0");
+    assert_eq!(
+        infer::get(&tar).map(|kind| kind.mime_type()),
+        Some("application/x-tar")
+    );
+}
